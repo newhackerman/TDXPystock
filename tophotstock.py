@@ -168,12 +168,31 @@ import sys
 # s='会当凌绝顶，一览众山小'
 # print(s.encode(encoding='GBK'))
 # print(s.encode(encoding='utf-8'))
-with open('C:\\Users\\test\\Desktop\\0_300563.dat','rb') as fp:
-    i=0
-    byte1=fp.readlines()
-    for by in byte1:
-       print(by)
-
+def filewcopy(source,dist):
+    try:
+        fw=open(dist,'ab')
+        fw.seek(0)
+        str='this is add context!'
+        fw.write(str.encode())
+        with open(source,'rb') as fp:
+            i=0
+            byte1=fp.readlines()
+            for by in byte1:
+               fw.write(by)
+    except FileNotFoundError as fnot:
+        print(fnot)
+    except FileExistsError as fper:
+        print(fper)
+    except BaseException as be:
+        print(be)
+    finally:
+        fw.close()
+    #    fp.close()  #离开WITH 语句自动关闭
+# source='C:\\Users\\test\\Desktop\\0_300563.dat'
+# dist='C:\\Users\\test\\Desktop\\0_300564.dat'
+# #filewcopy(source,dist)
+# with open(dist,'rb') as fa:
+#     print(fa.readlines())
 #fp.close()
 #函数的定义
 
@@ -286,9 +305,33 @@ with open('C:\\Users\\test\\Desktop\\0_300563.dat','rb') as fp:
 #         schedule.cancel_job(testschedule())
 #         break
 #
-#
+import os
+def osopreation(command):
+    os.system(command)
+#cmd1=osopreation('notepad.exe')  #打开系统应用程序
+#cmd2=os.startfile('C:\\Program\ Files\ (x86)\\Fiddler2\\Fiddler.exe')  #打开安装的应用程序
+def listpwd():
+    dirlist = os.getcwd()
+    lstfile=os.walk(dirlist)
+    for dirpath,dirname,filename in lstfile:
+        for dir in dirname:
+            print(os.path.join(dirpath,dir))
+        for file in filename:
+            if file.endswith('py'):
+                print(os.path.join(dirpath,file))
+        print('--------------')
+#listpwd()    #遍历
 
 
 
 
 
+
+
+
+
+
+
+
+import struct as st
+import base64
