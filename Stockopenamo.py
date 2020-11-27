@@ -6,6 +6,7 @@ import string
 import datetime, re
 import time
 import pandas as pds
+import shutil
 import dateutil as dt
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
@@ -64,7 +65,16 @@ def getbandopenprice(sfile,dpath):
             fflowdata=stockcode(date1,codeamo)
             #print(fflowdata) #编码后的数据
             #print(codenum[0:3], codenum[0:3], codenum[0:3])
-            if codenum[0:3]=='600' or codenum[0:3]=='688' or codenum[0:3]=='880':
+            if '指数' in sfile1:        #处理指数时统一用1—
+                dfilename = dpath + '1_' + codenum + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                    print(dfilename)
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
+            elif codenum[0:2]=='60' or codenum[0:3]=='688' or codenum[0:3]=='880':
                 dfilename=dpath+'1_'+codenum+'.dat'
                 try:
                     fw1=open(dfilename,'ab+')
@@ -84,8 +94,13 @@ def getbandopenprice(sfile,dpath):
                 fw1.write(fflowdata)
                 fw1.close()
             else:
-                print('股票代码不存或不支持')
-                continue
+                dfilename = dpath + '1_' + codenum + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
     except FileNotFoundError as fnot1:
         print(fnot1)
         return
@@ -113,7 +128,16 @@ def getstockopenprice(sfile,dpath):
             fflowdata=stockcode(date1,codeamo) #调用编码功能
             #print(fflowdata) #编码后的数据
             #print(codenum[0:3], codenum[0:3], codenum[0:3])
-            if codenum[0:3]=='600' or codenum[0:3]=='688' or codenum[0:3]=='880':
+            if '指数' in sfile1:        #处理指数时统一用1—
+                dfilename = dpath + '1_' + codenum + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                    print(dfilename)
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
+            elif codenum[0:2]=='60' or codenum[0:3]=='688' or codenum[0:3]=='880':
                 dfilename=dpath+'1_'+codenum+'.dat'
                 try:
                     fw1=open(dfilename,'aw+')
@@ -130,8 +154,14 @@ def getstockopenprice(sfile,dpath):
                 fw1.write(fflowdata)
                 fw1.close()
             else:
-                print('股票代码不存或不支持')
-                continue
+                dfilename = dpath + '1_' + codenum + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
+
     except FileNotFoundError as fnot1:
         print(fnot1)
         return
@@ -145,12 +175,35 @@ def procesdata(sfile,dpath):
         print(ee)
         print('处理异常请检查')
     print('处理完成')
-sfile='D:\\十档行情\\T0002\\export\\板块指数20201125.xls'  #导出数据为excel /后每天执行一次
-sfile2='C:\\十档行情\\T0002\\export\\沪深Ａ股20201125.xls'  #导出数据为excel /后每天执行一次
-dpath='D:\\十档行情\\T0002\\signals\\signals_user_9601\\'
-#procesdata(sfile2,dpath)
 
-#通达信竞价文件读取
+def movefile(sfile1,dfile1):
+    try:
+        shutil.move(sfile1, dfile1)
+    except BaseException as be:
+        print(be)
+
+spath='c:\\十档行情\\T0002\\export'
+spathbak='c:\\十档行情\\T0002\\exportbak'
+sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数据为excel /后每天执行一次
+sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
+dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
+listfile =os.listdir(spath)
+# for fl in listfile:
+#     print('代处理的文件为：',spath+'\\'+fl)
+#     if fl.endswith('xls'):
+#         procesdata(spath+'\\'+fl, dpath)
+#         print('文件：%s,处理成功！',spath+'\\'+fl)
+#         if not os.path.exists(spathbak):
+#             os.makedirs(spathbak)
+#         else:
+#             movefile(spath+'\\'+fl,spathbak+'\\'+fl)
+#             print("move %s -> %s",fl,(spathbak+fl))
+
+ #             #movefile(sfile2,spathbak+'\\'+'沪深Ａ股20201126.xls')
+
+
+
+            #通达信竞价文件读取
 def readTDXdata(filename):     #可以解出日期了,竞价数据要用f解
     with open(filename,'rb') as fr:
         seek=4

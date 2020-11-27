@@ -340,3 +340,6 @@ import os
 # Image('fc.jpg')
 import requests
 requests.get('https://www.baidu.com/')
+
+
+print(bin(1000000),ascii(1000000))
