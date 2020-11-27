@@ -165,7 +165,12 @@ def getstockopenprice(sfile,dpath):
     except FileNotFoundError as fnot1:
         print(fnot1)
         return
-
+################处理后移动到bak目录
+def movefile(sfile1,dfile1):
+    try:
+        shutil.move(sfile1, dfile1)
+    except BaseException as be:
+        print(be)
 #每天调用一次即可(板块调一次，个股调用一次)
 def procesdata(sfile,dpath):
     try:
@@ -176,11 +181,7 @@ def procesdata(sfile,dpath):
         print('处理异常请检查')
     print('处理完成')
 
-def movefile(sfile1,dfile1):
-    try:
-        shutil.move(sfile1, dfile1)
-    except BaseException as be:
-        print(be)
+
 
 spath='c:\\十档行情\\T0002\\export'
 spathbak='c:\\十档行情\\T0002\\exportbak'
@@ -188,6 +189,7 @@ sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数�
 sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
 dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 listfile =os.listdir(spath)
+#下面代码每天调用一次即可
 # for fl in listfile:
 #     print('代处理的文件为：',spath+'\\'+fl)
 #     if fl.endswith('xls'):
