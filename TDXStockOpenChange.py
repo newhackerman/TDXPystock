@@ -1,18 +1,18 @@
-#######################本程序为通达信早盘板块异动分析
-
 import struct as st
 import os,re
 import time
 import Stockopenamo as soamo
-#传入一个板块列表文件，用于判断是否为板，然后再读取板块对应的文件
+################本程序为早盘竞价异动处理
+
+#传入一个股票列表文件，用于判断是否为板，然后再读取股票对应的文件
 #
 #
-####读取板块文件 返回一个列表
-def readbandinfo(bandfile):
+####读取股票文件 返回一个列表
+def readStockinfo(stockfile):
     list=[]
     context=''
     line={}
-    with open(bandfile,'r') as bfile:
+    with open(stockfile,'r') as bfile:
         while True:
             context = bfile.readline().strip('\n')
             if context:
@@ -24,19 +24,19 @@ def readbandinfo(bandfile):
                 break
         #print(list)
     return list
-#/判断列表中是否存该板块，找到返回板块名称与代码
+#/判断列表中是否存该股票，找到返回股票名称与代码
 def checkinlist(list,code1):
     for i in list:
         codenum,codename=i.split(':')
-        #print('传入的板块数据为：',i,codenum,codename)
+        #print('传入的股票数据为：',i,codenum,codename)
         if code1 == codenum:
             return codenum,codename
         else:
-            #print('未找到对应板块',code1)
+            #print('未找到对应股票',code1)
             pass
 
             #通达信竞价文件读取 只读取最后两行,并进行计算
-def readTDXdata(filename,codenumt,codenamet):
+def readTDXUerSignals_9601(filename,codenumt,codenamet):
     listdata=[]
     #读取最后16个字节并计算，返回计算后的值与代码
     try:
@@ -53,22 +53,27 @@ def readTDXdata(filename,codenumt,codenamet):
             text4 = st.unpack("f", str[len1+3*seek:len1+4 * seek])[0]
             #print(text1,text2,text3,text4)
             if text2:
-                value=round(text4/text2,3)
+                if float(text4)>5000000:   #竞价值太小不参与计算 要大于500万
+                    value=round(text4/text2,3)
+                else:
+                    value=0
+                    pass
                 #listdata.append(str(codenum)+':'+str(float(value)))
             else:
-                print('读到的值为空，无法计算')
+                #print('股票：%s\t读到的值为空，无法计算' %(codenamet))
+                value='0'  #给个0值 ，否则会出错
                #print(text1,text2)
             return codenumt,codenamet,value
     except FileNotFoundError as fnot:
         print('未找到文件：',filename)
         return codenumt, codenamet, 0
-###########板块异动值排序
+###########股票异动值排序
 def listsort(valuelist):
     #valuelist=['880963:消费1:1.89','880965:消费2:5.247','880966:消费3:1.147','880766:消费4:1.947','880666:消费6:9.247']
     date1 =time.strftime("%Y%m%d", time.localtime())
     newlist=[] #存取分离后的值
     newlist2=[]#存取排序后的值
-    print('今日早盘：%s,以下板块异动：'%(date1))
+    print('今日早盘：%s,以下股票异动：'%(date1))
 
     for line in valuelist:     #把值分离出来 放在newlist里
         codenum1,codename1,value1=line.split(':')
@@ -76,33 +81,33 @@ def listsort(valuelist):
     #print(newlist)
     newlist1=sorted(newlist, key = lambda x:float(x),reverse=True)   #对值进行逆序
     #print(newlist1)
-    for i in newlist1:  #根据值再找到对应的板块
+    for i in newlist1:  #根据值再找到对应的股票
         for j in valuelist:
             codenum2,codename2,value2=j.split(':')
-            if i==value2:
+            if i==value2 and float(value2)>28 and float(value2)<30:
                 newlist2.append(codenum2+':'+codename2+':'+value2)
             else:
                 continue
     #输出前15名
     #print(newlist2)
-    i=0
+    i=1
     for info in newlist2:
-        i+=1
         print(info)
-        if i>14:
-            break
+        # i += 1
+        # if i>15:
+        #     break
     return newlist2
 
 ########################以下代码为处理早盘竞价数据################################
 # spath='c:\\十档行情\\T0002\\export'
 # spathbak='c:\\十档行情\\T0002\\exportbak'
-# sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数据为excel /后每天执行一次
+# sfile1='c:\\十档行情\\T0002\\export\\股票指数20201126.xls'  #导出数据为excel /后每天执行一次
 # sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
 # dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 # listfile =os.listdir(spath)
 # spath='c:\\十档行情\\T0002\\export'
 # spathbak='c:\\十档行情\\T0002\\exportbak'
-# sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数据为excel /后每天执行一次
+# sfile1='c:\\十档行情\\T0002\\export\\股票指数20201126.xls'  #导出数据为excel /后每天执行一次
 # sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
 # dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 # listfile =os.listdir(spath)
@@ -122,28 +127,33 @@ def listsort(valuelist):
 ########################以上代码为处理早盘竞价数据################################
 
 
-########################### 早盘板块异动提醒（说明：要先写好板块数据）
-def tdxbandchange():
-    bandfile = 'D:\\pythonTtest\\testOne\\板块列表.txt'
-    bandlist = readbandinfo(bandfile)
-    #print('板块列表为：',bandlist)
+########################### 早盘股票异动提醒（说明：要先写好股票数据）
+def tdxstockOpenchange():
+    stockfile = 'D:\\pythonTtest\\testOne\\个股信息列表.txt'
+    stocklist = readStockinfo(stockfile)
+    #print('股票列表为：',stocklist)
     sdir='C:\\十档行情\\T0002\\signals\\signals_user_9601'
     filelist= os.listdir(sdir)
     #print(len(filelist))
-    newfilelist=[]       #板块文件列表
+    newfilelist=[]       #股票文件列表
     valuelist=[]
-    for band in bandlist:    #只需要处理板块文件
-        codenumV,codenamev=band.split(':') #取得板块代码与名称
-        newfile=sdir + '\\' + '1_'+codenumV+'.dat'
+    for stock in stocklist:    #只需要处理股票文件
+        codenumV,codenamev=stock.split(':') #取得股票代码与名称
+        if codenumV[0:2]=='60':
+            newfile=sdir + '\\' + '1_'+codenumV+'.dat'
+        else:
+            newfile = sdir + '\\' + '0_' + codenumV + '.dat'
         newfilelist.append(newfile)
-        codenum1, codename1, value = readTDXdata(newfile, codenumV, codenamev)
+
+        codenum1, codename1, value = readTDXUerSignals_9601(newfile, codenumV, codenamev)
         try:
             valuelist.append(codenum1+':'+codename1+':'+str(value))
         except BaseException as be:
             print(be)
-    listsort(valuelist)         #调用列表排序，并输出前15个板块
+    #print(newfilelist)
+    listsort(valuelist)         #调用列表排序，并输出前15个股票
 
-tdxbandchange()  #调用
+tdxstockOpenchange()  #调用
 #######################################################3
 
 # valuelist=['880963:消费1:1.89','880965:消费2:5.247','880966:消费3:1.147','880766:消费4:1.947','880666:消费6:9.247']

@@ -1,3 +1,4 @@
+###################本程序为通信达早盘自定义数据的写盘与读取###########################
 from __future__ import division
 import os
 import struct as st
@@ -10,6 +11,8 @@ import shutil
 import dateutil as dt
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+
+
 #########解码
 def STOCKuncode(date,codeamo):     #可以解出日期了,竞价数据要用f解
     text1=st.unpack("I",date)[0]
