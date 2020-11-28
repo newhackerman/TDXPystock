@@ -3,7 +3,7 @@
 import struct as st
 import os,re
 import time
-import Stockopenamo as soamo
+import 通达信写自定义竞价数据文件 as soamo
 #传入一个板块列表文件，用于判断是否为板，然后再读取板块对应的文件
 #
 #
