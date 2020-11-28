@@ -153,7 +153,9 @@ def tdxstockOpenchange():
     #print(newfilelist)
     listsort(valuelist)         #调用列表排序，并输出前15个股票
 
-tdxstockOpenchange()  #调用
+
+if __name__=='__main__':
+    tdxstockOpenchange()  #调用
 #######################################################3
 
 # valuelist=['880963:消费1:1.89','880965:消费2:5.247','880966:消费3:1.147','880766:消费4:1.947','880666:消费6:9.247']

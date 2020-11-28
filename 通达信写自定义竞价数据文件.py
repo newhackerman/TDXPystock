@@ -186,26 +186,28 @@ def procesdata(sfile,dpath):
 
 
 
-spath='c:\\十档行情\\T0002\\export'
-spathbak='c:\\十档行情\\T0002\\exportbak'
-sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数据为excel /后每天执行一次
-sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
-dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
-listfile =os.listdir(spath)
+
 
 #下面代码每天调用一次即可
-# for fl in listfile:
-#     print('代处理的文件为：',spath+'\\'+fl)
-#     if fl.endswith('xls'):
-#         procesdata(spath+'\\'+fl, dpath)
-#         print('文件：%s,处理成功！',spath+'\\'+fl)
-#         if not os.path.exists(spathbak):
-#             os.makedirs(spathbak)
-#         else:
-#             movefile(spath+'\\'+fl,spathbak+'\\'+fl)
-#             print("move %s -> %s",fl,(spathbak+fl))
+if __name__=='__main__':
+    spath = 'c:\\十档行情\\T0002\\export'
+    spathbak = 'c:\\十档行情\\T0002\\exportbak'
+    sfile1 = 'c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  # 导出数据为excel /后每天执行一次
+    sfile2 = 'c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  # 导出数据为excel /后每天执行一次
+    dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
+    listfile = os.listdir(spath)
+    for fl in listfile:
+        print('代处理的文件为：',spath+'\\'+fl)
+        if fl.endswith('xls'):
+            procesdata(spath+'\\'+fl, dpath)
+            print('文件：%s,处理成功！',spath+'\\'+fl)
+            if not os.path.exists(spathbak):
+                os.makedirs(spathbak)
+            else:
+                movefile(spath+'\\'+fl,spathbak+'\\'+fl)
+                print("move %s -> %s",fl,(spathbak+fl))
 
- #             #movefile(sfile2,spathbak+'\\'+'沪深Ａ股20201126.xls')
+     #             #movefile(sfile2,spathbak+'\\'+'沪深Ａ股20201126.xls')
 
 
 

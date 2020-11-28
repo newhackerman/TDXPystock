@@ -120,10 +120,10 @@ sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数�
 sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
 dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 
-procesopenstockprice('C:\\十档行情\\T0002\\exportbak\\沪深Ａ股20201127.xls')
 
-if '__name__'=='__main__':
-    pass
+if __name__=='__main__':
+    procesopenstockprice('C:\\十档行情\\T0002\\exportbak\\沪深Ａ股20201127.xls')
+
 
 #listfile =os.listdir(spath)
 #下面代码每天调用一次即可
