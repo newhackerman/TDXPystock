@@ -3,7 +3,7 @@ pygame.init()
 screen=pygame.display.set_mode((480,700)) #设置窗口大小
 bg=pygame.image.load('E:\\手机相关\\华为手机\\壁纸\\magazine-unlock-01-2.3.1009-_7AD45EE0D67ED07E16EB17D8EF5FE114.jpg')
 screen.blit(bg,(1,1))
-hreo=pygame.image.load('.\\hreo.png') #加载图片文件
+hreo=pygame.image.load('hreo.png') #加载图片文件
 screen.blit(hreo,(200,600)) #设置图片加载的位置
 pygame.display.update() #更新画面
 clock=pygame.time.Clock() #时钟
