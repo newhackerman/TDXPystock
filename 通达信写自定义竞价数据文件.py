@@ -45,26 +45,30 @@ def getbandopenprice(sfile,dpath):
     #date1 =time.strftime("%Y%m%d", time.localtime())
     #date1 = sfile[-12:-4:1]  #取文件名中的日期
     date1 = re.search(r'\d+.xls$', sfile).group()[0:8]
-    print('文件名中的日期为%s',date1)
+    print('文件名中的日期为%s'%date1)
     try:
         count=0
         list1=pds.read_excel(sfile1)
-        list2=list1.loc[:,['代码']]
-        list3=list1.loc[:,['开盘金额']]
-        dict1={}
+        #list2=list1.loc[:,['代码']]
+        #list3=list1.loc[:,['开盘金额']]
+        #dict1={}
         #print(type(list2),type(list3))
-        flag=0
+        #flag=0
         for i in  list1.index.values:
             #row_data = list1.loc[i, ['代码', '开盘金额']].to_dict()
             e1=list1.loc[i, ['代码']].to_dict()
-            codenum=str(e1['代码']).rjust(6,'0')
-            e2=list1.loc[i, ['开盘金额']].to_dict()
+            codenum = str(e1['代码']).rjust(6, '0')
+            if not codenum.isdigit():   #如果读到的不是数字，则跳过
+                continue
+            e2 = list1.loc[i, ['开盘金额']].to_dict()
             codeamo=str(format(e2['开盘金额']))
             #print(codenum,codeamo)
             #test_data.append(row_data)
             # dat=date1.join(codenum).join(codeamo)
             # print(dat)
             #需要写编码功能)
+            if codenum=='' or  codeamo=='':  #如果开盘金额是空的，或代码是空的则跳过（股票未开盘无意义）
+                continue
             fflowdata=stockcode(date1,codeamo)
             #print(fflowdata) #编码后的数据
             #print(codenum[0:3], codenum[0:3], codenum[0:3])
@@ -196,16 +200,20 @@ if __name__=='__main__':
     sfile2 = 'c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  # 导出数据为excel /后每天执行一次
     dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
     listfile = os.listdir(spath)
+    if not os.path.exists(dpath):
+        print('目标目录不存在，请检查！')
+        exit(1)
     for fl in listfile:
-        print('代处理的文件为：',spath+'\\'+fl)
+        print('待处理的文件为：',spath+'\\'+fl)
+
         if fl.endswith('xls'):
             procesdata(spath+'\\'+fl, dpath)
-            print('文件：%s,处理成功！',spath+'\\'+fl)
+            print('文件：%s处理成功！'%(spath+'\\'+fl))
             if not os.path.exists(spathbak):
                 os.makedirs(spathbak)
             else:
                 movefile(spath+'\\'+fl,spathbak+'\\'+fl)
-                print("move %s -> %s",fl,(spathbak+fl))
+                print("move %s -> %s" %(fl,(spathbak+'\\'+fl)))
 
      #             #movefile(sfile2,spathbak+'\\'+'沪深Ａ股20201126.xls')
 

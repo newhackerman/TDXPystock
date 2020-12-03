@@ -2,7 +2,7 @@ from __future__ import division
 import tushare as ts
 import datetime, re
 import pandas as pds
-
+import util.logout as log
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 #早盘选股，选量比>25的，现量大于3000手，3日涨幅% <15%,流通盘小150亿
@@ -13,7 +13,8 @@ def getstockopenamo(sfile):
     #date1 =time.strftime("%Y%m%d", time.localtime())
     #date1 = sfile[-12:-4:1]  #取文件名中的日期
     date1 = re.search(r'\d+.xls$', sfile).group()[0:8]
-    print('日期为%s\t 早盘选股 '%date1)
+    #print('日期为%s\t 早盘选股 '%date1)
+    log.logout('日期为%s\t 早盘选股 \r---------------------------------------'%date1)
     try:
         count=0
         list1=pds.read_excel(sfile1)
@@ -37,54 +38,77 @@ def getstockopenamo(sfile):
                 codename=str(format(list11['名称']))
                 #print('codename', codename)
                 list3 = list1.loc[i, ['开盘金额']]
-                if str(list3[0:2])=='--' :
+                if '--' in str(list3) :
                     #print('此股数据有问题',codenum)
                     continue
                 codeamo = str(format(list3['开盘金额']))
                 #print('codeamo',codeamo)
                 list4 = list1.loc[i, ['开盘换手Z']]
-                if str(list4[0:2])=='--' :
+                if '--' in str(list4) :
                     #rint('此股数据有问题',codenum)
                     continue
                 switchvalue=str(format(list4['开盘换手Z']))
                 #print('switchvalue',switchvalue)
                 list5 = list1.loc[i, ['涨幅%']]
+                if '--' in str(list5):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 increase=str(format(list5['涨幅%']))
                 #print('increase',increase)
                 list6 = list1.loc[i, ['现量']]
+                if '--' in str(list6):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 volline=str(format(list6['现量']))
                 #print('volline', volline)
                 list7 = list1.loc[i, ['流通市值']]
+                if '--' in str(list7):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 temp=str(list7['流通市值'])
                 temp1 =re.findall(r"[^\W\d_]+|\d+.\d+", temp)[0]
                 Circulationmarketvalue =float(temp1)
                 #print('Circulationmarketvalue', Circulationmarketvalue)
                 list8 = list1.loc[i, ['3日涨幅%']]
+                if '--' in str(list8):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 Threeincrease=str(format(list8['3日涨幅%']))
                 #print('Threeincrease', Threeincrease)
                 list9 = list1.loc[i, ['20日涨幅%']]
+                if '--' in str(list9):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 tewincrease=str(format(list9['20日涨幅%']))
                 #print('tewincrease', tewincrease)
                 list10 = list1.loc[i, ['开盘%']]
+                if '--' in str(list10):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 openpercent=str(format(list10['开盘%']))
                 #print('openpercent', openpercent)
                 list12 = list1.loc[i, ['量比']]
+                if '--' in str(list12):
+                    # rint('此股数据有问题',codenum)
+                    continue
                 volpercent = str(format(list12['量比']))
                 #print('volpercent', volpercent)
                 #print('{0},{01},{2},{3},{4},{5},{6},{7},{8},{9}'%(codenum,codeamo,switchvalue,
                 #increase, volline,Circulationmarketvalue,Threeincrease,tewincrease,openpercent,codename))
                 if float(volpercent)>1:     #有数据表示未停牌
                     # 按量比排序，选量比>25的，现量大于3000手，3日涨幅% <15% and 流通市值小于150亿
-                    if float(volpercent)>5 and float(volline)>3000 and float(Threeincrease)<15 and float(Circulationmarketvalue)<150:
+                    if float(openpercent) <4 and float(openpercent)>-1.5 and float(volpercent)>25 and float(volline)>3000 and float(Threeincrease)<15 and float(Circulationmarketvalue)<150:
                         newlist.append(str(codenum)+':'+str(codename)+':'+str(volpercent)+':'+str(volline)+':'+str(Circulationmarketvalue))
-                        print('量比条件个股代码为：%s: %s'%(codenum,codename))
+                        #print('量比条件个股代码为：%s: %s'%(codenum,codename))
+                        log.logout('量比条件个股代码为：%s: %s'%(codenum,codename))
                         #print(newlist)
                         # 按换手选 换手在在0.8到2之间，现量大于3000手，3日涨幅% <15% and 流通市值小于150亿
-                    if float(switchvalue) >0.9 and float(switchvalue)<=2 and float(volline) > 3000 and float(Threeincrease) < 15 and float(
+                    if float(openpercent) <4 and float(openpercent)>-1.5 and float(switchvalue) >0.9 and float(switchvalue)<=2 and float(volline) > 3000 and float(Threeincrease) < 15 and float(
                             Circulationmarketvalue) < 150:
                         newlist.append(str(codenum) + ':' + str(codename) + ':' + str(volpercent) + ':' + str(
                             volline) + ':' + str(Circulationmarketvalue))
-                        print('换手条件个股代码为：%s: %s' % (codenum, codename))
+                        log.logout('换手条件个股代码为：%s: %s' % (codenum, codename))
+                        #print('换手条件个股代码为：%s: %s' % (codenum, codename))
                         # print(newlist)
                 else:
                     continue
@@ -122,7 +146,7 @@ dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 
 
 if __name__=='__main__':
-    procesopenstockprice('C:\\十档行情\\T0002\\exportbak\\沪深Ａ股20201127.xls')
+    procesopenstockprice('C:\\十档行情\\T0002\\export\\沪深Ａ股20201203.xls')
 
 
 #listfile =os.listdir(spath)
@@ -139,4 +163,3 @@ if __name__=='__main__':
 #             print("move %s -> %s",fl,(spathbak+fl))
 
  #             #movefile(sfile2,spathbak+'\\'+'沪深Ａ股20201126.xls')
- 

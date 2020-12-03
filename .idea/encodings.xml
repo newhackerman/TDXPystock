@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="PROJECT" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/可转债与正股对应表.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/板块列表.txt" charset="GBK" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

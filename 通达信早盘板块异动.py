@@ -3,6 +3,7 @@
 import struct as st
 import os,re
 import time
+import util.logout as log
 import 通达信写自定义竞价数据文件 as soamo
 #传入一个板块列表文件，用于判断是否为板，然后再读取板块对应的文件
 #
@@ -45,12 +46,20 @@ def readTDXdata(filename,codenumt,codenamet):
             #fr.seek(50,2)
             str=fr.read()          #未找到较好的倒序读取方法，根据偏移量读取后，无法读到数据
             len1 = len(str) - 16   #定位到最后16个字符的位置（）
+            if len1<16:   #当文件中不足两行时，直接返回
+                return codenumt, codenamet, 0
             #print(len1)
             #print(str)
-            text1=st.unpack("I",str[len1:len1+seek])[0]
-            text2=st.unpack("f",str[len1+seek:len1+2*seek])[0]
-            text3 = st.unpack("I", str[len1+2*seek:len1+3 * seek])[0]
-            text4 = st.unpack("f", str[len1+3*seek:len1+4 * seek])[0]
+            try:
+                text1=st.unpack("I",str[len1:len1+seek])[0]
+                #print(text1)
+                text2=st.unpack("f",str[len1+seek:len1+2*seek])[0]
+                #print(text2)
+                text3 = st.unpack("I", str[len1+2*seek:len1+3 * seek])[0]
+                text4 = st.unpack("f", str[len1+3*seek:len1+4 * seek])[0]
+            except:
+                print('error file is :',filename,codenumt,codenamet)
+                value=0
             #print(text1,text2,text3,text4)
             if text2:
                 value=round(text4/text2,3)
@@ -68,7 +77,8 @@ def listsort(valuelist):
     date1 =time.strftime("%Y%m%d", time.localtime())
     newlist=[] #存取分离后的值
     newlist2=[]#存取排序后的值
-    print('今日早盘：%s,以下板块异动：'%(date1))
+    #print('今日早盘：%s,以下板块异动：'%(date1))
+    log.logout('今日早盘：%s,以下板块异动：\r---------------------------------------'%(date1))
 
     for line in valuelist:     #把值分离出来 放在newlist里
         codenum1,codename1,value1=line.split(':')
@@ -88,7 +98,8 @@ def listsort(valuelist):
     i=0
     for info in newlist2:
         i+=1
-        print(info)
+        #print(info)
+        log.logout(info)
         if i>14:
             break
     return newlist2
@@ -124,7 +135,7 @@ def listsort(valuelist):
 
 ########################### 早盘板块异动提醒（说明：要先写好板块数据）
 def tdxbandchange():
-    bandfile = 'D:\\pythonTtest\\testOne\\板块列表.txt'
+    bandfile = 'D:\\pythonTtest\\TDXPystock\\板块列表.txt'
     bandlist = readbandinfo(bandfile)
     #print('板块列表为：',bandlist)
     sdir='C:\\十档行情\\T0002\\signals\\signals_user_9601'

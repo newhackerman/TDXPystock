@@ -1,6 +1,7 @@
 import struct as st
 import os,re
 import time
+import util.logout as log
 import 通达信写自定义竞价数据文件 as soamo
 ################本程序为早盘竞价异动处理
 
@@ -9,7 +10,7 @@ import 通达信写自定义竞价数据文件 as soamo
 #
 ####读取股票文件 返回一个列表
 def readStockinfo(stockfile):
-    list=[]
+    stocklist=[]
     context=''
     line={}
     with open(stockfile,'r') as bfile:
@@ -19,21 +20,52 @@ def readStockinfo(stockfile):
                 codenum,codename=context.split(',')
                 #print(codename)
                 line=codenum+':'+codename
-                list.append(line)
+                stocklist.append(line)
             else:
                 break
         #print(list)
-    return list
-#/判断列表中是否存该股票，找到返回股票名称与代码
-def checkinlist(list,code1):
-    for i in list:
-        codenum,codename=i.split(':')
+    return stocklist
+
+####读取股票文件 返回一个列表
+def readKZZinfo(KZZfile):
+    kzzlist=[]
+    context=''
+    line={}
+    with open(KZZfile,'r') as bfile:
+        while True:
+            context = bfile.readline().strip('\n')
+            if context:
+                codenum,codename,kzzcode,kzzname=context.split(',')
+                #print(codename)
+                line=codenum+':'+codename+kzzcode+':'+kzzname
+                kzzlist.append(line)
+            else:
+                break
+        #print(list)
+    return kzzlist
+
+#/判断列表中是否存该可转债，找到返回可转债
+def checkkzzinlist(kzzlist,code1):
+    for i in kzzlist:
+        codenum,codename,kzzcode,kzzname=i.split(',')
         #print('传入的股票数据为：',i,codenum,codename)
-        if code1 == codenum:
-            return codenum,codename
+        if code1 == kzzcode:
+            return kzzcode,kzzname
         else:
             #print('未找到对应股票',code1)
             pass
+
+# /判断列表中是否存该股票，找到返回股票名称与代码
+def checkinlist(list, code1):
+    for i in list:
+        codenum, codename = i.split(':')
+        # print('传入的股票数据为：',i,codenum,codename)
+        if code1 == codenum:
+            return codenum, codename
+        else:
+            # print('未找到对应股票',code1)
+            pass
+
 
             #通达信竞价文件读取 只读取最后两行,并进行计算
 def readTDXUerSignals_9601(filename,codenumt,codenamet):
@@ -67,14 +99,17 @@ def readTDXUerSignals_9601(filename,codenumt,codenamet):
     except FileNotFoundError as fnot:
         print('未找到文件：',filename)
         return codenumt, codenamet, 0
+
+##############查找对应的可转债
+
 ###########股票异动值排序
 def listsort(valuelist):
     #valuelist=['880963:消费1:1.89','880965:消费2:5.247','880966:消费3:1.147','880766:消费4:1.947','880666:消费6:9.247']
     date1 =time.strftime("%Y%m%d", time.localtime())
     newlist=[] #存取分离后的值
     newlist2=[]#存取排序后的值
-    print('今日早盘：%s,以下股票异动：'%(date1))
-
+    #print('今日早盘：%s,以下股票异动：'%(date1))
+    log.logout('今日早盘：%s,以下股票异动：\r---------------------------------------'%(date1))
     for line in valuelist:     #把值分离出来 放在newlist里
         codenum1,codename1,value1=line.split(':')
         newlist.append(value1)   #存存分离后的值
@@ -92,7 +127,8 @@ def listsort(valuelist):
     #print(newlist2)
     i=1
     for info in newlist2:
-        print(info)
+
+        log.logout(info)
         # i += 1
         # if i>15:
         #     break
@@ -129,7 +165,7 @@ def listsort(valuelist):
 
 ########################### 早盘股票异动提醒（说明：要先写好股票数据）
 def tdxstockOpenchange():
-    stockfile = 'D:\\pythonTtest\\testOne\\个股信息列表.txt'
+    stockfile = 'D:\\pythonTtest\\TDXPystock\\个股信息列表.txt'
     stocklist = readStockinfo(stockfile)
     #print('股票列表为：',stocklist)
     sdir='C:\\十档行情\\T0002\\signals\\signals_user_9601'
@@ -156,6 +192,9 @@ def tdxstockOpenchange():
 
 if __name__=='__main__':
     tdxstockOpenchange()  #调用
+    kzzfile='D:/pythonTtest/TDXPystock/可转债与正股对应表.txt'
+    kzzlist=readKZZinfo(kzzfile)
+
 #######################################################3
 
 # valuelist=['880963:消费1:1.89','880965:消费2:5.247','880966:消费3:1.147','880766:消费4:1.947','880666:消费6:9.247']
