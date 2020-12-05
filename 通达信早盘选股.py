@@ -14,7 +14,7 @@ def getstockopenamo(sfile):
     #date1 = sfile[-12:-4:1]  #取文件名中的日期
     date1 = re.search(r'\d+.xls$', sfile).group()[0:8]
     #print('日期为%s\t 早盘选股 '%date1)
-    log.logout('日期为%s\t 早盘选股 \r---------------------------------------'%date1)
+    log.logout('日期： %s\t 早盘股 \r---------------------------------------'%date1)
     try:
         count=0
         list1=pds.read_excel(sfile1)
@@ -100,14 +100,14 @@ def getstockopenamo(sfile):
                     if float(openpercent) <4 and float(openpercent)>-1.5 and float(volpercent)>25 and float(volline)>3000 and float(Threeincrease)<15 and float(Circulationmarketvalue)<150:
                         newlist.append(str(codenum)+':'+str(codename)+':'+str(volpercent)+':'+str(volline)+':'+str(Circulationmarketvalue))
                         #print('量比条件个股代码为：%s: %s'%(codenum,codename))
-                        log.logout('量比条件个股代码为：%s: %s'%(codenum,codename))
+                        log.logout('量比组合条件个股：  %s:  %s'%(codenum,codename))
                         #print(newlist)
                         # 按换手选 换手在在0.8到2之间，现量大于3000手，3日涨幅% <15% and 流通市值小于150亿
                     if float(openpercent) <4 and float(openpercent)>-1.5 and float(switchvalue) >0.9 and float(switchvalue)<=2 and float(volline) > 3000 and float(Threeincrease) < 15 and float(
                             Circulationmarketvalue) < 150:
                         newlist.append(str(codenum) + ':' + str(codename) + ':' + str(volpercent) + ':' + str(
                             volline) + ':' + str(Circulationmarketvalue))
-                        log.logout('换手条件个股代码为：%s: %s' % (codenum, codename))
+                        log.logout('换手组合条件个股：  %s:  %s' % (codenum, codename))
                         #print('换手条件个股代码为：%s: %s' % (codenum, codename))
                         # print(newlist)
                 else:
@@ -146,7 +146,7 @@ dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 
 
 if __name__=='__main__':
-    procesopenstockprice('C:\\十档行情\\T0002\\export\\沪深Ａ股20201203.xls')
+    procesopenstockprice('C:\\十档行情\\T0002\\export\\沪深Ａ股20201204.xls')
 
 
 #listfile =os.listdir(spath)

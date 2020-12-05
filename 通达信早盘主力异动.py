@@ -109,7 +109,7 @@ def listsort(valuelist):
     newlist=[] #存取分离后的值
     newlist2=[]#存取排序后的值
     #print('今日早盘：%s,以下股票异动：'%(date1))
-    log.logout('今日早盘：%s,以下股票异动：\r---------------------------------------'%(date1))
+    log.logout('今日早盘： %s,异动股票：\r---------------------------------------'%(date1))
     for line in valuelist:     #把值分离出来 放在newlist里
         codenum1,codename1,value1=line.split(':')
         newlist.append(value1)   #存存分离后的值
