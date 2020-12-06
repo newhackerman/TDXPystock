@@ -5,10 +5,9 @@ import util.logout as log
 import 通达信写自定义竞价数据文件 as soamo
 ################本程序为早盘竞价异动处理
 
-#传入一个股票列表文件，用于判断是否为板，然后再读取股票对应的文件
 #
 #
-####读取股票文件 返回一个列表
+####读取股票文件txt 返回一个列表
 def readStockinfo(stockfile):
     stocklist=[]
     context=''
@@ -26,7 +25,7 @@ def readStockinfo(stockfile):
         #print(list)
     return stocklist
 
-####读取股票文件 返回一个列表
+####读取可转债文件 返回一个列表
 def readKZZinfo(KZZfile):
     kzzlist=[]
     context=''
@@ -102,7 +101,7 @@ def readTDXUerSignals_9601(filename,codenumt,codenamet):
 
 ##############查找对应的可转债
 
-###########股票异动值排序
+###########股票异动值排序输出
 def listsort(valuelist):
     #valuelist=['880963:消费1:1.89','880965:消费2:5.247','880966:消费3:1.147','880766:消费4:1.947','880666:消费6:9.247']
     date1 =time.strftime("%Y%m%d", time.localtime())
@@ -119,7 +118,7 @@ def listsort(valuelist):
     for i in newlist1:  #根据值再找到对应的股票
         for j in valuelist:
             codenum2,codename2,value2=j.split(':')
-            if i==value2 and float(value2)>28 and float(value2)<30:
+            if i==value2 and float(value2)>28 and float(value2)<30:  #只取异动值在28到30倍的，容易涨停（待验证）
                 newlist2.append(codenum2+':'+codename2+':'+value2)
             else:
                 continue

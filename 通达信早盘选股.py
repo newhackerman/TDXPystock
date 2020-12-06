@@ -96,15 +96,15 @@ def getstockopenamo(sfile):
                 #print('{0},{01},{2},{3},{4},{5},{6},{7},{8},{9}'%(codenum,codeamo,switchvalue,
                 #increase, volline,Circulationmarketvalue,Threeincrease,tewincrease,openpercent,codename))
                 if float(volpercent)>1:     #有数据表示未停牌
-                    # 按量比排序，选量比>25的，现量大于3000手，3日涨幅% <15% and 流通市值小于150亿
-                    if float(openpercent) <4 and float(openpercent)>-1.5 and float(volpercent)>25 and float(volline)>3000 and float(Threeincrease)<15 and float(Circulationmarketvalue)<150:
+                    # 按量比排序，选量比>25的，现量大于3000手，3日涨幅% <15% and 流通市值小于100亿
+                    if float(openpercent) <4 and float(openpercent)>-1.5 and float(volpercent)>25 and float(volline)>3000 and float(Threeincrease)<15 and float(Circulationmarketvalue)<100:
                         newlist.append(str(codenum)+':'+str(codename)+':'+str(volpercent)+':'+str(volline)+':'+str(Circulationmarketvalue))
                         #print('量比条件个股代码为：%s: %s'%(codenum,codename))
                         log.logout('量比组合条件个股：  %s:  %s'%(codenum,codename))
                         #print(newlist)
-                        # 按换手选 换手在在0.8到2之间，现量大于3000手，3日涨幅% <15% and 流通市值小于150亿
+                        # 按换手选 换手在在0.8到2之间，现量大于3000手，3日涨幅% <15% and 流通市值小于100亿
                     if float(openpercent) <4 and float(openpercent)>-1.5 and float(switchvalue) >0.9 and float(switchvalue)<=2 and float(volline) > 3000 and float(Threeincrease) < 15 and float(
-                            Circulationmarketvalue) < 150:
+                            Circulationmarketvalue) < 100:
                         newlist.append(str(codenum) + ':' + str(codename) + ':' + str(volpercent) + ':' + str(
                             volline) + ':' + str(Circulationmarketvalue))
                         log.logout('换手组合条件个股：  %s:  %s' % (codenum, codename))
