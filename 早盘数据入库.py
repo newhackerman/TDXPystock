@@ -5,12 +5,12 @@ import logging
 database='stock'
 tablename='stockopendata'
 configfile='D:/mysqlconfig.json'
-excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
+#excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
 #读取json格式的配置文件
 def file2dict(path):
     with open(path, encoding="utf-8") as f:
         jsoncontent=json.load(f)
-        # ##if jsoncontent.startswith(u'\ufeff'):
+        #if jsoncontent.startswith(u'\ufeff'):
         #     jsoncontent = jsoncontent.encode('utf8')[3:].decode('utf8')
         return jsoncontent
 

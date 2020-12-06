@@ -1,12 +1,11 @@
 import 早盘数据入库 as indb
 import prettytable as pt  #usege:https://www.cnblogs.com/Mr-Koala/p/6582299.html
-import pandas as pd
-import json
 import pymysql
 outfile='stockopendata.html' #输出到文件
 
 ####################输出分析图表#####################################
-
+def outmap(dataframe):
+    pass
 
 ####################以表格的形式输出##################################
 def formatresults(results,header):
@@ -39,7 +38,8 @@ def formatresults(results,header):
     s=tb.get_html_string()  #获取html格式
     print(s,file=fw)
     print(tb)
-#######################根据条件查询mysql中的数据###############################
+
+#######################根据条件查询mysql中的数据#######################
 def dataselect(*condiction,**keyscondiction):
     #dict=indb.file2dict(indb.configfile)  #读取配置信息
     conn=indb.dbconnect()
