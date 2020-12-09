@@ -146,7 +146,7 @@ dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 
 
 if __name__=='__main__':
-    procesopenstockprice('C:\\十档行情\\T0002\\export\\沪深Ａ股20201204.xls')
+    procesopenstockprice('C:\\十档行情\\T0002\\export\\沪深Ａ股20201209.xls')
 
 
 #listfile =os.listdir(spath)

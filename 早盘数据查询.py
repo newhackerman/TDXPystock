@@ -1,18 +1,20 @@
 import 早盘数据入库 as indb
-import prettytable as pt  #usege:https://www.cnblogs.com/Mr-Koala/p/6582299.html
+import prettytable as pt  #useage:https://www.cnblogs.com/Mr-Koala/p/6582299.html
 import pymysql
+import pyecharts       #可视化图表输出  useage:https://blog.csdn.net/update7/article/details/89086454
 outfile='stockopendata.html' #输出到文件
 
 ####################输出分析图表#####################################
 def outmap(dataframe):
-    pass
-
+    bar=pyecharts.charts.Bar()
+    bar.add_dataset(dataframe)
+    bar.render()
 ####################以表格的形式输出##################################
 def formatresults(results,header):
     #results   查询到的数据集
     #header   要输出的表头
     tb = pt.PrettyTable()
-    tb.field_names=header
+    tb.field_names=header #设置表头
     tb.align='r'  #右对齐
     tb.sortby = "日期"
     #tb.set_style(pt.DEFAULT)
@@ -38,6 +40,7 @@ def formatresults(results,header):
     s=tb.get_html_string()  #获取html格式
     print(s,file=fw)
     print(tb)
+    #outmap(tb)
 
 #######################根据条件查询mysql中的数据#######################
 def dataselect(*condiction,**keyscondiction):
@@ -64,4 +67,4 @@ def dataselect(*condiction,**keyscondiction):
 
 
 if __name__ == '__main__':
-    dataselect(code='600038')   #传入要查询的条件，例如：name='中直股份‘ ，date='2020-12-01'
+      dataselect(code='000528')   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 只支持单个条件

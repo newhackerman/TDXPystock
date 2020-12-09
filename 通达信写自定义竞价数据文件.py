@@ -212,7 +212,7 @@ if __name__=='__main__':
             if not os.path.exists(spathbak):
                 os.makedirs(spathbak)
             else:
-                movefile(spath+'\\'+fl,spathbak+'\\'+fl)
+                movefile(spath+'\\'+fl,spathbak+'\\'+fl)  #处理完移走
                 print("move %s -> %s" %(fl,(spathbak+'\\'+fl)))
 
      #             #movefile(sfile2,spathbak+'\\'+'沪深Ａ股20201126.xls')

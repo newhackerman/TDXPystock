@@ -240,5 +240,6 @@ CREATE TABLE IF NOT EXISTS `stockopendata`(
 create index stockcode on stockopendata(code);
 create index stockname on stockopendata(name);
 create index stockhanyi on stockopendata(xifenhangye);
+create bitmap index stockdate on stockopendata(date);
 select date,code ,name ,kaipanhuanshuoz,kaipanjine,liangbi,xianliang,liutongsizhi,liutongguyi,xifenhangye from stockopendata where name='中水渔业';
 '''
