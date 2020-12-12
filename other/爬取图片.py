@@ -3,7 +3,9 @@ import urllib.parse
 import json
 import os
 import re
+import urllib.error as urlerror
 import random,time
+
 
 #利用有道翻译
 def youdao():
@@ -13,14 +15,6 @@ def youdao():
     timeout=30
     data={}
     data['i']='I hate play game'  #翻译的语句
-    #data['from']='AUTO'
-    ##data['to']='AUTO'
-    #data['smartresult']='dict'
-    #data['client']='fanyideskweb'
-    #data['salt']='16069947030391'
-    #data['sign']='e2c5e6b040eabb08533fd085a4a3653a'
-    #data['lts']='1606994703039'
-    #data['bv']='8269b35cc1594b7635631cdd3a301112'
     data['doctype']='json'
     data['version']='2.1'
     data['keyfrom']='fanyi.web'
@@ -88,8 +82,15 @@ def proxytest():
         response=urllib.request.urlopen(dricturl)
         html=response.read()
         print(html)
-    except:
-        print('访问出现错误')
+    except urllib.error.URLError as urler:
+        print('地址错误',urler)
+    except urllib.error.ContentTooShortError as cr:
+        print('连接错误',cr)
+        proxytest()
+    except urllib.error.HTTPError as httper:
+        print('访问出现错误，尝试中...')
+        proxytest()
+
 #w创建子目录
 def mkdir(subpath):
     os.chdir(savepath)
@@ -179,8 +180,6 @@ def downloadmm(savepath,pages=10):
         time.sleep(random.randrange(1, 10, 1)) #随机生成1~10的随机数
         for img in imgaddress:
             picture=savepicture(savepath,subimgs[i],img)
-
-
 
 if __name__ == '__main__':
     savepath = 'D:/pythonTtest/TDXPystock/other/picture'
