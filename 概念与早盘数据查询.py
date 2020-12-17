@@ -2,6 +2,7 @@ import 早盘数据入库 as indb
 import prettytable as pt  #useage:https://www.cnblogs.com/Mr-Koala/p/6582299.html
 import pymysql
 import pyecharts       #可视化图表输出  useage:https://blog.csdn.net/update7/article/details/89086454
+import sys
 outfile='stockopendata.html' #输出到文件
 
 ####################输出分析图表#####################################
@@ -38,7 +39,7 @@ def formatresults(tablename,results,header):
             # print('%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t' % (
             # date, code, name, kaipanhuanshuoz, kaipanjine, liangbi, xianliang, liutongsizhi, liutongguyi, xifenhangye))
             tb.add_row([date,code,name,kaipanhuanshuoz,kaipanjine,liangbi,xianliang,liutongsizhi,liutongguyi,xifenhangye])
-    print(results)
+    #print(results)
     if tablename=='stockinfo':
         for row in results:  # 依次获取每一行数据
             #print(row)
@@ -102,7 +103,13 @@ def dataselect(tablename,*condiction,**keyscondiction):
 if __name__ == '__main__':
     tablename1='stockopendata'
     tablename2='stockinfo'
+    var1=sys.argv #可以接收从外部传入参数
     #查个股概念信息，或某概念包含的股票信息
-    #dataselect(tablename2,r"info like '%汽车%'")   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 支持单条件如 (r"name in ('中直股份','珠江啤酒','深物业A')")
+    if len(var1)>=2:
+        var=sys.argv[1]
+        dataselect(tablename2, var)
+    else:
+        dataselect(tablename2,r"info like '%抗癌%'")   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 支持单条件如 (r"name in ('中直股份','珠江啤酒','深物业A')")
     #查早盘数据
-    dataselect(tablename1, name='中直股份')  #r"name in('','','') "  //
+    #dataselect(tablename1, name='科隆股份')  #r"name in('','','') "  //
+    #dataselect(tablename2, name='科隆股份')

@@ -2,7 +2,7 @@ import pygame
 from other.plane_sprites import *
 
 class PlaneGame(object):
-    def __int__(self):
+    def __init__(self):
         #super().__init__()
         #创建游戏窗口
         self.screen = pygame.display.set_mode(SCREEN_RECT.szie)
