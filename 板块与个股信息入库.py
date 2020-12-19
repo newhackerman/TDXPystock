@@ -30,9 +30,9 @@ def insertstockinfos(conn,file,tablename):
                 code=line.split("|")[1]
                 mark = line.split("|")[2]
                 info = line.split("|")[3]
-                value = line.split("|")[4]
-                sql='insert into '+tablename +' values(%s,%s,%s,%s,%s)'
-                values=(mcode,code,mark,info,value)
+                #value = line.split("|")[4]
+                sql='insert into '+tablename +'(mcode,code,mark,info) '+' values(%s,%s,%s,%s)'
+                values=(mcode,code,mark,info)
                 flag=cursor.execute(sql,values)
                 #i+=1
                 #print(flag,i)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     stockinfo='stockinfo'
     conn = indb.dbconnect()
     #inserttodb(conn,bindfile, bandtb)  #插入板块对应信息
-    #inserttodb(conn,stockfile, stocktb) #插入个股对应信息
+    inserttodb(conn,stockfile, stocktb) #插入个股对应信息
 
     #insertstockinfos(conn, stockinfofile, stockinfo) #插入个股概念主营信息
 
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `stockinfo`(
 mcode varchar(2),
 code varchar(6),
 mark varchar(6),
-info varchar(200),
+info varchar(300),
 value varchar(10),
 name varchar(10),
 markname varchar(12)

@@ -1,4 +1,4 @@
-import 早盘数据入库 as indb
+﻿import 早盘数据入库 as indb
 import prettytable as pt  #useage:https://www.cnblogs.com/Mr-Koala/p/6582299.html
 import pymysql
 import pyecharts       #可视化图表输出  useage:https://blog.csdn.net/update7/article/details/89086454
@@ -16,7 +16,7 @@ def formatresults(tablename,results,header):
     #header   要输出的表头
     tb = pt.PrettyTable()
     tb.field_names=header #设置表头
-    tb.align='c'  #对齐方式（c:居中，l居左，r:居右）
+    tb.align='l'  #对齐方式（c:居中，l居左，r:居右）
     #tb.sortby = "日期"
     #tb.set_style(pt.DEFAULT)
     #tb.horizontal_char = '*'
@@ -39,7 +39,7 @@ def formatresults(tablename,results,header):
             # print('%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t' % (
             # date, code, name, kaipanhuanshuoz, kaipanjine, liangbi, xianliang, liutongsizhi, liutongguyi, xifenhangye))
             tb.add_row([date,code,name,kaipanhuanshuoz,kaipanjine,liangbi,xianliang,liutongsizhi,liutongguyi,xifenhangye])
-    #print(results)
+    print('记录条数：\t',len(results))
     if tablename=='stockinfo':
         for row in results:  # 依次获取每一行数据
             #print(row)
@@ -50,7 +50,10 @@ def formatresults(tablename,results,header):
             name = row['name']
             mark = row['mark']
             markname=row['markname']
-            info = str(row['info']).strip()[0:65]
+            info = str(row['info']).strip()
+            if len(info)>65:
+                info = str(row['info']).strip()[0:65]
+
             #value = row['value']
 
             # # 打印结果
@@ -92,7 +95,7 @@ def dataselect(tablename,*condiction,**keyscondiction):
         if tablename=='stockopendata':
             header= ['日期', '股票代码 ', '股票名称 ', '开盘换手Z', '开盘金额', '量比  ', '现量  ', '流通市值  ', '流通股本（亿）', '细分行业']
         if tablename=='stockinfo':
-            header = ['市场代码', '股股代码 ','股票名称', '信息ID','信息名称', '对应信息']
+            header = ['市场代码', '股票代码 ','股票名称', '信息ID','信息名称', '对应信息']
         formatresults(tablename,results,header)   #格式化输出
     except BaseException as be:
         print(be)
@@ -103,13 +106,18 @@ def dataselect(tablename,*condiction,**keyscondiction):
 if __name__ == '__main__':
     tablename1='stockopendata'
     tablename2='stockinfo'
-    var1=sys.argv #可以接收从外部传入参数
+    var=sys.argv #可以接收从外部传入参数
     #查个股概念信息，或某概念包含的股票信息
-    if len(var1)>=2:
-        var=sys.argv[1]
-        dataselect(tablename2, var)
-    else:
+    lon=len(var)
+    if lon==2:
+        var1=sys.argv[1]
+        dataselect(tablename2, var1)
+    elif lon<2:
         dataselect(tablename2,r"info like '%抗癌%'")   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 支持单条件如 (r"name in ('中直股份','珠江啤酒','深物业A')")
+    elif lon==3:
+        var1=sys.argv[1]
+        var2=sys.argv[2]
+        dataselect(var1,var2) 
     #查早盘数据
     #dataselect(tablename1, name='科隆股份')  #r"name in('','','') "  //
     #dataselect(tablename2, name='科隆股份')
