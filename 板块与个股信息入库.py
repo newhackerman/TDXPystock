@@ -78,8 +78,9 @@ if __name__ == '__main__':
     stocktb='stocks'
     stockinfo='stockinfo'
     conn = indb.dbconnect()
+    #以下调用语句，需要用时放开注释即调用相关功能
     #inserttodb(conn,bindfile, bandtb)  #插入板块对应信息
-    inserttodb(conn,stockfile, stocktb) #插入个股对应信息
+    #inserttodb(conn,stockfile, stocktb) #插入个股对应信息
 
     #insertstockinfos(conn, stockinfofile, stockinfo) #插入个股概念主营信息
 
