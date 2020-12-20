@@ -113,11 +113,14 @@ if __name__ == '__main__':
         var1=sys.argv[1]
         dataselect(tablename2, var1)
     elif lon<2:
-        dataselect(tablename2,r"info like '%抗癌%'")   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 支持单条件如 (r"name in ('中直股份','珠江啤酒','深物业A')")
+        var1=r"info like '%抗癌%'"
+        dataselect(tablename2,var1)   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 支持单条件如 (r"name in ('中直股份','珠江啤酒','深物业A')")
     elif lon==3:
         var1=sys.argv[1]
         var2=sys.argv[2]
-        dataselect(var1,var2) 
+        dataselect(var1,var2)
+    else:
+        print('parameters error!')
     #查早盘数据
     #dataselect(tablename1, name='科隆股份')  #r"name in('','','') "  //
     #dataselect(tablename2, name='科隆股份')
