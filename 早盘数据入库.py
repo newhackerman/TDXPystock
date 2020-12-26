@@ -49,40 +49,40 @@ date
         zhangfu = sheet_1.cell(i, 2).value
         if '--' in str(zhangfu):
             zhangfu = 0
-        kaipanhuanshuoz = sheet_1.cell(i, 3).value
+        kaipanhuanshuoz = sheet_1.cell(i, 9).value
         if '--' in str(kaipanhuanshuoz):
             kaipanhuanshuoz = 0
-        kaipanjine = sheet_1.cell(i, 4).value
+        kaipanjine = sheet_1.cell(i, 12).value
         if '--' in str(kaipanjine):
             kaipanjine = 0
-        huanshuonu = sheet_1.cell(i, 6).value
+        huanshuonu = sheet_1.cell(i, 8).value
         if '--' in str(huanshuonu):
             huanshuonu = 0
-        liangbi = sheet_1.cell(i, 7).value
+        liangbi = sheet_1.cell(i, 5).value
         if '--' in str(liangbi):
             liangbi = 0
-        xianliang = sheet_1.cell(i, 9).value
+        xianliang = sheet_1.cell(i, 4).value
         if '--' in str(xianliang):
             xianliang = 0
-        zongliang = sheet_1.cell(i, 10).value
+        zongliang = sheet_1.cell(i, 13).value
         if '--' in str(zongliang):
             zongliang = 0
-        zongjine = sheet_1.cell(i, 11).value
+        zongjine = sheet_1.cell(i, 14).value
         if '--' in str(zongjine):
             zongjine = 0
-        xianjia = sheet_1.cell(i, 12).value
+        xianjia = sheet_1.cell(i, 7).value
         if '--' in str(xianjia):
             xianjia = 0
-        junjia = sheet_1.cell(i, 13).value
+        junjia = sheet_1.cell(i, 15).value
         if '--' in str(junjia):
             junjia = 0
-        liutongguyi = sheet_1.cell(i, 14).value
+        liutongguyi = sheet_1.cell(i, 11).value
         if '--' in str(liutongguyi):
             liutongguyi = 0
-        liutongsizhi = sheet_1.cell(i, 15).value
+        liutongsizhi = sheet_1.cell(i, 16).value
         if '--' in str(liutongsizhi):
             liutongsizhi = 0
-        renjiusizhi = sheet_1.cell(i, 16).value
+        renjiusizhi = sheet_1.cell(i, 17).value
         if '--' in str(renjiusizhi):
             renjiusizhi = 0
         xifenhangye = sheet_1.cell(i, 21).value
