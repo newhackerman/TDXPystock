@@ -3,7 +3,7 @@ from random import *
 
 
 class SmallEnemy(pygame.sprite.Sprite):
-    energy=3  #血，被普通子弹击中多少下死掉
+    energy=1  #血，被普通子弹击中多少下死掉
     score=20 #打死后的分数
     def __init__(self,bg_size):
         pygame.sprite.Sprite.__init__(self)
@@ -18,7 +18,7 @@ class SmallEnemy(pygame.sprite.Sprite):
             ])
         self.rect=self.image.get_rect()
         self.width,self.height=bg_size[0],bg_size[1]
-        self.speed=randint(3,8)
+        self.speed=randint(3,5)
         self.active = True
         self.rect.left,self.rect.top=\
         randint(0,self.width-self.rect.width),randint(-5*self.height,0)

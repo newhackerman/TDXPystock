@@ -40,7 +40,7 @@
          
          python 概念与早盘数据查询.py  “name='中直股份'”         #查询中直股份的概念与主营业务，公司亮点（支持多只个股查询例："name in('隆基股份','通威股份')"）
 
-         python 概念与早盘数据查询.py stockopendata name='福耀玻璃'  #查询耀玻璃  的早盘数据
+         python 概念与早盘数据查询.py stockopendata name='福耀玻璃'  #查询耀玻璃 的早盘数据
 
 
 感谢您的关注，使用中有任何疑问，请与我联系：QQ:860760123  微信：newhackerman@163.com                          
