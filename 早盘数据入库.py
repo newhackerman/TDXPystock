@@ -190,7 +190,8 @@ date
         except BaseException as be:
             print(be)
             continue
-    conn.commit()  #最后少于500条，执行完循环后，提交一次。
+    conn.commit()  #最后少于50条，执行完循环后，提交一次。
+    print('插入数据：%d 条' %j)
     cursor.close()
     conn.close()
 #列出所给目录中的所有excel 文件
