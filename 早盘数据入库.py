@@ -2,6 +2,7 @@ import xlrd,pymysql
 import json,time,re
 import os
 import logging
+import pandas as pds
 database='stock'
 tablename='stockopendata'
 configfile='D:/mysqlconfig.json'
@@ -36,124 +37,131 @@ def datainsert(configfile,excelfile):
 date           
 ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
     #打开文件
-    file = xlrd.open_workbook(excelfile)
-    sheet_1 = file.sheet_by_index(0) #根据sheet页的排序选取sheet
-    row_content = sheet_1.row_values(0) #获取指定行的数据，返回列表，排序自0开始
-    col_number = sheet_1.ncols  # 获取有数据的最大列数
-    row_number = sheet_1.nrows #获取有数据的最大行数
+    file = pds.read_excel(excelfile)
+    # sheet_1 = file.sheet_by_index(0) #根据sheet页的排序选取sheet
+    # row_content = sheet_1.row_values(0) #获取指定行的数据，返回列表，排序自0开始
+    # col_number = sheet_1.ncols  # 获取有数据的最大列数
+    # row_number = sheet_1.nrows #获取有数据的最大行数
+    # head=sheet_1.row_values(0) #获取表头
+
+
+    #获取字段名对应的ID
+
     j=0 #控制提交频率
-    for i in range(1,row_number):
+    i=1
+    for i in file.index.values:
         j += 1
-        code = sheet_1.cell(i, 0).value
-        name = sheet_1.cell(i, 1).value
-        zhangfu = sheet_1.cell(i, 2).value
+        e1 = file.loc[i, ['代码']]
+        code = str(e1['代码']).rjust(6, '0')
+        name = file.loc[i,['名称']].to_dict()['名称']
+        zhangfu = file.loc[i,['涨幅%']].to_dict()['涨幅%']
         if '--' in str(zhangfu):
             zhangfu = 0
-        kaipanhuanshuoz = sheet_1.cell(i, 9).value
+        kaipanhuanshuoz = file.loc[i,['开盘换手Z']].to_dict()['开盘换手Z']
         if '--' in str(kaipanhuanshuoz):
             kaipanhuanshuoz = 0
-        kaipanjine = sheet_1.cell(i, 12).value
+        kaipanjine =str( file.loc[i,['开盘金额']].to_dict()['开盘金额'])
         if '--' in str(kaipanjine):
             kaipanjine = 0
-        huanshuonu = sheet_1.cell(i, 8).value
+        huanshuonu = str(file.loc[i,['换手%']].to_dict()['换手%'])
         if '--' in str(huanshuonu):
             huanshuonu = 0
-        liangbi = sheet_1.cell(i, 5).value
+        liangbi = str(file.loc[i,['量比']].to_dict()['量比'])
         if '--' in str(liangbi):
             liangbi = 0
-        xianliang = sheet_1.cell(i, 4).value
+        xianliang = str(file.loc[i,['现量']].to_dict()['现量'])
         if '--' in str(xianliang):
             xianliang = 0
-        zongliang = sheet_1.cell(i, 13).value
+        zongliang =  str(file.loc[i,['总量']].to_dict()['总量'])
         if '--' in str(zongliang):
             zongliang = 0
-        zongjine = sheet_1.cell(i, 14).value
+        zongjine = str(file.loc[i,['总金额']].to_dict()['总金额'])
         if '--' in str(zongjine):
             zongjine = 0
-        xianjia = sheet_1.cell(i, 7).value
+        xianjia = str(file.loc[i,['现价']].to_dict()['现价'])
         if '--' in str(xianjia):
             xianjia = 0
-        junjia = sheet_1.cell(i, 15).value
+        junjia = str( file.loc[i,['均价']].to_dict()['均价'])
         if '--' in str(junjia):
             junjia = 0
-        liutongguyi = sheet_1.cell(i, 11).value
+        liutongguyi =str( file.loc[i,['流通股(亿)']].to_dict()['流通股(亿)'])
         if '--' in str(liutongguyi):
             liutongguyi = 0
-        liutongsizhi = sheet_1.cell(i, 16).value
+        liutongsizhi = str(file.loc[i,['流通市值']].to_dict()['流通市值'])
         if '--' in str(liutongsizhi):
             liutongsizhi = 0
-        renjiusizhi = sheet_1.cell(i, 17).value
+        renjiusizhi = str(file.loc[i,['人均市值']].to_dict()['人均市值'])
         if '--' in str(renjiusizhi):
             renjiusizhi = 0
-        xifenhangye = sheet_1.cell(i, 21).value
-        diqu = sheet_1.cell(i, 22).value
-        siyingniu = sheet_1.cell(i, 24).value
+        xifenhangye =str(file.loc[i,['细分行业']].to_dict()['细分行业'])
+        diqu = str(file.loc[i,['地区']].to_dict()['地区'])
+        siyingniu =str( file.loc[i,['市盈(TTM)']].to_dict()['市盈(TTM)'])
         if '--' in str(siyingniu):
             siyingniu = 0
-        huoyuedu = sheet_1.cell(i, 34).value
+        huoyuedu = str(file.loc[i,['活跃度']].to_dict()['活跃度'])
         if '--' in str(huoyuedu):
             huoyuedu = 0
-        lianzhangtiansu = sheet_1.cell(i, 36).value
+        lianzhangtiansu =str( file.loc[i,['连涨天']].to_dict()['连涨天'])
         if '--' in str(lianzhangtiansu):
             lianzhangtiansu = 0
-        shanrizhangfu = sheet_1.cell(i, 37).value
+        shanrizhangfu = str(file.loc[i,['3日涨幅%']].to_dict()['3日涨幅%'])
         if '--' in str(shanrizhangfu):
             shanrizhangfu = 0
-        ershirizhangfu = sheet_1.cell(i, 38).value
+        ershirizhangfu = str(file.loc[i,['20日涨幅%']].to_dict()['20日涨幅%'])
         if '--' in str(ershirizhangfu):
             ershirizhangfu = 0
-        liushirizhangfu = sheet_1.cell(i, 39).value
+        liushirizhangfu = str(file.loc[i,['60日涨幅%']].to_dict()['60日涨幅%'])
         if '--' in str(liushirizhangfu):
             liushirizhangfu = 0
-        huanshuoz = sheet_1.cell(i, 41).value
+        huanshuoz = str(file.loc[i,['换手Z']].to_dict()['换手Z'])
         if '--' in str(huanshuoz):
             huanshuoz = 0
-        liutongsizhiz = sheet_1.cell(i, 42).value
+        liutongsizhiz = str(file.loc[i,['流通市值Z']].to_dict()['流通市值Z'])
         if '--' in str(liutongsizhiz):
             liutongsizhiz = 0
         # print(liutongsizhi)
-        beitaxishuo = sheet_1.cell(i, 45).value
+        beitaxishuo = str(file.loc[i,['贝塔系数']].to_dict()['贝塔系数'])
         if '--' in str(beitaxishuo):
             beitaxishuo = 0
-        kaipan = sheet_1.cell(i, 49).value
+        kaipan = str(file.loc[i,['开盘%']].to_dict()['开盘%'])
         if '--' in str(kaipan):
             kaipan = 0
-        gudongrenshuo = sheet_1.cell(i, 84).value
+        gudongrenshuo =str( file.loc[i,['股东人数']].to_dict()['股东人数'])
         if '--' in str(gudongrenshuo):
             gudongrenshuo = 0
-        renjunchigu = sheet_1.cell(i, 85).value
+        renjunchigu = str(file.loc[i,['人均持股']].to_dict()['人均持股'])
         if '--' in str(renjunchigu):
             renjunchigu = 0
-        liruntongbi = sheet_1.cell(i, 86).value
+        liruntongbi = str(file.loc[i,['利润同比%']].to_dict()['利润同比%'])
         if '--' in str(liruntongbi):
             liruntongbi = 0
-        shuyutongbi = sheet_1.cell(i, 87).value
+        shuyutongbi = str(file.loc[i,['收入同比%']].to_dict()['收入同比%'])
         if '--' in str(shuyutongbi):
             shuyutongbi = 0
-        shijingniu = sheet_1.cell(i, 88).value
+        shijingniu = str(file.loc[i,['市净率']].to_dict()['市净率'])
         if '--' in str(shijingniu):
             shijingniu = 0
-        meigujingzhi = sheet_1.cell(i, 93).value
+        meigujingzhi = str(file.loc[i,['每股净资']].to_dict()['每股净资'])
         if '--' in str(meigujingzhi):
             meigujingzhi = 0
-        meigugongji = sheet_1.cell(i, 95).value
+        meigugongji = str(file.loc[i,['每股公积']].to_dict()['每股公积'])
         if '--' in str(meigugongji):
             meigugongji = 0
-        meiguweifenpei = sheet_1.cell(i, 96).value
+        meiguweifenpei =str(file.loc[i,['每股未分配']].to_dict()['每股未分配'])
         if '--' in str(meiguweifenpei):
             meiguweifenpei = 0
-        meiguxianjinliu = sheet_1.cell(i, 97).value
+        meiguxianjinliu = str(file.loc[i,['每股现金流']].to_dict()['每股现金流'])
         if '--' in str(meiguxianjinliu):
             meiguxianjinliu = 0
-        maoliniu = sheet_1.cell(i, 100).value
+        maoliniu = str(file.loc[i,['毛利率%']].to_dict()['毛利率%'])
         #print(maoliniu)
         if '--' in str(maoliniu):
             maoliniu = 0
             #print(maoliniu)
-        yinyeilirunniu = sheet_1.cell(i, 101).value
+        yinyeilirunniu = str(file.loc[i,['营业利润率%']].to_dict()['营业利润率%'])
         if '--' in str(yinyeilirunniu):
             yinyeilirunniu = 0
-        jinlirunniu = sheet_1.cell(i, 102).value
+        jinlirunniu = str(file.loc[i,['净利润率%']].to_dict()['净利润率%'])
         if '--' in str(jinlirunniu):
             jinlirunniu = 0
         date=str(date1)
@@ -163,8 +171,14 @@ date
                   kaipan,gudongrenshuo,renjunchigu,liruntongbi ,shuyutongbi,shijingniu,meigujingzhi,meigugongji,
                   meiguweifenpei, meiguxianjinliu,maoliniu,yinyeilirunniu,jinlirunniu,date)
     #执行sql语句插入数据
+        # print(code,name,zhangfu,kaipanhuanshuoz,kaipanjine,huanshuonu,liangbi,xianliang,zongliang, zongjine,
+        #           xianjia,junjia,liutongguyi, liutongsizhi ,renjiusizhi ,xifenhangye,diqu , siyingniu,huoyuedu,
+        #           lianzhangtiansu,shanrizhangfu,ershirizhangfu,liushirizhangfu,huanshuoz,liutongsizhiz,beitaxishuo,
+        #           kaipan,gudongrenshuo,renjunchigu,liruntongbi ,shuyutongbi,shijingniu,meigujingzhi,meigugongji,
+        #           meiguweifenpei, meiguxianjinliu,maoliniu,yinyeilirunniu,jinlirunniu,date)
+        #print('%s \n %s' %(sql,values))
         cursor.execute(sql,values)
-        if j%500==0:
+        if j%50==0:
             conn.commit()
         else:
             continue
