@@ -1,8 +1,8 @@
 import bs4
 import requests as req
 import re,json
-import prettytable as pt
-
+import prettytable as pt   #格式化成表格输出到html文件
+#import csvtotable      #格式化成表格输出到html文件
 
 def formatresults(listdata,header):
     #results   查询到的数据集
@@ -35,8 +35,11 @@ def formatresults(listdata,header):
     s=tb.get_html_string()  #获取html格式
     outfile='./南向资金_'+HDDATE+'.html'
     fw = open(outfile, 'w', encoding='utf-8')
-    print(s,file=fw)
-    print(tb)
+    print(s,file=fw)  #输出到文件
+    print(tb)   #输出到控制台
+    #方法二：使用csvto table
+
+
 def getsouth():
     url='http://data.eastmoney.com/hsgtcg/lz.html'
     headers = {

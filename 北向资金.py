@@ -34,6 +34,7 @@ def formatresults(listdata,header):
         tb.add_row([HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One])
     print('记录条数：\t',len(listdata))
     s=tb.get_html_string()  #获取html格式
+
     outfile='./北向资金_'+HdDate+'.html'
     fw = open(outfile, 'w', encoding='utf-8')
     print(s,file=fw)
@@ -66,9 +67,9 @@ def getnorth():
     jsondata=str(re.findall(regex,temp,re.M))
     #print((jsondata))
     data=jsondata.replace('\\r\\n','',-1).replace('},','}},',-1).replace('[\' [','',-1).replace('  ]\']','',-1)
-    print(data)
+    #print(data)
     listdata=data.split('},',-1)
-    header = ['日期', '股票代码 ', '股票名称 ', '板块', '占流通股比', '最新价  ', '涨跌幅  ', '今日持股股数亿  ', '今日持股市值亿', '占流通股本%', '今日持股占总股本','市值增幅','市值增幅%']
+    header = ['日期', '股票代码 ', '股票名称 ', '板块', '占流通股%', '最新价  ', '涨跌幅  ', '今日持股股数亿  ', '今日持股市值亿', '占流通股本%', '今日持股占总股本','市值增幅','市值增幅%']
     #print(len(listdata))
     '''{
       "DateType": "1",
