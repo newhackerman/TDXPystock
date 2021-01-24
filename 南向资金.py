@@ -160,7 +160,7 @@ def getsouth():
                 "SHAREHOLDPRICEONE": 19102759903.0,一日市值变化
                 "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
                 "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
-            #formatresults(listdata, header) #格式化输出
+            formatresults(listdata, header) #格式化输出
             Write_southdata(listdata, dpath)  # 写北向持股占比数据
         except BaseException as BE:
             print(BE)
