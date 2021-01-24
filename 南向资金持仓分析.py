@@ -207,7 +207,7 @@ def selectdb(**kwords):      #**kwords :表示可以传入多个键值对， *kw
     conn = dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # 执行的sql语句
-    sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE from  southdataanly  '''
+    sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN from  southdataanly  '''
     sql=sql+ 'where '+ conditions + '  order by HDDATE'
     print(sql)
     cursor.execute(sql)
@@ -216,51 +216,77 @@ def selectdb(**kwords):      #**kwords :表示可以传入多个键值对， *kw
 
 #将查询到的数据分析后输出到html
 def rendertohtml(resultset):
+    header = ['日期', '股票代码 ', '股票名称 ', '持股数亿', '占比', '收盘价  ', '当日涨跌幅  ', '持股市值亿  ', '一日市值变化亿', '五日市值变化亿', '十日市值变化亿']
+    tb = pt.PrettyTable()
+    tb.field_names = header  # 设置表头
+    tb.align = 'c'  # 对齐方式（c:居中，l居左，r:居右）
+
     c = Line()
     x = ['持股占比']
     name=''
-    HDDATE=[]
-    SHAREHOLDSUM=[]  #持股数
-    SHARESRATE=[]#持股占比
+    HDDATELIST=[]
+    SHAREHOLDSUMlist=[]  #持股数
+    SHARESRATElist=[]#持股占比
     SHAREHOLD=[]#持股数量
     #取出占比数据
     for data in resultset:
-        HDDATE1=data['HDDATE']
-        HDDATE.append(HDDATE1)
+        HDDATE=data['HDDATE']
+        #HDDATE = datetime.datetime.strptime(HDDATE1, '%Y-%m-%d').strftime('%Y%m%d')
+        HDDATELIST.append(HDDATE)
 
-        SHAREHOLD=data['SHAREHOLDSUM']
-        SHAREHOLDSUM.append(SHAREHOLD)
+        SCODE = data['SCODE']
+        SHAREHOLDSUM=data['SHAREHOLDSUM']
+        SHAREHOLDSUMlist.append(SHAREHOLDSUM)
 
-        SHARESRATE1= data['SHARESRATE']
-        SHARESRATE.append(SHARESRATE1)
-        name=data['SNAME']
+        SNAME = data['SNAME']
+        SHARESRATE = data['SHARESRATE']
+        SHARESRATElist.append(SHARESRATE)
+
+        CLOSEPRICE = data['CLOSEPRICE']
+        ZDF = data['ZDF']
+        SHAREHOLDPRICE = format(data['SHAREHOLDPRICE'], '.3f')
+        SHAREHOLDPRICEONE = format(data['SHAREHOLDPRICEONE'] , '.3f')
+        SHAREHOLDPRICEFIVE = format(data['SHAREHOLDPRICEFIVE'] , '.3f')
+        SHAREHOLDPRICETEN = format(data['SHAREHOLDPRICETEN'] , '.3f')
+
+        tb.add_row(
+            [HDDATE, SCODE, SNAME, SHAREHOLDSUM, SHARESRATE, CLOSEPRICE, ZDF, SHAREHOLDPRICE, SHAREHOLDPRICEONE,
+             SHAREHOLDPRICEFIVE, SHAREHOLDPRICETEN])
+
+    OUTFILE='南向资金_'+SNAME+'.html'
     #print(SHARESRATE)
-    x1=HDDATE
-    y1 = SHARESRATE #将占比数据设置为y轴
-    y2=SHAREHOLDSUM
+    x1=HDDATELIST
+    y1 = SHARESRATElist #将占比数据设置为y轴
+    y2=SHAREHOLDSUMlist
     #y2 = [1000, 300, 500]
     #bar = Bar()
     # 设置x轴
     c.add_xaxis(xaxis_data=x)
     c.add_xaxis(xaxis_data=x1)
     # 设置y轴
-    c.add_yaxis(series_name='持股占比', y_axis=y1)
-    c.add_yaxis(series_name='持股数量', y_axis=y2)
-    c.set_global_opts(title_opts=opts.TitleOpts(title='南向资金持股分析:  '+name))
+    c.add_yaxis(series_name='持股百分比', y_axis=y1)
+    c.add_yaxis(series_name='持股数量亿', y_axis=y2)
+    c.set_global_opts(title_opts=opts.TitleOpts(title='南向资金持股分析:  '+SNAME))
     # 生成html文件
-    c.render(path='南向资金_'+name+'.html')
+    c.render(path=OUTFILE)
     #如果要输出柱图
     '''
     bar = Bar()
     然后将c 换成bar
     '''
+    #将数据也输出到文件
+    s=tb.get_html_string()
+    with open(OUTFILE,'a+',encoding='utf-8') as fw:
+        fw.write(s)
+    fw.close()
 
 if __name__ == '__main__':
     # southdata=getsouth() #获取南向数据
     # insertdb (southdata) #将南向数据写表
     # SNAME='腾讯控股'
     SNAME='建设银行'
-    resultset=selectdb(SNAME='腾讯控股')#按名称查询南向资金占比
+    SNAME='小米集团 - W'
+    resultset=selectdb(SNAME='小米集团-W')#按名称查询南向资金占比
     rendertohtml(resultset)
 
 
