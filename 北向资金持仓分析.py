@@ -129,5 +129,6 @@ def getnorth(code):
     #formatresults(listdata, header)#每一页写表
 
 if __name__ == '__main__':
-    ''
-    getnorth('002179')
+    '002044'
+    '002179'
+    getnorth('002044')
