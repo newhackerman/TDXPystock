@@ -2,12 +2,48 @@ import bs4
 import requests as req
 import re,json
 import prettytable as pt   #格式化成表格输出到html文件
+import struct as st
+import datetime
 #import csvtotable      #格式化成表格输出到html文件
 import pymysql
 database='stock'
 tablename='stockopendata'
 configfile='D:/mysqlconfig.json'
-#excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
+dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9603\\'
+#########编码成通达信可识别的数据
+def stockcode(HdDate, SCode):
+    seek = 4
+    text1 = st.pack('I', int(HdDate))
+    # print(text1)
+    text2 = st.pack('f', float(SCode))
+    # print(text2)
+    return text1 + text2
+
+    ###################处理个股北资数据
+def Write_southdata(listdata, dpath):
+    try:
+        for row in listdata:  # 依次获取每一行数据
+            jsdata = json.loads(row)
+            HdDate = str(jsdata['HDDATE'])[0:10]
+            HdDate = datetime.datetime.strptime(HdDate, '%Y-%m-%d').strftime('%Y%m%d')
+            SCode = str(jsdata['SCODE'])
+            SharesRate = jsdata['SHARESRATE']
+            if SCode == '':  # 如果取到空数据则跳过
+                continue
+            fflowdata = stockcode(HdDate, SharesRate)
+            # print(fflowdata) #编码后的数据
+            # print(codenum[0:3], codenum[0:3], codenum[0:3])
+            dfilename = dpath + '1_' + SCode + '.dat'
+            try:
+                fw1 = open(dfilename, 'ab+')
+                print(dfilename)
+            except FileNotFoundError as fnot:
+                fw1 = open(dfilename, 'wb')
+            fw1.write(fflowdata)
+            fw1.close()
+    except FileNotFoundError as fnot1:
+        print(fnot1)
+        return
 
 #读取json格式的配置文件
 def file2dict(path):
@@ -124,11 +160,13 @@ def getsouth():
                 "SHAREHOLDPRICEONE": 19102759903.0,一日市值变化
                 "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
                 "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
-            formatresults(listdata, header) #格式化输出
+            #formatresults(listdata, header) #格式化输出
+            Write_southdata(listdata, dpath)  # 写北向持股占比数据
         except BaseException as BE:
             print(BE)
             continue
     #print(jsondata)
+
 if __name__ == '__main__':
     getsouth()
 

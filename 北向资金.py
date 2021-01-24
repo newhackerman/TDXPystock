@@ -3,11 +3,81 @@ import requests as req
 import re,json
 import prettytable as pt
 import pymysql
+import struct as st
+import datetime
 
 database='stock'
 tablename='stockopendata'
 configfile='D:/mysqlconfig.json'
+dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9602\\'  #通达信北资数据目录
 #excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
+
+#########编码成通达信可识别的数据
+def stockcode(HdDate, SCode):
+    seek = 4
+    text1 = st.pack('I', int(HdDate))
+    # print(text1)
+    text2 = st.pack('f', float(SCode))
+    # print(text2)
+    return text1 + text2
+
+    ###################处理个股北资数据
+def Write_northdata(listdata, dpath):
+    try:
+        for row in listdata:  # 依次获取每一行数据
+            jsdata = json.loads(row)
+            HdDate = str(jsdata['HdDate'])[0:10]
+            HdDate = datetime.datetime.strptime(HdDate, '%Y-%m-%d').strftime('%Y%m%d')
+            SCode = str(jsdata['SCode'])
+            SharesRate = jsdata['SharesRate']
+            # SName = jsdata['SName']
+            # HYName = jsdata['HYName']
+            #
+            # NewPrice = jsdata['NewPrice']
+            # Zdf = jsdata['Zdf']
+            # ShareHold = format(jsdata['ShareHold'] / 100000000, '.3f')
+            # ShareSZ = format(jsdata['ShareSZ'] / 100000000, '.3f')
+            # LTZB = format(jsdata['LTZB'] * 100, '.3f')
+            # ZZB = format(jsdata['ZZB'] * 100, '.3f')
+            # ShareSZ_Chg_One = format(jsdata['ShareSZ_Chg_One'] / 100000000, '.3f')
+            # ShareSZ_Chg_Rate_One = format(jsdata['ShareSZ_Chg_Rate_One'] * 100, '.3f')
+
+            if SCode == '':  # 如果取到空数据则跳过
+                continue
+            fflowdata = stockcode(HdDate, SharesRate)
+            # print(fflowdata) #编码后的数据
+            # print(codenum[0:3], codenum[0:3], codenum[0:3])
+            if SCode[0:2] == '60' or SCode[0:3] == '688' or SCode[0:3] == '880':
+                dfilename = dpath + '1_' + SCode + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                    print(dfilename)
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
+
+            elif SCode[0:3] == '300' or SCode[0:2] == '00':
+                dfilename = dpath + '0_' + SCode + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                    print(dfilename)
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
+            else:
+                dfilename = dpath + '1_' + SCode + '.dat'
+                try:
+                    fw1 = open(dfilename, 'ab+')
+                except FileNotFoundError as fnot:
+                    fw1 = open(dfilename, 'wb')
+                fw1.write(fflowdata)
+                fw1.close()
+    except FileNotFoundError as fnot1:
+        print(fnot1)
+        return
+
 #读取json格式的配置文件
 def file2dict(path):
     with open(path, encoding="utf-8") as f:
@@ -19,7 +89,7 @@ def file2dict(path):
 def dbconnect():      #建立连接
     dict = []
     dict = file2dict(configfile)  # 获取连接数据库需要的相关信息
-      # 创建数据库连接
+    # 创建数据库连接
     conn = pymysql.connect(dict['host'], dict['user'], dict['password']
                            , dict['database'], charset='utf8')
     return conn
@@ -68,6 +138,7 @@ def formatresults(listdata,header):
     fw = open(outfile, 'w', encoding='utf-8')
     print(s,file=fw)
     print(tb)
+ #从东方财富获取北资金数据
 def getnorth():
     header = ['日期', '股票代码 ', '股票名称 ', '板块', '占流通股%', '最新价  ', '涨跌幅  ', '今日持股股数亿  ', '今日持股市值亿', '占流通股本%', '今日持股占总股本',
               '市值增幅', '市值增幅%']
@@ -144,10 +215,18 @@ def getnorth():
               "ZZB_One": 0.000429622606984593
             },'''
             formatresults(listdata, header) #格式化输出
+            Write_northdata(listdata, dpath) #写北向持股占比数据
         except BaseException as be:
             print(be)
             continue
     #print(jsondata)
+
+
+    # 北资写通达信文件
+def getnorthdata():
+    pass
+
+
 if __name__ == '__main__':
     getnorth()
 
