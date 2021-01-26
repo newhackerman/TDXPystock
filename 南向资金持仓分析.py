@@ -3,7 +3,7 @@ import requests as req
 import re,json
 import prettytable as pt   #格式化成表格输出到html文件
 import struct as st
-import datetime
+import time
 import re
 from pyecharts.charts import Bar, Page,Line
 from pyecharts import options as opts
@@ -123,6 +123,7 @@ def getsouth():
                      'rt': '53712406'}
 
             response=req.get(url=url,headers=headers,params=params)
+
             bstext=bs4.BeautifulSoup(response.content,'lxml')
             # print(bstext)
 
@@ -150,6 +151,7 @@ def getsouth():
                 "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
                 "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
             southdatainfos.append(listdata)
+            time.sleep(1)
             #formatresults(listdata, header)#每一页写表
         except BaseException as BE:
             print(BE)
@@ -208,7 +210,7 @@ def selectdb(**kwords):      #**kwords :表示可以传入多个键值对， *kw
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # 执行的sql语句
     sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN from  southdataanly  '''
-    sql=sql+ 'where '+ conditions + '  order by HDDATE'
+    sql=sql+ 'where '+ conditions + '  order by HDDATE '
     print(sql)
     cursor.execute(sql)
     resultset=cursor.fetchall()
@@ -281,12 +283,12 @@ def rendertohtml(resultset):
     fw.close()
 
 if __name__ == '__main__':
-    # southdata=getsouth() #获取南向数据
-    # insertdb (southdata) #将南向数据写表
+    # southdata=getsouth() #获取南向数据 ，获取数据后，将它注释掉
+    # insertdb (southdata) #将南向数据写表  获取数据后，将它注释掉
     # SNAME='腾讯控股'
     SNAME='建设银行'
     SNAME='小米集团 - W'
-    resultset=selectdb(SNAME='小米集团-W')#按名称查询南向资金占比
+    resultset=selectdb(SNAME='腾讯控股')#按名称查询南向资金占比
     rendertohtml(resultset)
 
 
