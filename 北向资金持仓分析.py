@@ -7,6 +7,7 @@ import prettytable as pt   #格式化成表格输出到html文件
 from pyecharts.charts import Bar, Page,Line
 from pyecharts import options as opts
 import datetime
+import pandas as pd
 
 #获取所有南向资金数据
 def getnorth(code):
@@ -28,10 +29,11 @@ def getnorth(code):
                 'p': 1,
                 'ps': 50,
                 'js': 'var nLvHRzKi={pages:(tp),data:(x)}',
-                'rt': '53716198'}
-
+                'rt': '53722197'}
+    #print(params)
     response=req.get(url=url,headers=headers,params=params).text
-    #print(response+'\n----------------------------------------')
+    #print(response.url)
+    #print(response.text+'\n----------------------------------------')
 
     regex = r'data:\[({.*?)\]}'
     jsondata=str(re.findall(regex,response))
@@ -59,7 +61,7 @@ def getnorth(code):
     for data in listdata:
         #print(data+'\n----------------------------------------')
         jsdata = json.loads(data)
-
+        print(type(jsdata),jsdata)
         HDDATE = str(jsdata['HDDATE'])[0:10]
         HDDATE =datetime.datetime.strptime(HDDATE, '%Y-%m-%d').strftime('%Y%m%d')
         HDDATElist.append(HDDATE)
@@ -128,7 +130,18 @@ def getnorth(code):
     northdatainfos.append(listdata)
     #formatresults(listdata, header)#每一页写表
 
+def get_stockcode(stockname):
+    stocklist='./个股信息列表.txt'
+    readata=pd.read_csv(stocklist,sep=',',header=0,names=['代码','名称'])
+    for row in readata.iterrows():
+        #print(row)
+        if row[1]['名称']==stockname:
+            return str(row[1]['代码'])
+        else:
+            continue
+
 if __name__ == '__main__':
     '002044'
     '002179'
-    getnorth('002044')
+    code=get_stockcode('南大光电')
+    getnorth(code) #实时查询北向资金
