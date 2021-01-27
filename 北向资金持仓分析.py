@@ -88,9 +88,9 @@ def getnorth(code):
             [HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN])
 
 
-    x1 = HDDATElist
-    y1 = SHARESRATElist  # 将占比数据设置为y轴
-    y2 = SHAREHOLDSUMlist
+    x1 = HDDATElist[::-1]
+    y1 = SHARESRATElist[::-1] # 将占比数据设置为y轴
+    y2 = SHAREHOLDSUMlist[::-1]
     # y2 = [1000, 300, 500]
     # bar = Bar()
     # 设置x轴
