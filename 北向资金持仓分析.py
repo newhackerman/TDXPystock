@@ -8,6 +8,7 @@ from pyecharts.charts import Bar, Page,Line
 from pyecharts import options as opts
 import datetime
 import pandas as pd
+import sys
 
 #获取所有南向资金数据
 def getnorth(code):
@@ -143,5 +144,11 @@ def get_stockcode(stockname):
 if __name__ == '__main__':
     '002044'
     '002179'
-    code=get_stockcode('南大光电')
-    getnorth(code) #实时查询北向资金
+    var = sys.argv  # 可以接收从外部传入参数
+    if len(var)>1:
+        var1=var[1]
+        code=get_stockcode(var1)
+        getnorth(code) #实时查询北向资金
+    else:
+        code = get_stockcode('南大光电')
+        getnorth(code)
