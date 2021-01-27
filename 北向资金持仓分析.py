@@ -30,7 +30,7 @@ def getnorth(code):
                 'p': 1,
                 'ps': 50,
                 'js': 'var nLvHRzKi={pages:(tp),data:(x)}',
-                'rt': '53722197'}
+                'rt': '53732197'}
     #print(params)
     response=req.get(url=url,headers=headers,params=params).text
     #print(response.url)
@@ -137,7 +137,7 @@ def get_stockcode(stockname):
     for row in readata.iterrows():
         #print(row)
         if row[1]['名称']==stockname:
-            return str(row[1]['代码'])
+            return str(row[1]['代码']).rjust(6,'0')
         else:
             continue
 
@@ -150,5 +150,6 @@ if __name__ == '__main__':
         code=get_stockcode(var1)
         getnorth(code) #实时查询北向资金
     else:
-        code = get_stockcode('南大光电')
+        code = get_stockcode('科大讯飞')
+        print(code)
         getnorth(code)
