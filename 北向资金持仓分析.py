@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec#分割子图
 import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
 import tushare as ts
-
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+import baostock as bs
 
 ###获取股票代码
 def get_stockcode(stockname):
@@ -44,6 +44,17 @@ def get_stock_dateData(stockcode,start_date,end_date):
     #从tushare 获取日线数据
     df = pro.daily(ts_code=stockcode, start_date=start_date,end_date=end_date)
     df=df.sort_values(by=['trade_date'],ascending=True)  #按日期升序
+    #从baostock获取数据
+    # lg = bs.login()
+    # rs = bs.query_history_k_data_plus(stockcode,
+    #                                   "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
+    #                                   start_date=start_date, end_date=end_date,
+    #                                   frequency="30m", adjustflag="3")
+    # data_list = []
+    # while (rs.error_code == '0') & rs.next():
+    #     # 获取一条记录，将记录合并在一起
+    #     data_list.append(rs.get_row_data())
+    # result = pd.DataFrame(data_list, columns=rs.fields)
 
     #print(df)
     return df
