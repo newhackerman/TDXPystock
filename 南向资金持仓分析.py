@@ -3,12 +3,24 @@ import requests as req
 import re,json
 import prettytable as pt   #格式化成表格输出到html文件
 import struct as st
-import time
+import time,sys
 import re
 from pyecharts.charts import Bar, Page,Line
 from pyecharts import options as opts
-
+import tushare as ts
+import pandas as pd   #数据读取
+import webbrowser  #打开浏览器
+'''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
+# import  talib   #Technical Analysis Library”, 即技术分析库 是Python金融量化的高级库，涵盖了150多种股票、期货交易软件中常用的技术分析指标，如MACD、RSI、KDJ、动量指标、布林带等等。
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import matplotlib.gridspec as gridspec#分割子图
+# import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
 import pymysql
+
+pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+
 database='stock'
 tablename='stockopendata'
 configfile='D:/mysqlconfig.json'
@@ -18,57 +30,13 @@ dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9603\\'
 def file2dict(path):
     with open(path, encoding="utf-8") as f:
         jsoncontent=json.load(f)
-        #if jsoncontent.startswith(u'\ufeff'):
-        #     jsoncontent = jsoncontent.encode('utf8')[3:].decode('utf8')
         return jsoncontent
 
 def dbconnect():      #建立连接
     dict = []
     dict = file2dict(configfile)  # 获取连接数据库需要的相关信息
-      # 创建数据库连接
-    conn = pymysql.connect(dict['host'], dict['user'], dict['password']
-                           , dict['database'], charset='utf8')
+    conn = pymysql.connect(dict['host'], dict['user'], dict['password'], dict['database'], charset='utf8')
     return conn
-#暂时未用到
-def formatresults(southdatainfos,header):
-    #results   查询到的数据集
-    #header   要输出的表头
-    tb = pt.PrettyTable()
-    tb.field_names=header #设置表头
-    tb.align='l'  #对齐方式（c:居中，l居左，r:居右）
-    #tb.sortby = "日期"
-    #tb.set_style(pt.DEFAULT)
-    #tb.horizontal_char = '*
-    HDDATE=''
-    for datalist in southdatainfos:
-        for row in datalist:  # 依次获取每一行数据
-            try:
-                jsdata = json.loads(row)
-                HDDATE = str(jsdata['HDDATE'])[0:10]
-                SCODE = jsdata['SCODE']
-                SNAME = jsdata['SNAME']
-                SHAREHOLDSUM = format(jsdata['SHAREHOLDSUM']/100000000,'.3f')
-                SHARESRATE = jsdata['SHARESRATE']
-                CLOSEPRICE = jsdata['CLOSEPRICE']
-                ZDF = jsdata['ZDF']
-                SHAREHOLDPRICE = format(jsdata['SHAREHOLDPRICE']/100000000,'.3f')
-                SHAREHOLDPRICEONE = format(jsdata['SHAREHOLDPRICEONE']/100000000,'.3f')
-                SHAREHOLDPRICEFIVE = format(jsdata['SHAREHOLDPRICEFIVE']/100000000,'.3f')
-                SHAREHOLDPRICETEN = format(jsdata['SHAREHOLDPRICETEN']/100000000,'.3f')
-
-                tb.add_row([HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN])
-                # values=(HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN)
-                # cursor.execute(sql, values)
-                #print(values,sql)
-            except BaseException as be:
-                print(be)
-                continue
-    s=tb.get_html_string()  #获取html格式
-    outfile='./南向资金_'+HDDATE+'.html'
-    fw = open(outfile, 'w+', encoding='utf-8')
-    print(s,file=fw)  #输出到文件
-    print(tb)   #输出到控制台
-    #方法二：使用csvto table
 
 #获取南向数据总页数
 def get_pages(headers,url,params):
@@ -123,14 +91,10 @@ def getsouth():
                      'rt': '53712406'}
 
             response=req.get(url=url,headers=headers,params=params)
-
             bstext=bs4.BeautifulSoup(response.content,'lxml')
-            # print(bstext)
-
             tempdata = bstext.find_all('p')
             temp = str(tempdata)
             regex = 'data:(.*?)}</p>'
-            #print(temp)
             jsondata=str(re.findall(regex,temp,re.M))
             #print((jsondata))
             data=jsondata.replace('\\r\\n','',-1).replace('},','}},',-1).replace('[\'[','',-1).replace(']\']','',-1)
@@ -152,7 +116,6 @@ def getsouth():
                 "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
             southdatainfos.append(listdata)
             time.sleep(1)
-            #formatresults(listdata, header)#每一页写表
         except BaseException as BE:
             print(BE)
             continue
@@ -202,6 +165,7 @@ def insertdb (southdatainfos):
     conn.commit()
     conn.close()
     print('入库成功！！！')
+
 #按条件查询持续比例与持股市值
 def selectdb(**kwords):      #**kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
     conditions=str(kwords).strip('{').strip('}').replace(':','=',1).replace('\'','',2)
@@ -215,6 +179,29 @@ def selectdb(**kwords):      #**kwords :表示可以传入多个键值对， *kw
     cursor.execute(sql)
     resultset=cursor.fetchall()
     return  resultset
+#获取日线数据
+def get_stock_dateData(stockcode,start_date,end_date):
+    if stockcode[0:2] =='600' or stockcode[0:2]=='68':
+        stockcode=stockcode+'.SH'
+    else:
+        stockcode =  stockcode+'.SZ'
+    #从tushare 获取日线数据
+    df = pro.daily(ts_code=stockcode, start_date=start_date,end_date=end_date)
+    df=df.sort_values(by=['trade_date'],ascending=True)  #按日期升序
+    #从baostock获取数据
+    # lg = bs.login()
+    # rs = bs.query_history_k_data_plus(stockcode,
+    #                                   "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
+    #                                   start_date=start_date, end_date=end_date,
+    #                                   frequency="30m", adjustflag="3")
+    # data_list = []
+    # while (rs.error_code == '0') & rs.next():
+    #     # 获取一条记录，将记录合并在一起
+    #     data_list.append(rs.get_row_data())
+    # result = pd.DataFrame(data_list, columns=rs.fields)
+
+    #print(df)
+    return df
 
 #将查询到的数据分析后输出到html
 def rendertohtml(resultset):
@@ -281,15 +268,22 @@ def rendertohtml(resultset):
     with open(OUTFILE,'a+',encoding='utf-8') as fw:
         fw.write(s)
     fw.close()
-
+    webbrowser.open(OUTFILE)#调用浏览器打开文件
 if __name__ == '__main__':
-    #southdata=getsouth() #获取南向数据 ，获取数据后，将它注释掉
-    #insertdb (southdata) #将南向数据写表  获取数据后，将它注释掉
+    # southdata=getsouth() #获取南向数据 ，获取数据后，将它注释掉
+    # insertdb (southdata) #将南向数据写表  获取数据后，将它注释掉
     # SNAME='腾讯控股'
     SNAME='建设银行'
     SNAME='小米集团 - W'
-    resultset=selectdb(SNAME='腾讯控股')#按名称查询南向资金占比
-    rendertohtml(resultset)
+    var = sys.argv  # 可以接收从外部传入参数
+    if len(var)>1:
+        SNAME=var[1]
+        resultset=selectdb(SNAME=SNAME)#按名称查询南向资金占比
+        rendertohtml(resultset)
+    else:
+        resultset = selectdb(SNAME='腾讯控股')  # 按名称查询南向资金占比
+        rendertohtml(resultset)
+
 
 
 '''

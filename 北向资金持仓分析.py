@@ -35,7 +35,7 @@ def get_stockcode(stockname):
     #         return str(row[1]['代码']).rjust(6,'0')
     #     else:
     #         continue
-#获个人股日线数据
+#获个股日线数据
 def get_stock_dateData(stockcode,start_date,end_date):
     if stockcode[0:2] =='600' or stockcode[0:2]=='68':
         stockcode=stockcode+'.SH'
