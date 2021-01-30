@@ -32,7 +32,8 @@ def result_to_htmlAExcel(all_Everydata,DateType):
             values=(HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One)
 
     print('记录条数：\t',j)
-    sb=tb.get_csv_string()
+    sb=tb.get_csv_string()  #输出csv格式
+
     s=tb.get_html_string()  #获取html格式
     if DateType!=1:
         outfile='./北向资金_'+HdDate+'_'+str(DateType)+'.html'
