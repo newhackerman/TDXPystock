@@ -14,6 +14,10 @@ import matplotlib.gridspec as gridspec#分割子图
 import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
 import tushare as ts
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+import warnings
+warnings.filterwarnings('ignore')  #控制台不输出warning 信息
+
+
 #ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 import baostock as bs
 
@@ -144,8 +148,8 @@ def format_tohtml(listdata):
     graph_VOL = fig.add_subplot(gs[1, :])
     #graph_MACD = fig.add_subplot(gs[2, :])
     #graph_KDJ = fig.add_subplot(gs[3, :])
-    mpf.candlestick2_ochl(graph_KAV, getstockdata.open, getstockdata.close, getstockdata.high, getstockdata.low,
-                          width=0.5,colorup='r', colordown='g')  # 绘制K线走势
+    mpf.candlestick2_ochl(graph_KAV, getstockdata.open, getstockdata.close, getstockdata.high, getstockdata.low, width=0.5,colorup='r', colordown='g')  # 绘制K线走势
+    #mpf.plot(getstockdata.iloc[:100],type='candle')  # 绘制K线走势
     # 绘制移动平均线图
     getstockdata['Ma5'] = getstockdata.close.rolling(window=5).mean()  # pd.rolling_mean(df_stockload.close,window=20)
     getstockdata['Ma10'] = getstockdata.close.rolling(window=10).mean()  # pd.rolling_mean(df_stockload.close,window=30)
