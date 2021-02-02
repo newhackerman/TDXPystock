@@ -14,7 +14,7 @@ import matplotlib.gridspec as gridspec#分割子图
 import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
 import tushare as ts
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+#ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 import baostock as bs
 
 ###获取股票代码
@@ -37,11 +37,12 @@ def get_stockcode(stockname):
     #         continue
 #获个股日线数据
 def get_stock_dateData(stockcode,start_date,end_date):
-    if stockcode[0:2] =='600' or stockcode[0:2]=='68':
+    if stockcode[0:2] =='60' or stockcode[0:2]=='68':
         stockcode=stockcode+'.SH'
     else:
         stockcode =  stockcode+'.SZ'
     #从tushare 获取日线数据
+    #print(stockcode,start_date,end_date)
     df = pro.daily(ts_code=stockcode, start_date=start_date,end_date=end_date)
     df=df.sort_values(by=['trade_date'],ascending=True)  #按日期升序
     #从baostock获取数据
@@ -60,6 +61,8 @@ def get_stock_dateData(stockcode,start_date,end_date):
     return df
 
 def format_tohtml(listdata):
+    if len(listdata)==0:
+        return
     header = ['日期', '股票代码 ', '股票名称 ', '持股数亿', '占比', '收盘价  ', '当日涨跌幅  ', '持股市值亿  ', '一日市值变化亿', '五日市值变化亿', '十日市值变化亿']
     tb = pt.PrettyTable()
     tb.field_names = header  # 设置表头
@@ -76,7 +79,7 @@ def format_tohtml(listdata):
     CLOSEPRICElist = [] #收盘价
     #数据分类格式化
     for data in listdata:
-        # print(data+'\n----------------------------------------')
+        #print(data+'\n----------------------------------------')
         jsdata = json.loads(data)
         #print(type(jsdata), jsdata)
         HDDATE = str(jsdata['HDDATE'])[0:10]
@@ -120,7 +123,8 @@ def format_tohtml(listdata):
     # c.render(path=outfile)
     #输出K线图
     #先获取日线历史数据
-    date=datetime.date.today() - relativedelta(months=+1)
+    date=datetime.date.today() - relativedelta(months=+4) #当前日期减2个月
+    date=datetime.datetime.strptime(str(date), '%Y-%m-%d').strftime('%Y%m%d')
     #print(date)
     getstockdata=get_stock_dateData(SCODE,str(date), x1[-1])
     #getstockdata = pd.DataFrame(getstockdata)
@@ -158,7 +162,7 @@ def format_tohtml(listdata):
     # 添加网格
     graph_KAV.grid()
     graph_KAV.legend(loc='best')
-    graph_KAV.set_title(SCODE + ' ' + SNAME)
+    graph_KAV.set_title(SCODE + ' ' + SNAME+'(日线)')
     graph_KAV.set_ylabel(u"价格")
     graph_KAV.set_xlim(0, len(getstockdata.index))  # 设置一下x轴的范围
     # 绘制成交量图
@@ -282,11 +286,12 @@ if __name__ == '__main__':
         format_tohtml(listdata)
         webbrowser.open('北向资金_' + var1+ '.html')
     else:
-        code = get_stockcode('科大讯飞')
+        name='长江电力'
+        code = get_stockcode(name)
         #print(code)
         listdata = getnorth(code)  # 实时查询北向资金
         format_tohtml(listdata)
-        webbrowser.open('北向资金_' +'科大讯飞' + '.html')
+        webbrowser.open('北向资金_' +name + '.html')
 
 
 '''
