@@ -4,6 +4,7 @@ import prettytable as pt
 def format_tohtml(datalist):
     header = ['股票代码 ', '股票名称 ', '热度值', '热度值变化']
     tb = pt.PrettyTable()
+    tb.add_row(['+-----------+', '+-----------+', '+-----------+', '+-----------+'])
     tb.field_names = header  # 设置表头
     tb.align = 'l'  # 对齐方式（c:居中，l居左，r:居右）
     for data1 in datalist:
@@ -30,7 +31,7 @@ def getdata():
     # 沪深
     url2 = 'https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=8&_type=12&type=12'
     # 港股
-    url3 = 'https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=8&_type=10&type=13'
+    url3 = 'https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=8&_type=13&type=13'
     # 美股
     url4 = 'https://stock.xueqiu.com/v5/stock/hot_stock/list.json?size=8&_type=11&type=11'
     urllist = []
