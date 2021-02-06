@@ -105,7 +105,7 @@ def get_north_EveryDaydata(DateType):
     }
     date1=get_dfcfdate()
     all_Everydata=[]
-    for i in range(1,30,1): #北向资金数据每天有30页
+    for i in range(1,31,1): #北向资金数据每天有30页
         try:
             params = {'type': 'HSGT20_GGTJ_SUM',
                      'token': '894050c76af8597a853f5b408b759f5d',

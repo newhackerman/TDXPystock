@@ -1,4 +1,4 @@
-import bs4
+﻿import bs4
 import requests as req
 import re,json
 import prettytable as pt   #格式化成表格输出到html文件
@@ -78,7 +78,7 @@ def getsouth():
     pages=get_pages(headers,url,params)
     #print(pages)
     southdatainfos=[]
-    for i in range(1,pages,1):   #南向数据每天只有10页的数据量(取总量)
+    for i in range(1,pages+1,1):   #南向数据每天只有10页的数据量(取总量)
         try:
             params = {'type': 'HSGTHDSTA',
                      'token': '894050c76af8597a853f5b408b759f5d',
@@ -270,8 +270,8 @@ def rendertohtml(resultset):
     fw.close()
     webbrowser.open(OUTFILE)#调用浏览器打开文件
 if __name__ == '__main__':
-    # southdata=getsouth() #获取南向数据 ，获取数据后，将它注释掉
-    # insertdb (southdata) #将南向数据写表  获取数据后，将它注释掉
+    southdata=getsouth() #获取南向数据 ，获取数据后，将它注释掉
+    insertdb (southdata) #将南向数据写表  获取数据后，将它注释掉
     # SNAME='腾讯控股'
     SNAME='建设银行'
     SNAME='小米集团 - W'
