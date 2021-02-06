@@ -242,7 +242,7 @@ def rendertohtml(resultset):
             [HDDATE, SCODE, SNAME, SHAREHOLDSUM, SHARESRATE, CLOSEPRICE, ZDF, SHAREHOLDPRICE, SHAREHOLDPRICEONE,
              SHAREHOLDPRICEFIVE, SHAREHOLDPRICETEN])
 
-    OUTFILE='。/南向资金/南向资金_'+SNAME+'.html'
+    OUTFILE='./南向资金/南向资金_'+SNAME+'.html'
     #print(SHARESRATE)
     x1=HDDATELIST
     y1 = SHARESRATElist #将占比数据设置为y轴
