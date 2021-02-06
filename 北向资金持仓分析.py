@@ -20,7 +20,7 @@ warnings.filterwarnings('ignore')  #控制台不输出warning 信息
 
 #ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 import baostock as bs
-
+outfile=''
 ###获取股票代码
 def get_stockcode(stockname):
     if stockname.isdigit(): #如果输入的是代码
@@ -44,6 +44,20 @@ def get_stockcode(stockname):
     #         return str(row[1]['代码']).rjust(6,'0')
     #     else:
     #         continue
+def get_stockname(stockcode):
+    if stockcode.isdigit(): #如果输入的是代码
+        stockdata =pd.DataFrame(pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date'))
+        #print(stockdata)
+        for stock in stockdata.iterrows():
+            #print(stock)
+            if stockcode in stock[1]['ts_code']:
+                print(stock[1]['name'])
+                #print(str(stock[1]['ts_code'])[0:6])
+                return str(stock[1]['name'])
+            else:
+                continue
+    else:
+        return stockcode
 #获个股日线数据
 def get_stock_dateData(stockcode,start_date,end_date):
     if stockcode[0:2] =='60' or stockcode[0:2]=='68':
@@ -294,15 +308,25 @@ if __name__ == '__main__':
         code=get_stockcode(var1)
         listdata=getnorth(code) #实时查询北向资金
         format_tohtml(listdata)
-        webbrowser.open('北向资金_' + var1+ '.html')
+        if var1.isdigit():
+            stockname=get_stockname(var[1])
+            webbrowser.open('北向资金_' + stockname+ '.html')
+        else:
+            webbrowser.open('北向资金_' + var1 + '.html')
     else:
-        name='长江电力'
+        name='600031'
         code = get_stockcode(name)
         #print(code)
         listdata = getnorth(code)  # 实时查询北向资金
         format_tohtml(listdata)
-        webbrowser.open('北向资金_' +name + '.html')
-
+        if name.isdigit():
+            stockname = get_stockname(name)
+            #print(stockname)
+            outfile='北向资金_'+stockname + '.html'
+            webbrowser.open(outfile)
+        else:
+            webbrowser.open('北向资金_' + name + '.html')
+    print(outfile)
 
 '''
         data: [{
