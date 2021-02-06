@@ -23,16 +23,19 @@ import baostock as bs
 
 ###获取股票代码
 def get_stockcode(stockname):
-    stockdata =pd.DataFrame(pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date'))
-    #print(stockdata)
-    for stock in stockdata.iterrows():
-        #print(stock)
-        if stockname == stock[1]['name']:
-            #print(stock[1]['name'])
-            #print(str(stock[1]['ts_code'])[0:6])
-            return str(stock[1]['ts_code'])[0:6]
-        else:
-            continue
+    if stockname.isdigit(): #如果输入的是代码
+        return stockname
+    else:
+        stockdata =pd.DataFrame(pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date'))
+        #print(stockdata)
+        for stock in stockdata.iterrows():
+            #print(stock)
+            if stockname == stock[1]['name']:
+                #print(stock[1]['name'])
+                #print(str(stock[1]['ts_code'])[0:6])
+                return str(stock[1]['ts_code'])[0:6]
+            else:
+                continue
     # stocklist='./个股信息列表.txt'
     # readata=pd.read_csv(stocklist,sep=',',header=0,names=['代码','名称'])
     # for row in readata.iterrows():
