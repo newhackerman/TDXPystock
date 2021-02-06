@@ -242,7 +242,7 @@ def rendertohtml(resultset):
             [HDDATE, SCODE, SNAME, SHAREHOLDSUM, SHARESRATE, CLOSEPRICE, ZDF, SHAREHOLDPRICE, SHAREHOLDPRICEONE,
              SHAREHOLDPRICEFIVE, SHAREHOLDPRICETEN])
 
-    OUTFILE='./南向资金/南向资金_'+SNAME+'.html'
+    OUTFILE='南向资金_'+SNAME+'.html'
     #print(SHARESRATE)
     x1=HDDATELIST
     y1 = SHARESRATElist #将占比数据设置为y轴
@@ -268,6 +268,8 @@ def rendertohtml(resultset):
     with open(OUTFILE,'a+',encoding='utf-8') as fw:
         fw.write(s)
     fw.close()
+    #outfile='file://'+OUTFILE
+
     webbrowser.open(OUTFILE)#调用浏览器打开文件
 if __name__ == '__main__':
     # southdata=getsouth() #获取南向数据 ，获取数据后，将它注释掉
@@ -278,7 +280,10 @@ if __name__ == '__main__':
     var = sys.argv  # 可以接收从外部传入参数
     if len(var)>1:
         SNAME=var[1]
-        resultset=selectdb(SNAME=SNAME)#按名称查询南向资金占比
+        if var[1].isdigit():
+            resultset = selectdb(SCODE=SNAME)  # 按名称查询南向资金占比
+        else:
+            resultset=selectdb(SNAME=SNAME)#按名称查询南向资金占比
         rendertohtml(resultset)
     else:
         resultset = selectdb(SNAME='腾讯控股')  # 按名称查询南向资金占比
