@@ -241,7 +241,12 @@ class southwardAnalysis():
     def Select_Netpurchases(self):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
-        yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
+        # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
+        if outdate.isoweekday()==1:         #如果是周一，则库表前一天为周5的数据
+            yesterday = str((outdate + datetime.timedelta(days=-3)).strftime("%Y-%m-%d"))
+        else:
+            yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
+        print(newdate,yesterday)
         sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
         # print(sql)
         conn = self.dbconnect()
