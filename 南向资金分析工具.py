@@ -103,7 +103,7 @@ class southwardAnalysis():
                   'rt': '53712406'}
         # 获取北向数据总页数
         pages = self.get_pages(headers, url, params)
-        # print(pages)
+        print('共用数据 %d 页，请稍等......' %pages)
         southdatainfos = []
         for i in range(1, pages+1, 1):  # 南向数据每天只有10页的数据量(取总量)
             try:
