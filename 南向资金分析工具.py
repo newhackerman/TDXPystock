@@ -1,4 +1,4 @@
-'''
+﻿'''
 author by :newhackerman@163.com
 申明：根据此程序分析做出的买卖，本人不承担投资损失，投资有风险，买卖需谨慎！！
 1。数据更新（去取库里的最新日期与网上的最新日期比较，较旧更新数据，否提示数据最新）
@@ -242,7 +242,7 @@ class southwardAnalysis():
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
-        sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and zdf >0 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
+        sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
         # print(sql)
         conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
