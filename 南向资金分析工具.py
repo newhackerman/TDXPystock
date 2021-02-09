@@ -425,6 +425,18 @@ class southwardAnalysis():
         var = sys.argv  # 可以接收从外部传入参数
         while True:
             if len(var) > 1:
+                var1 = str(var[1]).strip(' ')
+                if var1=='1':
+                    isnew = self.compare_Date()  # 判断是否要更新数据
+                    if isnew:
+                        print('数据已是最新')
+                        break
+                    else:
+                        print('数据更新中！')
+                        pagedata = self.getsouth()
+                        self.insertdb(pagedata)
+                        print('数据更新成功！！！')
+                        break
                 SNAME = var[1]
                 if SNAME.isdigit():
                     resultset = self.selectdb(SCODE=SNAME)  # 按代码查询南向资金占比
