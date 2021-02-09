@@ -314,7 +314,7 @@ if __name__ == '__main__':
         else:
             webbrowser.open('北向资金_' + var1 + '.html')
     else:
-        name='600031'
+        name='三一重工'
         code = get_stockcode(name)
         #print(code)
         listdata = getnorth(code)  # 实时查询北向资金
@@ -327,6 +327,13 @@ if __name__ == '__main__':
         else:
             webbrowser.open('北向资金_' + name + '.html')
     print(outfile)
+
+
+
+
+
+
+
 
 '''
         data: [{

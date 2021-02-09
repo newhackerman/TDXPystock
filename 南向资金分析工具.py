@@ -105,7 +105,7 @@ class southwardAnalysis():
         pages = self.get_pages(headers, url, params)
         # print(pages)
         southdatainfos = []
-        for i in range(1, pages + 1, 1):  # 南向数据每天只有10页的数据量(取总量)
+        for i in range(1, pages+1, 1):  # 南向数据每天只有10页的数据量(取总量)
             try:
                 params = {'type': 'HSGTHDSTA',
                           'token': '894050c76af8597a853f5b408b759f5d',
@@ -127,6 +127,7 @@ class southwardAnalysis():
                 data = jsondata.replace('\\r\\n', '', -1).replace('},', '}},', -1).replace('[\'[', '', -1).replace(
                     ']\']', '', -1)
                 listdata = data.split('},', -1)
+                # print(listdata)
                 header = ['日期', '股票代码 ', '股票名称 ', '持股数亿', '占比', '收盘价  ', '当日涨跌幅  ', '持股市值亿  ', '一日市值变化亿', '五日市值变化亿',
                           '十日市值变化亿']
                 # print(len(listdata))
@@ -144,12 +145,13 @@ class southwardAnalysis():
                     "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
                     "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
                 southdatainfos.append(listdata)
-                self.WriteFile(southdatainfos)  # 将查询到的数据写一份到本地文件
+
                 time.sleep(1)
             except BaseException as BE:
                 print(BE)
                 continue
         print('所有南向数据下载成功！！')
+        # self.WriteFile(southdatainfos)  # 将查询到的数据写一份到本地文件
         # 将数据写到文件，以便读取使用，免得每次都要去网上爬，造成大量访问
         return southdatainfos
 
@@ -162,7 +164,7 @@ class southwardAnalysis():
         # 由于每次取的是全量数据，先将表清空
         sql1 = 'delete from southdataanly'
         cursor.execute(sql1)
-        self.conn.commit()
+        conn.commit()
 
         # 执行的sql语句
         sql = '''insert into southdataanly (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
@@ -367,7 +369,7 @@ class southwardAnalysis():
             data1 = data['HDDATE']
         cursor.close()
         conn.close()
-        if data1 == '':
+        if data1 is None:
             print('表中无数据，请更新数据')
             return None
         return str(data1)
@@ -377,11 +379,13 @@ class southwardAnalysis():
         isnewdate = True
         pagedate = self.get_page_newdate()
         dbdate = self.getdb_maxdate()
+        if dbdate is None:
+            return False
         if pagedate > dbdate:
             isnewdate = False
         else:
             isnewdate = True
-        return isnewdate
+            return isnewdate
 
     # 格式化成table
     def SouthdataFormat(self, resultset):

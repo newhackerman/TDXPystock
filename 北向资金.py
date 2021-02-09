@@ -105,10 +105,10 @@ def formatresults(listdata,header):
     #tb.set_style(pt.DEFAULT)
     #tb.horizontal_char = '*'
 
-    conn = dbconnect()
-    cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-    # 执行的sql语句
-    sql = '''insert into northdata (HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    # conn = dbconnect()
+    # cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+    # # 执行的sql语句
+    # sql = '''insert into northdata (HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
 
     for row in listdata:  # 依次获取每一行数据
         jsdata = json.loads(row)
@@ -129,10 +129,10 @@ def formatresults(listdata,header):
         # print('%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t' % (
         # date, code, name, kaipanhuanshuoz, kaipanjine, liangbi, xianliang, liutongsizhi, liutongguyi, xifenhangye))
         tb.add_row([HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One])
-        values=(HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One)
-        cursor.execute(sql,values)
+        # values=(HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One)
+        # cursor.execute(sql,values)
     print('记录条数：\t',len(listdata))
-    conn.commit()
+    # conn.commit()
     s=tb.get_html_string()  #获取html格式
 
     outfile='./北向资金_'+HdDate+'.html'
