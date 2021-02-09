@@ -124,6 +124,7 @@ def get_north_EveryDaydata(DateType):
             data=jsondata.replace('\\r\\n','',-1).replace('},','}},',-1).replace('[\'[','',-1).replace(']\']','',-1)
             listdata=data.split('},',-1)
             all_Everydata.append(listdata)
+
         except BaseException as be:
             print(be)
             continue

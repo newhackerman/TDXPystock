@@ -632,6 +632,17 @@ class NorthwardAnalysis():
         while True:
             if len(var) > 1:
                 var1 = str(var[1]).strip(' ')
+                if var1=='1':
+                    isnew = self.compare_Date()  # 判断是否要更新数据
+                    if isnew:
+                        print('数据已是最新')
+                        break
+                    else:
+                        print('数据更新中！')
+                        northdataAnalyinfos = self.getNownorth()
+                        self.insertNowdata(northdataAnalyinfos)
+                        print('数据更新成功！！！')
+                        break
                 code = self.get_stockcode(var1)
                 listdata = self.getnorth(code)  # 实时查询北向资金
                 self.rendertohtml(listdata)
