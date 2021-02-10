@@ -60,6 +60,6 @@
 感谢您的关注，使用中有任何疑问，请与我联系：QQ:860760123  微信：newhackerman@163.com                          
 
 如果您认为还不错，也可以随意打享
-![image]()
+![image](https://github.com/newhackerman/TDXPystock/blob/master/pic/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210210174245.png)
 
 
