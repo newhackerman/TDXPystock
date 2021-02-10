@@ -63,5 +63,5 @@
 
 
 
-![image](https://github.com/newhackerman/TDXPystock/blob/master/pics/20210210174337.png)
+![image](https://github.com/newhackerman/TDXPystock/blob/master/pics/20210210174337.jpg)
 
