@@ -690,7 +690,7 @@ class NorthwardAnalysis():
                             print('无北向数据......')
                         else:
                             self.rendertohtml(resultset)
-                    elif choise == 0:
+                    elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
                 else:
                     print('输入错误\n')

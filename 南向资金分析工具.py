@@ -485,7 +485,7 @@ class southwardAnalysis():
                             resultset = self.selectdb(SNAME=SNAME)  # 按名称查询南向资金占比
                             self.SouthdataFormat(resultset)
                         self.rendertohtml(resultset)
-                    elif choise == 0:
+                    elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
                 else:
                     print('输入错误\n')
