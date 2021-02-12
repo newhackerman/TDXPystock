@@ -330,13 +330,13 @@ class NorthwardAnalysis():
 
         OUTFILE = '南向资金_' + SNAME + '.html'
         # print(SHARESRATE)
-        x1 = HDDATELIST
-        y1 = SHARESRATElist  # 将占比数据设置为y轴
-        y2 = SHAREHOLDSUMlist
-        y3 = zdflist
-        y4 = SHAREHOLDPRICEONElist
-        y5 = SHAREHOLDPRICEFIVElist
-        y6 = SHAREHOLDPRICETENlsit
+        x1 = HDDATELIST[::-1]
+        y1 = SHARESRATElist[::-1]  # 将占比数据设置为y轴
+        y2 = SHAREHOLDSUMlist[::-1]
+        y3 = zdflist[::-1]
+        y4 = SHAREHOLDPRICEONElist[::-1]
+        y5 = SHAREHOLDPRICEFIVElist[::-1]
+        y6 = SHAREHOLDPRICETENlsit[::-1]
         # y2 = [1000, 300, 500]
         # bar = Bar()
         # 设置x轴
@@ -345,7 +345,7 @@ class NorthwardAnalysis():
         # 设置y轴
         c.add_yaxis(series_name='持股百分比', y_axis=y1)
         c.add_yaxis(series_name='持股数量亿', y_axis=y2)
-        c.add_yaxis(series_name='涨跌幅', y_axis=y3)
+        # c.add_yaxis(series_name='涨跌幅', y_axis=y3)
         c.add_yaxis(series_name='1日变动亿', y_axis=y4)
         c.add_yaxis(series_name='5日变动亿', y_axis=y5)
         c.add_yaxis(series_name='10日变动亿', y_axis=y6)
@@ -426,6 +426,7 @@ class NorthwardAnalysis():
         bar = Bar()
         然后将c 换成bar
         '''
+        # s = tb.sort_key('日期','desc')
         s = tb.get_html_string()  # 格式化成html文件
         # 将画的图片输出
         kline = '''<img src=./Kline.jpg />'''

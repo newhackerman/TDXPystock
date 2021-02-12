@@ -103,7 +103,7 @@ class southwardAnalysis():
                   'rt': '53712406'}
         # 获取北向数据总页数
         pages = self.get_pages(headers, url, params)
-        print('共用数据 %d 页，请稍等......' %pages)
+        print('共有数据 %d 页，请稍等......' %pages)
         southdatainfos = []
         for i in range(1, pages+1, 1):  # 南向数据每天只有10页的数据量(取总量)
             try:
@@ -247,7 +247,7 @@ class southwardAnalysis():
         else:
             yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         print(newdate,yesterday)
-        sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
+        sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>1 and SHAREHOLDPRICEFIVE>-2 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
         # print(sql)
         conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
@@ -257,7 +257,7 @@ class southwardAnalysis():
         if resultset:
             return resultset
         else:
-            print('数据不是最新，请更新数据！')
+            print('无满足条件数据！')
             # return None
         cursor.close()
         conn.close()
