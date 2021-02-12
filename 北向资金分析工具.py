@@ -654,10 +654,14 @@ class NorthwardAnalysis():
                 print('\t 2。当日持股变动最大前10股票查询')
                 print('\t 3。北资开始净买股票查询 ')
                 print('\t 4。个股数据展示（输入名称或代码）')
-                print('\t 0/q/exit/quit。退出\\r\n')
+                print('\t 0。退出\\r\n')
                 print(
                     '*****************************************************************************************************\r\n')
-                choise = int(input('请输入：'))
+                try:
+                    choise = int(input('请输入：'))
+                except BaseException as BE:
+
+                    choise = int(input('输入错误，请重新输入 ：'))
                 if choise in range(5):
                     if choise == 1:
                         isnew = self.compare_Date()  # 判断是否要更新数据
