@@ -418,6 +418,15 @@ class southwardAnalysis():
                 [HDDATE, SCODE, SNAME, SHAREHOLDSUM, SHARESRATE, CLOSEPRICE, ZDF, SHAREHOLDPRICE, SHAREHOLDPRICEONE,
                  SHAREHOLDPRICEFIVE, SHAREHOLDPRICETEN])
         print(tb.get_string())
+     #打开F0
+    def openF10(self,code):
+        url = 'https://finance.futunn.com/?code=%s&market=hk&skin=1&clienttype=10&direction=1#/profile'
+        if code.isdigit():
+            url=url %code
+            webbrowser.open(url)
+        else:
+            pass
+
 
     def main(self):
         SNAME = '建设银行'
@@ -455,6 +464,7 @@ class southwardAnalysis():
                 print('\t 2。当日持股变动最大前10股票查询')
                 print('\t 3。南资开始净买股票查询 ')
                 print('\t 4。个股数据展示（输入名称或代码）')
+                print('\t 5。个股F10')
                 print('\t 0。退出\r\n')
                 print(
                     '*****************************************************************************************************\r\n')
@@ -463,7 +473,7 @@ class southwardAnalysis():
                 except BaseException as BE:
 
                     choise = int(input('输入错误，请重新输入 ：'))
-                if choise in range(5):
+                if choise in range(6):
                     if choise == 1:
                         isnew = self.compare_Date()  # 判断是否要更新数据
                         if isnew:
@@ -489,6 +499,9 @@ class southwardAnalysis():
                             resultset = self.selectdb(SNAME=SNAME)  # 按名称查询南向资金占比
                             self.SouthdataFormat(resultset)
                         self.rendertohtml(resultset)
+                    elif choise == 5:
+                        SNAME = str(input('请输入股票代码:\t'))
+                        self.openF10(SNAME)
                     elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
                 else:
