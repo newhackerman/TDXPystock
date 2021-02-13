@@ -90,14 +90,11 @@ class NorthwardAnalysis():
                     continue
 
     # 写文件
-    def WriteFile(self, northdataAnalyinfos):
-        data = pd.DataFrame(northdataAnalyinfos,
-                            columns=['日期', '股票代码 ', '股票名称 ', '持股数亿', '占比', '收盘价  ', '当日涨跌幅  ', '持股市值亿  ', '一日市值变化亿',
-                                     '五日市值变化亿', '十日市值变化亿'])
-        data = data.to_csv()
-        southdatafile = '北向资金数据.txt'
+    def WriteFile(self, northdataAnalyinfos,Hddate):
+        data=''.join(northdataAnalyinfos)
+        southdatafile = '北向资金数据_%s.txt' %Hddate
         with open(southdatafile, 'w', encoding='utf-8') as fw:
-            fw.write(str(data))
+            fw.write(data)
 
     # 获取个股北向资金数据
     def getnorth(self,code):
@@ -769,6 +766,12 @@ class NorthwardAnalysis():
                         else:
                             northdataAnalyinfos = self.getDesignatedDateData(Hddate)
                             self.insertNowdata(northdataAnalyinfos)
+                            print('入库成功！！！')
+                            select = str(input('是否要保存到本地文件（Y/）N： '))
+                            if select =='Y' or select=='y':
+                                self.WriteFile(northdataAnalyinfos, Hddate)
+                            else:
+                                pass
                     elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
                 else:
