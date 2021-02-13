@@ -44,7 +44,7 @@ class NorthwardAnalysis():
     tablename = 'northdataAnaly'
     configfile = 'D:/mysqlconfig.json'
 
-    # 初始化建立数据库链接
+
     def __init__(self):
         pass
 

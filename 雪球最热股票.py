@@ -19,9 +19,12 @@ def format_tohtml(datalist):
                 [stockcode, stockname, hotvalue, hotincrement])
         tb.add_row(['+-----------+','+-----------+','+-----------+','+-----------+'])
     outfile = '雪球最热股票.html'
+    # outfile = '/opt/lampp/htdocs/hotstock.html'
     print(tb)
+    jscode=''' <script language="JavaScript">setTimeout(function(){location.reload()},30000); </script>'''
     s = tb.get_html_string()  #格式化成html文件
     fw = open(outfile, 'a+', encoding='gbk')
+    fw.write(jscode)
     fw.write(s)  # 输出到文件
     fw.close()
 
@@ -39,7 +42,7 @@ def getdata():
     urllist.append(url2)
     urllist.append(url3)
     urllist.append(url4)
-    cookeis = 'device_id=e6b8423858c6fa03fa5f8ea2cc164e8e; s=c9133wut45; bid=8eb7a82092e1387f689981b0cdac6fde_kibfx3s0; Hm_lvt_1db88642e346389874251b5a1eded6e3=1609921402,1610091659,1610671835,1810717039; xq_a_token=176b14b3953a7c8a2ae4e4fae4c848decc03a883; xqat=176b14b3953a7c8a2ae4e4fae4c848decc03a883; xq_r_token=2c9b0faa98159f39fa3f96606a9498edb9ddac60; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOi0xLCJpc3MiOiJ1YyIsImV4cCI6MTYxMzQ0MzE3MSwiY3RtIjoxNjEwODg4ODUyNzA3LCJjaWQiOiJkOWQwbjRBWnVwIn0.HhQ3EXskYpztLUpaST9VzxvxZOGA3rnNYl_N5HDwL61PTJeY2qRcP1ABbc-zCybKBjRiI6d1_0B_OXyUX9qHO4OHLbC8VaTrfXRgcMJxCRT2pv8xmWgNJUIEoLvVw7qRPVhHzcWtdDr1f0wCKRJMnRtZPvuzjs5lHgGGsPSGXtoqY-pH5pwcWikAxXHeqN3uMPzS4M4Y-UG371UZoz4cbt-6KBckdi3d9pge2fGzj0W4MpCm1286zGCatSUf_bY6_DclMPRCqftIJD0v1TsMToMc3K2Kd5mPeGoHD1FvfvYIg-Ji79d8lC4myc3hdWXHLXHKmDuKZ2kMT5SVFsJ6Gw; u=261610888892323; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1610888894'
+    cookeis = 'device_id=e6b8423858c6fa03fa5f8ea2cc164e8e; s=c9133wut45; bid=8eb7a82092e1387f689981b0cdac6fde_kibfx3s0; cookiesu=641612859392955; Hm_lvt_1db88642e346389874251b5a1eded6e3=1611565185,1611826882,1612859385,1612919940; xq_a_token=62effc1d6e7ddef281d52c4ea32f6800ce2c7473; xqat=62effc1d6e7ddef281d52c4ea32f6800ce2c7473; xq_r_token=53a0f79d5bae795fb7abc6814dc0fc0410413016; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOi0xLCJpc3MiOiJ1YyIsImV4cCI6MTYxNTYwMzIxNSwiY3RtIjoxNjEzMTg0Mjk2NDU4LCJjaWQiOiJkOWQwbjRBWnVwIn0.a3EmTx4ekMzI8fl17YcLZPsmWkawPJJF9yZZNF5lWr9oAoWmH2CvElUV49Xkg_SglA_sWGiN2uF1OBwkT4ii_yQOW45CViqaVvCAW3--qvOUIMWJDHvuvAQRbfitxkWztSUZ3feRSZVukTEZcd2VBZ6nXN_Bk2HghgjJdvJpu4awLMjnXWbhTbxxUqHZ_k7lgch3MulDEsnOEDFnuerbQ52UCc3lYcZ027wOoRDiUtQX6fNIzD-zFPEbn-i7BpN44hs8VDURnl53pr92Oj5T5KBUguBT23M6V9NYjMzTJSYX5OLP83JYYkNeX3tl5dcM2ihRU1KqkiJGx22nWSe4EA; u=951613184345028; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1613184347'
 
     headers = {'accept': 'application/json, text/plain, */*',
                'accept-encoding': 'gzip, deflate, br',
