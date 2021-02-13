@@ -91,7 +91,7 @@ class NorthwardAnalysis():
 
     # 写文件
     def WriteFile(self, northdataAnalyinfos,Hddate):
-        data=''.join(northdataAnalyinfos)
+        data=str(northdataAnalyinfos)
         southdatafile = '北向资金数据_%s.txt' %Hddate
         with open(southdatafile, 'w', encoding='utf-8') as fw:
             fw.write(data)
@@ -419,15 +419,16 @@ class NorthwardAnalysis():
         cursor.execute(sql)
         result = cursor.fetchall()
         # print(result)
+        data1=None
         for data in result:
             data1 = data['HDDATE']
             print(data1)
+            if data1 is None:
+                return None
         cursor.close()
         conn.close()
-        if data1 is None:
-            print('表中无数据，请更新数据')
-            return None
-        return str(data1)
+
+
 
     # 比较数据是否为最新的
     def compare_Date(self):
