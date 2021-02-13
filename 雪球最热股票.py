@@ -23,7 +23,7 @@ def format_tohtml(datalist):
     print(tb)
     jscode=''' <script language="JavaScript">setTimeout(function(){location.reload()},30000); </script>'''
     s = tb.get_html_string()  #格式化成html文件
-    fw = open(outfile, 'a+', encoding='gbk')
+    fw = open(outfile, 'w', encoding='gbk')
     fw.write(jscode)
     fw.write(s)  # 输出到文件
     fw.close()

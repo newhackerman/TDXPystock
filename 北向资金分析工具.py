@@ -385,6 +385,7 @@ class NorthwardAnalysis():
         '''
         # s = tb.sort_key('日期','desc')
         s = tb.get_html_string()  # 格式化成html文件
+        # print(s)
         # 将画的图片输出
         kline = '''<img src=./Kline.jpg />'''
         fw = open(outfile, 'a+', encoding='utf-8')
