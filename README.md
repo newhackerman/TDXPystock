@@ -61,7 +61,5 @@
 
 如果您认为还不错，也可以随意打享
 
-
-
-![微信]http://a1.qpic.cn/psc?/V50pq8k53VZO9a3umeIZ2wCqaK3By0Ps/bqQfVz5yrrGYSXMvKr.cqVxfLFaYy4E4HwL0Zduhn*Bk5YYQ.Ny0K.TtQVqPBgzetsBsws0o2rCt5Y8uo2PFu5aE6Z.q0U8VnJmbCC7.4*c!/c&ek=1&kp=1&pt=0&bo=8gLKAgAAAAABFwg!&tl=3&vuin=860760123&tm=1613354400&sce=60-2-2&rf=0-0)
+![二围码](http://a1.qpic.cn/psc?/V50pq8k53VZO9a3umeIZ2wCqaK3By0Ps/bqQfVz5yrrGYSXMvKr.cqVxfLFaYy4E4HwL0Zduhn*Bk5YYQ.Ny0K.TtQVqPBgzetsBsws0o2rCt5Y8uo2PFu5aE6Z.q0U8VnJmbCC7.4*c!/c&ek=1&kp=1&pt=0&bo=8gLKAgAAAAABFwg!&tl=3&vuin=860760123&tm=1613354400&sce=60-2-2&rf=0-0)
 
