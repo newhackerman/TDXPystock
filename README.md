@@ -63,5 +63,5 @@
 
 
 
-![image](https://github.com/newhackerman/TDXPystock/blob/master/pics/20210210174337.jpg)
+![微信](https://d.pcs.baidu.com/file/c22c1e3feh808eccb67d8967423b2cf7?fid=2617716508-250528-575886981107502&rt=pr&sign=FDtAERVCY-DCb740ccc5511e5e8fedcff06b081203-OTBF%2BButUMfK8J5c9EQJzOB75Qk%3D&expires=8h&chkv=1&chkbd=1&chkpc=et&dp-logid=1053929494857579640&dp-callid=0&dstime=1613356593&r=262792336&vip=0)
 
