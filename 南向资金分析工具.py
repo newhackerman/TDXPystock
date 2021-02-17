@@ -537,7 +537,7 @@ class southwardAnalysis():
                 print('\t 1。数据更新')
                 print('\t 2。当日持股变动最大前10股票查询')
                 print('\t 3。南资开始净买股票查询 ')
-                print('\t 4。个股数据展示（输入名称或代码）')
+                print('\t 4。个股南资数据展示（输入名称或代码）')
                 print('\t 5。个股F10')
                 print('\t 6。个股持股比例Top10经纪商查询')
                 print('\t 0。退出\r\n')
@@ -579,7 +579,7 @@ class southwardAnalysis():
                         self.openF10(SNAME)
                     elif choise == 6:
                         hkcode = str(input('请输入股票代码:\t'))
-                        Hddate = input('请输入要查询的数据日期，E.g: 2021-02-10\t')
+                        Hddate = input('请输入要查询的数据日期，E.g: 2021-02-10 默认为最新 \t')
                         if Hddate:
                             try:
                                 if ":" in Hddate:
