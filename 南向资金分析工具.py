@@ -427,6 +427,80 @@ class southwardAnalysis():
         else:
             pass
 
+    #获取经纪商持股数据
+    def get_participant(self,code, **defineDate):
+        url = 'https://sc.hkexnews.hk/TuniS/www.hkexnews.hk/sdw/search/searchsdw_c.aspx'
+        today = time.strftime('%Y-%m-%d', time.localtime())
+        today = datetime.datetime.strptime(today, "%Y-%m-%d")
+        if defineDate:
+            yesterday = defineDate['date']
+        else:
+            yesterday = str((today + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
+        print(today, yesterday)
+
+        tb = pt.PrettyTable()
+        tb.align = 'l'  # 对齐方式（c:居中，l居左，r:居右）
+        page = Page()
+        c = Line()
+        data = {
+            'today': today,
+            '__EVENTTARGET': 'btnSearch',
+            '__EVENTARGUMENT': '',
+            'txtShareholdingDate': yesterday,
+            'txtStockCode': code,
+            'txtStockName': '',
+            'txtParticipantID': '',
+            'txtParticipantName': ''
+        }
+        requst = req.session()
+        response = requst.post(url=url, data=data)
+        tree = etree.HTML(response.text)
+        code = code
+        txtStockName = tree.xpath('//input[@name="txtStockName"]/@value')
+        if txtStockName ==[]:
+            print('无数据')
+            return
+
+        txtStockName = txtStockName[0]
+        print(code, txtStockName)
+        head = tree.xpath(
+            '//div[@id="pnlResultNormal"]/div[@class="search-details-table-container table-mobile-list-container"]//table/thead/tr')
+        header = []
+        for line in head:
+            participantid = line.xpath('./th[@data-column-class="col-participant-id"]/text()')[0]  # 机构编号
+            participantname = line.xpath('./th[@data-column-class="col-participant-name"]/text()')[0]  # 机构名称
+            address = line.xpath('./th[@data-column-class="col-address"]/text()')[0]  # 机构地址
+            shareholding = line.xpath('./th[@data-column-class="col-shareholding"]/text()')[0]  # 持股数量
+            shareholding_percent = \
+            str(line.xpath('./th[@data-column-class="col-shareholding-percent"]/text()')[0]).split('/')[-1][2:].strip()  # 持股百分比
+        header.append(participantid)
+        header.append(participantname)
+        # header.append(address)
+        header.append(shareholding)
+        header.append(shareholding_percent)
+
+        data = []
+        tempdata = tree.xpath(
+            '//div[@id="pnlResultNormal"]/div[@class="search-details-table-container table-mobile-list-container"]//table/tbody//tr')
+        i = 0
+        for line in tempdata:
+            i += 1
+            if i == 10:
+                break
+            else:
+                participantid = line.xpath('./td[@class="col-participant-id"]/div[2]/text()')[0]
+                participantname = line.xpath('./td[@class="col-participant-name"]/div[2]/text()')[0]
+                # address=line.xpath('./td[@class="col-address"]/div[2]/text()')[0]
+                shareholding = line.xpath('./td[@class="col-shareholding text-right"]/div[2]/text()')[0]
+                shareholding_percent = line.xpath('./td[@class="col-shareholding-percent text-right"]/div[2]/text()')[0]
+            dict = {'机构编号': participantid, '机构名称': participantname, '持股数量': shareholding, '持股百分比': shareholding_percent}
+            tb.add_row([participantid, participantname, shareholding, shareholding_percent])
+            data.append(dict)
+        pdf = pd.DataFrame(data)
+        tb.field_names = header  # 设置表头
+        print(tb.get_string())
+        # print(pdf)
+        return pdf
 
     def main(self):
         SNAME = '建设银行'
@@ -465,6 +539,7 @@ class southwardAnalysis():
                 print('\t 3。南资开始净买股票查询 ')
                 print('\t 4。个股数据展示（输入名称或代码）')
                 print('\t 5。个股F10')
+                print('\t 6。个股持股比例Top10经纪商查询')
                 print('\t 0。退出\r\n')
                 print(
                     '*****************************************************************************************************\r\n')
@@ -473,7 +548,7 @@ class southwardAnalysis():
                 except BaseException as BE:
 
                     choise = int(input('输入错误，请重新输入 ：'))
-                if choise in range(6):
+                if choise in range(7):
                     if choise == 1:
                         isnew = self.compare_Date()  # 判断是否要更新数据
                         if isnew:
@@ -502,11 +577,28 @@ class southwardAnalysis():
                     elif choise == 5:
                         SNAME = str(input('请输入股票代码:\t'))
                         self.openF10(SNAME)
+                    elif choise == 6:
+                        hkcode = str(input('请输入股票代码:\t'))
+                        Hddate = input('请输入要查询的数据日期，E.g: 2021-02-10\t')
+                        if Hddate:
+                            try:
+                                if ":" in Hddate:
+                                    time.strptime(Hddate, "%Y-%m-%d")
+                                else:
+                                    time.strptime(Hddate, "%Y-%m-%d")
+                            except:
+                                print('日期输入错误！')
+                                continue
+                            self.get_participant( hkcode, date=Hddate)
+                        else:
+                            self.get_participant(hkcode)
+
                     elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
                 else:
                     print('输入错误\n')
                     choise = int(input('请输入：'))
+
 
 
 if __name__ == '__main__':
