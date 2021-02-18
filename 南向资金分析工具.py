@@ -458,7 +458,7 @@ class southwardAnalysis():
         code = code
         txtStockName = tree.xpath('//input[@name="txtStockName"]/@value')
         if txtStockName ==[]:
-            print('无数据')
+            print('无数据,请确认此股票是否存在')
             return
 
         txtStockName = txtStockName[0]

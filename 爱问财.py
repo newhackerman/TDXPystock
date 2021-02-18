@@ -11,17 +11,18 @@ class aiwencai():
         # self.chrome_option.add_argument(headers)
         #self.chrome_option.add_argument('--disable-gpu')
         self.brow=webdriver.Chrome(executable_path='../chromedriver.exe', options=self.chrome_option)
-        self.brow.execute_script(
-            'Object.defineProperties(navigator,{ webdriver:{ get: () => false } }) ')  # 将属性设置为非webdriver 方式，（淘宝针对这个有反爬机制）
+        # self.brow.execute_script(
+        #     'Object.defineProperties(navigator,{ webdriver:{ get: () => false } }) ')  # 将属性设置为非webdriver 方式，（淘宝针对这个有反爬机制）
 
         pass
 
     def questions(self,question):
-        url='http://www.iwencai.com/unifiedwap/home/index?sign=1612252037820'
-        self.brow.get(url)
-        q=self.brow.find_element_by_class_name('search-input').send_keys(question)
-        click=self.brow.find_element_by_class_name('search-icon').click()
-
+        url='http://www.iwencai.com/stockpick/search?typed=1&preParams=&ts=1&f=1&qs=f10stock_query&selfsectsn=&querytype=&searchfilter=&tid=stockpick&w='+question
+        # self.brow.get(url)
+        # q=self.brow.find_element_by_class_name('search-input').send_keys(question)
+        # click=self.brow.find_element_by_class_name('search-icon').click()
+        request=requests.get(url)
+        print(request.text)
 
     def format(self):
         pass
