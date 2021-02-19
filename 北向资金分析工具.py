@@ -12,7 +12,7 @@ import json
 import re,bs4
 import sys
 import webbrowser  # 打开浏览器
-
+import struct as st #编码解码
 import matplotlib.gridspec as gridspec  # 分割子图
 import matplotlib.pyplot as plt
 import mpl_finance as mpf  # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
@@ -43,10 +43,20 @@ class NorthwardAnalysis():
     database = 'stock'
     tablename = 'northdataAnaly'
     configfile = 'D:/mysqlconfig.json'
-
+    percentDpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9602\\'
+    oneTrunDpath='C:\\十档行情\\T0002\\signals\\signals_user_9604\\'
 
     def __init__(self):
         pass
+
+    #########编码成通达信可识别的数据
+    def stockEncode(self,HdDate, SCode):
+        seek = 4
+        text1 = st.pack('I', int(HdDate))
+        # print(text1)
+        text2 = st.pack('f', float(SCode))
+        # print(text2)
+        return text1 + text2
 
     def dbconnect(self):
         # 读取json格式的配置文件
@@ -56,6 +66,62 @@ class NorthwardAnalysis():
         conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
                                jsoncontent['database'], charset='utf8')
         return conn
+
+    ###################处理个股北资占比数据写通达信文件
+    def writeNorthDataPercentToTdx(self,listdata, percentDpath,SCode):
+        #确定要写的目标文件名：
+        if SCode[0:2] == '60' or SCode[0:3] == '688' or SCode[0:3] == '880':
+            dfilename = percentDpath + '1_' + SCode + '.dat'
+        elif SCode[0:3] == '300' or SCode[0:2] == '00':
+            dfilename = percentDpath + '0_' + SCode + '.dat'
+        fw1 = open(dfilename, 'wb')
+        templist=[]
+        for tempdata in listdata:
+            for row in tempdata:  # 依次获取每一行数据
+                jsdata = json.loads(row)
+                HdDate = str(jsdata['HDDATE'])[0:10]
+                HdDate = datetime.datetime.strptime(HdDate, '%Y-%m-%d').strftime('%Y%m%d')
+                SCode = str(jsdata['SCODE'])
+                SharesRate = jsdata['SHARESRATE']
+                SHAREHOLDPRICEONE=format(jsdata['SHAREHOLDPRICEONE'] / 100000000, '.3f')
+                dict={'HdDate':HdDate,'SharesRate':SharesRate,'SHAREHOLDPRICEONE':SHAREHOLDPRICEONE}
+                templist.append(dict)
+        templist=templist[::-1] #list 反向（由于取的数据默认是降序，但写入通达信需要升序）
+        for line in templist:
+            HdDate=line['HdDate']
+            SharesRate=line['SharesRate']
+            fflowdata = self.stockEncode(HdDate, SharesRate)
+            fw1.write(fflowdata)
+        fw1.close()
+        print('文件：%s 写入成功!' %dfilename)
+
+    ###################处理个股北资持股市变到写通达信文件
+    def writeNorthDataOneTrunToTdx(self, listdata, oneTrunDpath, SCode):
+        # 确定要写的目标文件名：
+        if SCode[0:2] == '60' or SCode[0:3] == '688' or SCode[0:3] == '880':
+            dfilename = oneTrunDpath + '1_' + SCode + '.dat'
+        elif SCode[0:3] == '300' or SCode[0:2] == '00':
+            dfilename = oneTrunDpath + '0_' + SCode + '.dat'
+        fw1 = open(dfilename, 'wb')
+        templist = []
+        for tempdata in listdata:
+            for row in tempdata:  # 依次获取每一行数据
+                jsdata = json.loads(row)
+                HdDate = str(jsdata['HDDATE'])[0:10]
+                HdDate = datetime.datetime.strptime(HdDate, '%Y-%m-%d').strftime('%Y%m%d')
+                SCode = str(jsdata['SCODE'])
+                SharesRate = jsdata['SHARESRATE']
+                SHAREHOLDPRICEONE = format(jsdata['SHAREHOLDPRICEONE'] / 100000000, '.3f')
+                dict = {'HdDate': HdDate, 'SharesRate': SharesRate, 'SHAREHOLDPRICEONE': SHAREHOLDPRICEONE}
+                templist.append(dict)
+        templist = templist[::-1]  # list 反向（由于取的数据默认是降序，但写入通达信需要升序）
+        for line in templist:
+            HdDate = line['HdDate']
+            SHAREHOLDPRICEONE = line['SHAREHOLDPRICEONE']
+            fflowdata = self.stockEncode(HdDate, SHAREHOLDPRICEONE)
+            fw1.write(fflowdata)
+        fw1.close()
+        print('文件：%s 写入成功!' % dfilename)
     # 获取最新的数据日期
     def get_page_newdate(self):
         url = 'http://data.eastmoney.com/hsgtcg/StockStatistics.aspx?tab=3'
@@ -701,6 +767,7 @@ class NorthwardAnalysis():
                 print('\t 4。个股数据展示（输入名称或代码）')
                 print('\t 5。打开个股F0（输入名称代码）')
                 print('\t 6。手动补齐数据')
+                print('\t 7。个股北资持股占比与市值变动数据写通达信')
                 print('\t 0。退出\\r\n')
                 print(
                     '*****************************************************************************************************\r\n')
@@ -709,7 +776,7 @@ class NorthwardAnalysis():
                 except BaseException as BE:
 
                     choise = int(input('输入错误，请重新输入 ：'))
-                if choise in range(7):
+                if choise in range(8):
                     if choise == 1:
                         isnew = self.compare_Date()  # 判断是否要更新数据
                         if isnew:
@@ -774,6 +841,20 @@ class NorthwardAnalysis():
                                 self.WriteFile(northdataAnalyinfos, Hddate)
                             else:
                                 pass
+                    elif choise == 7:
+                        SNAME = str(input('请输入股票名称或代码:\t'))
+                        if SNAME.isdigit():
+                            # code = self.get_stockname(SNAME)
+                            pass
+                        else:
+                            SNAME = self.get_stockcode(SNAME)
+                        resultset = self.getnorth(SNAME)  # 按名称查询北向资金占比
+                        if resultset is None:
+                            print('无北向数据......')
+                        else:
+                            self.writeNorthDataOneTrunToTdx(resultset, self.oneTrunDpath, SNAME)
+                            self.writeNorthDataPercentToTdx(resultset, self.percentDpath, SNAME)
+
                     elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
                 else:
