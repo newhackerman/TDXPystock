@@ -1,11 +1,7 @@
 '''
 author by :newhackerman@163.com
 申明：根据此程序分析做出的买卖，本人不承担投资损失，投资有风险，买卖需谨慎！！
-1。数据更新（去取库里的最新日期与网上的最新日期比较，较旧更新数据，否提示数据最新）
-2。当日持股变动最大前10股票查询
-3。开始净买股票查询
-4。个股数据展示（输入名称或代码）
-5。退出'''
+'''
 
 import datetime,time
 import json
@@ -67,6 +63,19 @@ class NorthwardAnalysis():
                                jsoncontent['database'], charset='utf8')
         return conn
 
+    # 获取上一个交易日
+    def get_lastDay(self):
+        alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
+        # print(alldays)
+        tradingdays = alldays[alldays['is_open'] == 1]  # 得到所有交易开盘日
+        # print(tradingdays)
+        today = datetime.datetime.today().strftime('%Y%m%d')
+        if today in tradingdays['cal_date'].values:
+            tradingdays_list = tradingdays['cal_date'].tolist()
+            today_index = tradingdays_list.index(today)
+            last_day = tradingdays_list[int(today_index) - 1]  # 从列表中前一个数据即为上一个交易日
+            yesterday = str(last_day)[0:4] + '-' + str(last_day)[4:6] + '-' + str(last_day)[6:8]
+            return yesterday
     ###################处理个股北资占比数据写通达信文件
     def writeNorthDataPercentToTdx(self,listdata, percentDpath,SCode):
         #确定要写的目标文件名：
@@ -246,12 +255,7 @@ class NorthwardAnalysis():
         header = ['日期', '代码','名称','持股数量', '持股占比','收盘价' , '涨跌幅', '持股市值亿', '一日持股变动亿','五日持股变动亿','十日持股变动亿']
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
-
-        if outdate.isoweekday()==1:         #如果是周一，则库表前一天为周5的数据
-            yesterday = str((outdate + datetime.timedelta(days=-3)).strftime("%Y-%m-%d"))
-        else:
-            yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
-
+        yesterday=self.get_lastDay()
         sql = 'select * from northdataAnaly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and Zdf >-2 and SCode in ( select SCode from northdataAnaly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEONE desc'
         print(sql)
         conn = self.dbconnect()
