@@ -19,6 +19,9 @@ from lxml import etree
 from pyecharts.charts import Bar, Page, Line
 from pyecharts import options as opts
 
+
+
+
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 
 
@@ -48,7 +51,19 @@ class southwardAnalysis():
         conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
                                jsoncontent['database'], charset='utf8')
         return conn
-
+    #获取上一个交易日
+    def get_lastDay(self):
+        alldays = self.pro.trade_cal()  #得到所有日期，到今年年尾
+        # print(alldays)
+        tradingdays = alldays[alldays['is_open'] == 1 ] # 得到所有交易开盘日
+        # print(tradingdays)
+        today = datetime.datetime.today().strftime('%Y%m%d')
+        if today in tradingdays['cal_date'].values:
+            tradingdays_list = tradingdays['cal_date'].tolist()
+            today_index = tradingdays_list.index(today)
+            last_day = tradingdays_list[int(today_index) - 1] #从列表中前一个数据即为上一个交易日
+            yesterday=str(last_day)[0:4]+'-'+str(last_day)[4:6]+'-'+str(last_day)[6:8]
+            return yesterday
     # 获取南向数据总页数
     def get_pages(self, headers, url, params):
         response = req.get(url=url, headers=headers, params=params).text
@@ -242,10 +257,7 @@ class southwardAnalysis():
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
-        if outdate.isoweekday()==1:         #如果是周一，则库表前一天为周5的数据
-            yesterday = str((outdate + datetime.timedelta(days=-3)).strftime("%Y-%m-%d"))
-        else:
-            yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
+        yesterday=self.get_lastDay()
         print(newdate,yesterday)
         sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>1 and SHAREHOLDPRICEFIVE>-2 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
         # print(sql)
@@ -435,7 +447,7 @@ class southwardAnalysis():
         if defineDate:
             yesterday = defineDate['date']
         else:
-            yesterday = str((today + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
+            yesterday =self.get_lastDay()
         print(today, yesterday)
 
         tb = pt.PrettyTable()
@@ -502,6 +514,11 @@ class southwardAnalysis():
         # print(pdf)
         return pdf
 
+    #获取港股行情数据
+    def get_stock_Quatos(self,scode):
+        pass
+
+    #主循环入口
     def main(self):
         SNAME = '建设银行'
         SNAME = '小米集团 - W'
