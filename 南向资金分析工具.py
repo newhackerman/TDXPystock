@@ -52,12 +52,12 @@ class southwardAnalysis():
                                jsoncontent['database'], charset='utf8')
         return conn
     #获取上一个交易日
-    def get_lastDay(self):
+    def get_lastDay(self,today):
         alldays = self.pro.trade_cal()  #得到所有日期，到今年年尾
         # print(alldays)
         tradingdays = alldays[alldays['is_open'] == 1 ] # 得到所有交易开盘日
         # print(tradingdays)
-        today = datetime.datetime.today().strftime('%Y%m%d')
+        today =today.strftime('%Y%m%d')
         if today in tradingdays['cal_date'].values:
             tradingdays_list = tradingdays['cal_date'].tolist()
             today_index = tradingdays_list.index(today)
@@ -257,7 +257,7 @@ class southwardAnalysis():
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
-        yesterday=self.get_lastDay()
+        yesterday=self.get_lastDay(outdate)
         print(newdate,yesterday)
         sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>1 and SHAREHOLDPRICEFIVE>-2 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
         # print(sql)
@@ -447,7 +447,7 @@ class southwardAnalysis():
         if defineDate:
             yesterday = defineDate['date']
         else:
-            yesterday =self.get_lastDay()
+            yesterday =self.get_lastDay(today)
         print(today, yesterday)
 
         tb = pt.PrettyTable()
