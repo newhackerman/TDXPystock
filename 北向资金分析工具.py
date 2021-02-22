@@ -64,12 +64,12 @@ class NorthwardAnalysis():
         return conn
 
     # 获取上一个交易日
-    def get_lastDay(self):
+    def get_lastDay(self,today):
         alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
         # print(alldays)
         tradingdays = alldays[alldays['is_open'] == 1]  # 得到所有交易开盘日
         # print(tradingdays)
-        today = datetime.datetime.today().strftime('%Y%m%d')
+        today = today.strftime('%Y%m%d')
         if today in tradingdays['cal_date'].values:
             tradingdays_list = tradingdays['cal_date'].tolist()
             today_index = tradingdays_list.index(today)
@@ -255,7 +255,7 @@ class NorthwardAnalysis():
         header = ['日期', '代码','名称','持股数量', '持股占比','收盘价' , '涨跌幅', '持股市值亿', '一日持股变动亿','五日持股变动亿','十日持股变动亿']
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
-        yesterday=self.get_lastDay()
+        yesterday=self.get_lastDay(outdate)
         sql = 'select * from northdataAnaly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and Zdf >-2 and SCode in ( select SCode from northdataAnaly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEONE desc'
         print(sql)
         conn = self.dbconnect()
