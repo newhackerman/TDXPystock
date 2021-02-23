@@ -291,7 +291,7 @@ class NorthwardAnalysis():
 
     # 获取日线数据
     def get_stock_dateData(self, stockcode, start_date, end_date):
-        if stockcode[0:2] == '600' or stockcode[0:2] == '68':
+        if stockcode[0:3] == '600' or stockcode[0:2] == '68':
             stockcode = stockcode + '.SH'
         else:
             stockcode = stockcode + '.SZ'
