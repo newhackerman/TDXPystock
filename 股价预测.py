@@ -2,12 +2,9 @@ import requests
 import pandas as pd
 from pyecharts import options as opts
 from pyecharts.charts import Kline
-import pandas_datareader as  pdr
-import pandas_datareader.data as web
 import webbrowser  as br
 import tushare as ts
 import datetime
-import time
 from lxml import etree
 import prettytable as pt
 import matplotlib.pyplot as plt
