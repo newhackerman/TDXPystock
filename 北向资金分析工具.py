@@ -194,7 +194,14 @@ class NorthwardAnalysis():
                   'js': 'var nLvHRzKi={pages:(tp),data:(x)}',
                   'rt': '53732197'}
         # print(params)
-        response = req.get(url=url, headers=headers, params=params).text
+        try:
+            response = req.get(url=url, headers=headers, params=params)
+        except BaseException as BE:
+            response = req.get(url=url, headers=headers, params=params)
+            if response.status_code!=200:
+                print('访问异常，请重试！')
+                exit(1)
+        response=response.text
         #print(response)
         regex = r'data:\[({.*?)]}'
         jsondata = re.findall(regex, response)
@@ -608,33 +615,36 @@ class NorthwardAnalysis():
         print('共有  %d  页数据需要更新，请稍等......'%maxpage)
 
         for i in range(1, maxpage+1, 1):  # 北向资金数据每天有30页
-            try:
-                params = {'type': 'HSGTHDSTA',
-                          'token': '70f12f2f4f091e459a279469fe49eca5',
-                          'st': 'SHAREHOLDPRICEONE',
-                          'sr': -1,
-                          'p': i,
-                          'ps': 50,
-                          'js': 'var TpSlNIMe={pages:(tp),data:(x)}',
-                          'filter': '(MARKET in (\'001\',\'003\'))(HDDATE=^' + date1 + '^)',
-                          'rt': '53722283'}
+
+            params = {'type': 'HSGTHDSTA',
+                      'token': '70f12f2f4f091e459a279469fe49eca5',
+                      'st': 'SHAREHOLDPRICEONE',
+                      'sr': -1,
+                      'p': i,
+                      'ps': 50,
+                      'js': 'var TpSlNIMe={pages:(tp),data:(x)}',
+                      'filter': '(MARKET in (\'001\',\'003\'))(HDDATE=^' + date1 + '^)',
+                      'rt': '53722283'}
                 # print(params)
+            try:
                 response = req.get(url=url, headers=headers, params=params)
-                bstext = bs4.BeautifulSoup(response.content, 'lxml')
-                tempdata = bstext.find_all('p')
-                temp = str(tempdata)
-                regex = 'data:(.*?)}</p>'
-                jsondata = str(re.findall(regex, temp, re.M))
-                data = jsondata.replace('\\r\\n', '', -1).replace('},', '}},', -1).replace('[\'[', '', -1).replace(
-                    ']\']', '', -1)
-                listdata = data.split('},', -1)[::]
-                #print(listdata)
-                northdataAnalyinfos.append(listdata)
-                time.sleep(1)
-            except BaseException as be:
-                #print(be)
-                time.sleep(5)
-                continue
+            except BaseException as BE:
+                time.sleep(3)
+                response = req.get(url=url, headers=headers, params=params)
+                if response.status_code!=200:
+                    print('第%s 页数据获取异常！！！' %i)
+                    continue
+            bstext = bs4.BeautifulSoup(response.content, 'lxml')
+            tempdata = bstext.find_all('p')
+            temp = str(tempdata)
+            regex = 'data:(.*?)}</p>'
+            jsondata = str(re.findall(regex, temp, re.M))
+            data = jsondata.replace('\\r\\n', '', -1).replace('},', '}},', -1).replace('[\'[', '', -1).replace(
+                ']\']', '', -1)
+            listdata = data.split('},', -1)[::]
+            #print(listdata)
+            northdataAnalyinfos.append(listdata)
+            time.sleep(1)
         return northdataAnalyinfos
 
     # 获取指定日期的北向数据
