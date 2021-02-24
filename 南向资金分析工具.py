@@ -21,15 +21,14 @@ from pyecharts import options as opts
 import akshare as ak  #api 使用：https://akshare-4gize6tod19f2d2e-1252952517.tcloudbaseapp.com/index.html
 
 
-
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 
 
-# import  talib   #Technical Analysis Library”, 即技术分析库 是Python金融量化的高级库，涵盖了150多种股票、期货交易软件中常用的技术分析指标，如MACD、RSI、KDJ、动量指标、布林带等等。
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import matplotlib.gridspec as gridspec#分割子图
-# import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
+import  talib   #Technical Analysis Library”, 即技术分析库 是Python金融量化的高级库，涵盖了150多种股票、期货交易软件中常用的技术分析指标，如MACD、RSI、KDJ、动量指标、布林带等等。
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec#分割子图
+import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
 
 class southwardAnalysis():
     pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
@@ -176,8 +175,9 @@ class southwardAnalysis():
 
     #获取港股日线数据
     def getHK_stockQuotes(self,scode):
-        stock_hk_daily_hfq_df = ak.stock_hk_daily(symbol=scode, adjust="qfq")   #qfq： 前复权 hfq:后复权
-        return stock_hk_daily_hfq_df
+        data = ak.stock_hk_daily(symbol=scode, adjust="qfq")   #qfq： 前复权 hfq:后复权
+        data=pd.DataFrame(data)
+        return data
 
     # 将下载的数据写数据库
     def insertdb(self, southdatainfos):
@@ -297,6 +297,7 @@ class southwardAnalysis():
 
     # 将查询到的数据分析后输出到html
     def rendertohtml(self, resultset):
+        page=Page()
         if resultset is None:
             print('无数据')
             return None
@@ -362,8 +363,8 @@ class southwardAnalysis():
         c.add_xaxis(xaxis_data=x1)
         # 设置y轴
         c.add_yaxis(series_name='持股百分比', y_axis=y1)
-        c.add_yaxis(series_name='持股数量亿', y_axis=y2)
-        c.add_yaxis(series_name='涨跌幅', y_axis=y3)
+        # c.add_yaxis(series_name='持股数量亿', y_axis=y2)
+        # c.add_yaxis(series_name='涨跌幅', y_axis=y3)
         c.add_yaxis(series_name='1日市值变动亿', y_axis=y4)
         c.add_yaxis(series_name='5日市值变动亿', y_axis=y5)
         c.add_yaxis(series_name='10日市值变动亿', y_axis=y6)
@@ -371,18 +372,83 @@ class southwardAnalysis():
         c.set_global_opts(title_opts=opts.TitleOpts(title='南向资金持股分析:  ' + SNAME))
 
         # 生成html文件
-        c.render(path=OUTFILE)
+        # c.render(path=OUTFILE)
+        page.add(c)
+        page.render(path=OUTFILE)
         # 如果要输出柱图
         '''
         bar = Bar()
         然后将c 换成bar
         '''
         #获取港股日线数据并画K线图
-        stockquoteData=self.getHK_stockQuotes(SCODE)
+        getstockdata=self.getHK_stockQuotes(SCODE)
 
+        if len(getstockdata)<90:
+            getstockdata=getstockdata
+        else:
+            getstockdata=getstockdata.tail(90) #只后90行
+        # print(getstockdata)
+        if getstockdata.items == None:
+            kline=''
+        else:
+            # getstockdata['trade_date'] = pd.to_datetime(getstockdata.index)  # 设置字段trade_date 为datetime
+            # getstockdata = getstockdata.set_index('trade_date')  # 设置trade_date为索引
+            index=getstockdata.index.tolist()
+            # getstockdata.sort_values(by=[getstockdata.index().to_list,'close'],ascending=False)
+            # 设置四个绘图区域    包括    K线（均线），成交量，MACD
+            np.seterr(divide='ignore', invalid='ignore')  # 忽略warning
+            plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+            plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+            fig, ax = plt.subplots(figsize=(9, 6))  # 创建fig对象
+            # 画绘图区域
+            gs = gridspec.GridSpec(2, 1, left=0.08, bottom=0.15, right=0.99, top=0.96, wspace=None, hspace=0,
+                                   height_ratios=[3.5, 1])
+            # 添加指标
+            graph_KAV = fig.add_subplot(gs[0, :])  # K线图
+            graph_VOL = fig.add_subplot(gs[1, :])
+            # graph_MACD = fig.add_subplot(gs[2, :])
+            # graph_KDJ = fig.add_subplot(gs[3, :])
+            mpf.candlestick2_ochl(graph_KAV, getstockdata.open, getstockdata.close, getstockdata.high, getstockdata.low,
+                                  width=0.5, colorup='r', colordown='g')  # 绘制K线走势
+            # mpf.plot(getstockdata.iloc[:100],type='candle')  # 绘制K线走势
+            # 绘制移动平均线图
+            getstockdata['Ma5'] = getstockdata.close.rolling(
+                window=5).mean()  # pd.rolling_mean(df_stockload.close,window=20)
+            getstockdata['Ma10'] = getstockdata.close.rolling(
+                window=10).mean()  # pd.rolling_mean(df_stockload.close,window=30)
+            getstockdata['Ma20'] = getstockdata.close.rolling(
+                window=20).mean()
+            graph_KAV.plot(np.arange(0, len(index)), getstockdata['Ma5'], 'black', label='M5', lw=1.0)
+            graph_KAV.plot(np.arange(0, len(index)), getstockdata['Ma10'], 'green', label='M10', lw=1.0)
+            graph_KAV.plot(np.arange(0, len(index)), getstockdata['Ma20'], 'blue', label='M20', lw=1.0)
+
+            # 添加网格
+            graph_KAV.grid()
+            graph_KAV.legend(loc='best')
+            graph_KAV.set_title(SCODE + ' ' + SNAME + '(日线)')
+            graph_KAV.set_ylabel(u"价格")
+            graph_KAV.set_xlim(0, len(index))  # 设置一下x轴的范围
+            # 绘制成交量图
+            graph_VOL.bar(np.arange(0, len(index)), getstockdata.volume,
+                          color=['g' if getstockdata.open[x] > getstockdata.close[x] else 'r' for x in
+                                 range(0, len(index))])
+            graph_VOL.set_ylabel(u"成交量")
+            graph_VOL.set_xlim(0, len(index))  # 设置一下x轴的范围
+            graph_VOL.set_xticks(range(0, len(index), 1))  # X轴刻度设定 每1天标一个日期
+
+            # X-轴每个ticker标签都向右倾斜45度
+            for label in graph_KAV.xaxis.get_ticklabels():
+                label.set_visible(False)
+
+            for label in graph_VOL.xaxis.get_ticklabels():
+                label.set_visible(True)
+                label.set_fontsize(10)
+            plt.savefig('./Kline.jpg')
+        kline = '''<img src=./Kline.jpg />'''
         # 将数据也输出到文件
         s = tb.get_html_string()
         with open(OUTFILE, 'a+', encoding='utf-8') as fw:
+            fw.write(kline)
             fw.write(s)
         fw.close()
         webbrowser.open(OUTFILE)  # 调用浏览器打开文件
@@ -634,7 +700,8 @@ class southwardAnalysis():
 if __name__ == '__main__':
     Analys = southwardAnalysis()
     Analys.main()
-
+    # data=Analys.getHK_stockQuotes('00981')
+    # print(data.sort_values(data.index),'desc')
 '''
 CREATE TABLE IF NOT EXISTS `southdataanly`( 
 HDDATE date, 
