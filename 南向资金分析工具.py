@@ -18,7 +18,7 @@ import pandas  as pd
 from lxml import etree
 from pyecharts.charts import Bar, Page, Line
 from pyecharts import options as opts
-
+import akshare as ak  #api 使用：https://akshare-4gize6tod19f2d2e-1252952517.tcloudbaseapp.com/index.html
 
 
 
@@ -121,8 +121,8 @@ class southwardAnalysis():
         print('共有数据 %d 页，请稍等......' %pages)
         southdatainfos = []
         for i in range(1, pages+1, 1):  # 南向数据每天只有10页的数据量(取总量)
-            try:
-                params = {'type': 'HSGTHDSTA',
+
+            params = {'type': 'HSGTHDSTA',
                           'token': '894050c76af8597a853f5b408b759f5d',
                           'filter': '(MARKET=\'S\')',
                           'st': 'HDDATE',
@@ -132,43 +132,52 @@ class southwardAnalysis():
                           'js': 'var DYCpZajM={pages:(tp),data:(x)}',
                           'rt': '53712406'}
 
+            try:
                 response = req.get(url=url, headers=headers, params=params)
-                bstext = bs4.BeautifulSoup(response.content, 'lxml')
-                tempdata = bstext.find_all('p')
-                temp = str(tempdata)
-                regex = 'data:(.*?)}</p>'
-                jsondata = str(re.findall(regex, temp, re.M))
-                # print((jsondata))
-                data = jsondata.replace('\\r\\n', '', -1).replace('},', '}},', -1).replace('[\'[', '', -1).replace(
-                    ']\']', '', -1)
-                listdata = data.split('},', -1)
-                # print(listdata)
-                header = ['日期', '股票代码 ', '股票名称 ', '持股数亿', '占比', '收盘价  ', '当日涨跌幅  ', '持股市值亿  ', '一日市值变化亿', '五日市值变化亿',
-                          '十日市值变化亿']
-                # print(len(listdata))
-                '''data: [{
-                    "HDDATE": "2020-12-30T00:00:00", 日期
-                    "HKCODE": "1000145950",
-                    "SCODE": "00700",  代码
-                    "SNAME": "腾讯控股", 名称
-                    "SHAREHOLDSUM": 425931727.0, 持股数
-                    "SHARESRATE": 4.43,占比
-                    "CLOSEPRICE": 559.5,收盘价
-                    "ZDF": 5.4665,当日涨跌幅
-                    "SHAREHOLDPRICE": 238308801256.5, 持股市值
-                    "SHAREHOLDPRICEONE": 19102759903.0,一日市值变化
-                    "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
-                    "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
-                southdatainfos.append(listdata)
-
-                time.sleep(1)
             except BaseException as BE:
-                print(BE)
-                continue
+                print('访问异常，重试中！')
+                time.sleep(3)
+                response = req.get(url=url, headers=headers, params=params)
+                if response.status_code!=200:
+                    continue
+            bstext = bs4.BeautifulSoup(response.content, 'lxml')
+            tempdata = bstext.find_all('p')
+            temp = str(tempdata)
+            regex = 'data:(.*?)}</p>'
+            jsondata = str(re.findall(regex, temp, re.M))
+            # print((jsondata))
+            data = jsondata.replace('\\r\\n', '', -1).replace('},', '}},', -1).replace('[\'[', '', -1).replace(
+                ']\']', '', -1)
+            listdata = data.split('},', -1)
+            # print(listdata)
+            header = ['日期', '股票代码 ', '股票名称 ', '持股数亿', '占比', '收盘价  ', '当日涨跌幅  ', '持股市值亿  ', '一日市值变化亿', '五日市值变化亿',
+                      '十日市值变化亿']
+            # print(len(listdata))
+            '''data: [{
+                "HDDATE": "2020-12-30T00:00:00", 日期
+                "HKCODE": "1000145950",
+                "SCODE": "00700",  代码
+                "SNAME": "腾讯控股", 名称
+                "SHAREHOLDSUM": 425931727.0, 持股数
+                "SHARESRATE": 4.43,占比
+                "CLOSEPRICE": 559.5,收盘价
+                "ZDF": 5.4665,当日涨跌幅
+                "SHAREHOLDPRICE": 238308801256.5, 持股市值
+                "SHAREHOLDPRICEONE": 19102759903.0,一日市值变化
+                "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
+                "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
+            southdatainfos.append(listdata)
+            time.sleep(1)
+
         print('所有南向数据下载成功！！')
         # self.WriteFile(southdatainfos)  # 将查询到的数据写一份到本地文件
         # 将数据写到文件，以便读取使用，免得每次都要去网上爬，造成大量访问
         return southdatainfos
+
+    #获取港股日线数据
+    def getHK_stockQuotes(self,scode):
+        stock_hk_daily_hfq_df = ak.stock_hk_daily(symbol=scode, adjust="qfq")   #qfq： 前复权 hfq:后复权
+        return stock_hk_daily_hfq_df
 
     # 将下载的数据写数据库
     def insertdb(self, southdatainfos):
@@ -275,7 +284,7 @@ class southwardAnalysis():
         conn.close()
         return resultset
 
-    # 获取日线数据
+    # 获取A股日线数据
     def get_stock_dateData(self, stockcode, start_date, end_date):
         if stockcode[0:2] == '600' or stockcode[0:2] == '68':
             stockcode = stockcode + '.SH'
@@ -360,6 +369,7 @@ class southwardAnalysis():
         c.add_yaxis(series_name='10日市值变动亿', y_axis=y6)
 
         c.set_global_opts(title_opts=opts.TitleOpts(title='南向资金持股分析:  ' + SNAME))
+
         # 生成html文件
         c.render(path=OUTFILE)
         # 如果要输出柱图
@@ -367,6 +377,9 @@ class southwardAnalysis():
         bar = Bar()
         然后将c 换成bar
         '''
+        #获取港股日线数据并画K线图
+        stockquoteData=self.getHK_stockQuotes(SCODE)
+
         # 将数据也输出到文件
         s = tb.get_html_string()
         with open(OUTFILE, 'a+', encoding='utf-8') as fw:
