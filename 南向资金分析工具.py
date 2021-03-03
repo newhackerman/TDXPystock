@@ -135,10 +135,16 @@ class southwardAnalysis():
                 response = req.get(url=url, headers=headers, params=params)
             except BaseException as BE:
                 print('访问异常，重试中！')
-                time.sleep(3)
-                response = req.get(url=url, headers=headers, params=params)
-                if response.status_code!=200:
-                    continue
+                time.sleep(2)
+                count=0
+                while count<3:
+                    response = req.get(url=url, headers=headers, params=params)
+                    if response.status_code!=200:
+                        count+1
+                        print('第 %s 次重试获取 %s 页数据异常！' %(count,i))
+                        time.sleep(2)
+                    else:
+                        break
             bstext = bs4.BeautifulSoup(response.content, 'lxml')
             tempdata = bstext.find_all('p')
             temp = str(tempdata)
