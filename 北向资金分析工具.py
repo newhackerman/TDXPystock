@@ -629,11 +629,18 @@ class NorthwardAnalysis():
             try:
                 response = req.get(url=url, headers=headers, params=params)
             except BaseException as BE:
-                time.sleep(3)
-                response = req.get(url=url, headers=headers, params=params)
-                if response.status_code!=200:
-                    print('第%s 页数据获取异常！！！' %i)
-                    continue
+                time.sleep(2)
+                count=0
+                while count<3:
+                    response = req.get(url=url, headers=headers, params=params)
+                    if response.status_code!=200:
+
+                        count+=1
+                        print('第%s 次 第%s 页数据获取异常,重试中！！！' %(count,i))
+                        time.sleep(2)
+                    else:
+                        break
+
             bstext = bs4.BeautifulSoup(response.content, 'lxml')
             tempdata = bstext.find_all('p')
             temp = str(tempdata)
