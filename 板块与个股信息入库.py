@@ -34,7 +34,7 @@ def insertstock(stocklist):
         name = line[1]['name']
         area=line[1]['area']
         industry = line[1]['industry']
-        sql='''insert into tocks values(%s,%s,%s,%s)'''
+        sql='''insert into stocks values(%s,%s,%s,%s)'''
         values=(code,name,area,industry)
         conn=dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
@@ -82,7 +82,8 @@ if __name__ == '__main__':
     stocktb='stocks'
     stockinfo='stockinfo'
     conn = dbconnect()
-    get_stocklist()
+    stocklist=get_stocklist()
+    insertstock(stocklist)
     #以下调用语句，需要用时放开注释即调用相关功能
     #inserttodb(conn,bindfile, bandtb)  #插入板块对应信息
     #inserttodb(conn,stockfile, stocktb) #插入个股对应信息
@@ -94,12 +95,16 @@ if __name__ == '__main__':
 CREATE TABLE IF NOT EXISTS `stocks`(           
 `code`            varchar(8),                  
 `name`            varchar(12), 
-`bank`            varchar(12)
+`area`            varchar(12),
+`industry`  varchar(12),
 primary key (`code`) 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create index stockcodes on stocks(code);
 create index stocknames on stocks(name);
+create index stockarea on stocks(area);
+create index stockindustry on stocks(industry);
+
 
 #个股描述信息与概念表
 CREATE TABLE IF NOT EXISTS `stockinfo`(
