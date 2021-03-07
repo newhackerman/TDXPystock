@@ -3,24 +3,49 @@ from sqlalchemy import create_engine
 import os
 import pandas as pds
 import 早盘数据入库 as indb  #此文件里已经写好连库方法直接调用
+import tushare as ts
+import json
+import pandas as pd
 
+def get_config():
+    with open(configfile, encoding="utf-8") as f:
+        jsoncontent = json.load(f)
+    f.close()
+    return jsoncontent
+#连接数据库
+def dbconnect():
+    # 读取json格式的配置文件
+    jsoncontent =get_config()
+    conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
+                           jsoncontent['database'], charset='utf8')
+    return conn
+###获取股票代码
+def get_stocklist():
+    tusharecode = get_config()
+    pro = ts.pro_api(tusharecode['tushare'])
+    stocklist=pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
+    stocklist=pd.DataFrame(stocklist)
+    print(stocklist.head(10))
+    return stocklist
 
-def insertsql(tablename,code1,name1):
-    try:
-        conn = indb.dbconnect()
+def insertstock(stocklist):
+    for line in stocklist.iterrows():
+        code = line[1]['ts_code'][0:6]
+        name = line[1]['name']
+        area=line[1]['area']
+        industry = line[1]['industry']
+        sql='''insert into tocks values(%s,%s,%s,%s)'''
+        values=(code,name,area,industry)
+        conn=dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-        sql='insert into '+tablename +' values(%s,%s)'
-        values=(code1,name1)
-        #print(sql)
-        flag=cursor.execute(sql,values)
+        cursor.execute(sql,values)
         conn.commit()
-        cursor.close()
-        conn.close()
-    except BaseException as be:
-        print(be)
+    cursor.close()
+    conn.close()
 
 def insertstockinfos(conn,file,tablename):
     try:
+
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         #i=0
         with open(file,'r',encoding='utf-8') as fr:
@@ -46,27 +71,6 @@ def insertstockinfos(conn,file,tablename):
         print(be)
         print('执行错误！！！')
 
-def inserttodb(conn,file,tablename):
-    try:
-        #conn = indb.dbconnect()
-        # dict=indb.file2dict(configfile)
-        # engine =create_engine("mysql+pymysql://"+dict['user']+":"+dict['password']+'@'+dict['host']+":3306/"+dict['database']+"?charset=utf8")
-        # context=pds.read_csv(file,sep=",", encoding='utf-8')
-        # len= len(context)
-        with open(file,'r',encoding='utf-8') as fr:
-            context=fr.readlines()
-            for line in context:
-                # print(type(line),str(line))
-                code=line.split(",")[0]
-                name=line.split(",")[1]
-                #print(code,name)
-
-                flag=insertsql(tablename,code,name)
-                # if flag!=-1:
-                #     print('执行成功！')
-    except BaseException as be:
-        print(be)
-        print('执行错误！！！')
 
 
 if __name__ == '__main__':
@@ -77,7 +81,8 @@ if __name__ == '__main__':
     bandtb='bands'
     stocktb='stocks'
     stockinfo='stockinfo'
-    conn = indb.dbconnect()
+    conn = dbconnect()
+    get_stocklist()
     #以下调用语句，需要用时放开注释即调用相关功能
     #inserttodb(conn,bindfile, bandtb)  #插入板块对应信息
     #inserttodb(conn,stockfile, stocktb) #插入个股对应信息
@@ -86,20 +91,10 @@ if __name__ == '__main__':
 
 '''
 #股票代码表
-CREATE TABLE IF NOT EXISTS `bands`(           
-`code`            varchar(8),                  
-`name`            varchar(12), 
-primary key (`code`) 
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-create index codes on bands(code);
-create index bands on bands(name);
-
-
-#板块表
 CREATE TABLE IF NOT EXISTS `stocks`(           
 `code`            varchar(8),                  
 `name`            varchar(12), 
+`bank`            varchar(12)
 primary key (`code`) 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
