@@ -29,18 +29,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec#分割子图
 import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
+from optparse import OptionParser
 
 class southwardAnalysis():
-    pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-    ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-
     database = 'stock'
     tablename = 'southdataanly'
     configfile = 'D:/mysqlconfig.json'
+    pro = None
+    jsoncontent = None
 
-    # 初始化建立数据库链接
     def __init__(self):
-        pass
+        self.jsoncontent = self.get_config()
+        self.pro = ts.pro_api(self.jsoncontent['tushare'])
+
+    def get_config(self):
+        with open(self.configfile, encoding="utf-8") as f:
+            jsoncontent = json.load(f)
+        f.close()
+        return jsoncontent
 
     def dbconnect(self):
         # 读取json格式的配置文件
@@ -50,6 +56,20 @@ class southwardAnalysis():
         conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
                                jsoncontent['database'], charset='utf8')
         return conn
+
+    def get_optparse(self):
+        parser = OptionParser()
+        parser.add_option("-1", "--updatedata", type='int', dest="1", help="数据更新")
+        parser.add_option("-2", "--top10inscrese", type='int', dest="2", help="当日持股变动最大前10股票查询")
+        parser.add_option("-3", "--northbuy", type='int', dest="3", help="南资开始净买股票查询")
+        parser.add_option("-4", "--stockview", type='int', dest="4", help="个股南资数据展示（输入名称或代码）")
+        parser.add_option("-5", "--F10", type='int', dest="5", help="打开个股F0（输入名称代码）")
+        parser.add_option("-6", "--stockbuybank", type='int', dest="6", help="个股持股比例Top10经纪商查询")
+        parser.add_option("-0", "--0", type='int', dest="0", help="退出")
+        parser.add_option("-q", "--quiet",action="store_false", dest="verbose", default=True,help="退出")
+
+        (options, args) = parser.parse_args()
+        return options, args
     #获取上一个交易日
     def get_lastDay(self,today):
         alldays = self.pro.trade_cal()  #得到所有日期，到今年年尾
@@ -599,14 +619,24 @@ class southwardAnalysis():
         # print(pdf)
         return pdf
 
-    #获取港股行情数据
-    def get_stock_Quatos(self,scode):
-        pass
+    def mainMenu(self):
+        print(
+            '*****************************************************************************************************\r\n')
+        print('\t 1。数据更新')
+        print('\t 2。当日持股变动最大前10股票查询')
+        print('\t 3。南资开始净买股票查询 ')
+        print('\t 4。个股南资数据展示（输入名称或代码）')
+        print('\t 5。个股F10')
+        print('\t 6。个股持股比例Top10经纪商查询')
+        print('\t 0。退出\r\n')
+        print(
+            '*****************************************************************************************************\r\n')
 
     #主循环入口
     def main(self):
         SNAME = '建设银行'
-        SNAME = '小米集团 - W'
+        SNAME = '小米集团-W'
+        options,args=self.get_optparse()
         var = sys.argv  # 可以接收从外部传入参数
         while True:
             if len(var) > 1:
@@ -634,17 +664,7 @@ class southwardAnalysis():
                     self.rendertohtml(resultset)
                     break
             else:
-                print(
-                    '*****************************************************************************************************\r\n')
-                print('\t 1。数据更新')
-                print('\t 2。当日持股变动最大前10股票查询')
-                print('\t 3。南资开始净买股票查询 ')
-                print('\t 4。个股南资数据展示（输入名称或代码）')
-                print('\t 5。个股F10')
-                print('\t 6。个股持股比例Top10经纪商查询')
-                print('\t 0。退出\r\n')
-                print(
-                    '*****************************************************************************************************\r\n')
+                self.mainMenu()  #显示主菜单
                 try:
                     choise = int(input('请输入：'))
                 except BaseException as BE:
@@ -700,8 +720,6 @@ class southwardAnalysis():
                 else:
                     print('输入错误\n')
                     choise = int(input('请输入：'))
-
-
 
 if __name__ == '__main__':
     Analys = southwardAnalysis()

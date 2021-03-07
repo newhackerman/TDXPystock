@@ -22,6 +22,7 @@ from dateutil.relativedelta import relativedelta
 from lxml import etree
 from pyecharts import options as opts
 from pyecharts.charts import Page, Line
+from optparse import OptionParser
 
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 
@@ -33,17 +34,17 @@ from pyecharts.charts import Page, Line
 # import mpl_finance as mpf        # python中可以用来画出蜡烛图、线图的分析工具，目前已经从matplotlib中独立出来，非常适合用来画K线
 
 class NorthwardAnalysis():
-    pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-    ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-
     database = 'stock'
     tablename = 'northdataAnaly'
     configfile = 'D:/mysqlconfig.json'
     percentDpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9602\\'
     oneTrunDpath='C:\\十档行情\\T0002\\signals\\signals_user_9604\\'
+    pro=None
+    jsoncontent=None
 
     def __init__(self):
-        pass
+        self.jsoncontent=self.get_config()
+        self.pro = ts.pro_api(self.jsoncontent['tushare'])
 
     #########编码成通达信可识别的数据
     def stockEncode(self,HdDate, SCode):
@@ -54,15 +55,31 @@ class NorthwardAnalysis():
         # print(text2)
         return text1 + text2
 
-    def dbconnect(self):
-        # 读取json格式的配置文件
+    def get_config(self):
         with open(self.configfile, encoding="utf-8") as f:
             jsoncontent = json.load(f)
         f.close()
+        return jsoncontent
+
+    def dbconnect(self):
+        jsoncontent = self.get_config()
         conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
                                jsoncontent['database'], charset='utf8')
         return conn
 
+    def get_optparse(self):
+        parser = OptionParser()
+        parser.add_option("-1", "--updatedata", type='int', dest="1", help="数据更新")
+        parser.add_option("-2", "--top10inscrese", type='int', dest="2", help="当日持股变动最大前10股票查询")
+        parser.add_option("-3", "--northbuy", type='int', dest="3", help="南资开始净买股票查询")
+        parser.add_option("-4", "--stockview", type='int', dest="4", help="个股南资数据展示（输入名称或代码）")
+        parser.add_option("-5", "--F10", type='int', dest="5", help="打开个股F0（输入名称代码）")
+        parser.add_option("-6", "--stockbuybank", type='int', dest="6", help="个股持股比例Top10经纪商查询")
+        parser.add_option("-7", "--7", type='int', dest="7", help="个股北资持股占比与市值变动数据写通达信")
+        parser.add_option("-0", "--0", type='int', dest="store", help="退出")
+        parser.add_option("-q", "--quiet",action="store_false", dest="verbose", default=True,help="don't print status messages to stdout")
+        (options, args) = parser.parse_args()
+        return options, args
     # 获取上一个交易日
     def get_lastDay(self,today):
         alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
@@ -756,11 +773,24 @@ class NorthwardAnalysis():
         url=url %SNAME
         webbrowser.open(url)
 
-
+    def mainMemu(self):
+        print(
+            '*****************************************************************************************************\r\n')
+        print('\t 1。数据入库')
+        print('\t 2。当日持股变动最大前10股票查询')
+        print('\t 3。北资开始净买股票查询 ')
+        print('\t 4。个股数据展示（输入名称或代码）')
+        print('\t 5。打开个股F0（输入名称代码）')
+        print('\t 6。手动补齐数据')
+        print('\t 7。个股北资持股占比与市值变动数据写通达信')
+        print('\t 0。退出\n')
+        print(
+            '*****************************************************************************************************\r\n')
     #流程控制
     def main(self):
         SNAME = '建设银行'
         SNAME = '小米集团 - W'
+        options, args=self.get_optparse()
         var = sys.argv  # 可以接收从外部传入参数
         while True:
             if len(var) > 1:
@@ -780,18 +810,7 @@ class NorthwardAnalysis():
                 listdata = self.getnorth(code)  # 实时查询北向资金
                 self.rendertohtml(listdata)
             else:
-                print(
-                    '*****************************************************************************************************\r\n')
-                print('\t 1。数据入库')
-                print('\t 2。当日持股变动最大前10股票查询')
-                print('\t 3。北资开始净买股票查询 ')
-                print('\t 4。个股数据展示（输入名称或代码）')
-                print('\t 5。打开个股F0（输入名称代码）')
-                print('\t 6。手动补齐数据')
-                print('\t 7。个股北资持股占比与市值变动数据写通达信')
-                print('\t 0。退出\n')
-                print(
-                    '*****************************************************************************************************\r\n')
+                self.mainMemu() #显示主菜单
                 try:
                     choise = int(input('请输入：'))
                 except BaseException as BE:
