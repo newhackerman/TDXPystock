@@ -169,10 +169,10 @@ def select_stockinfos(condiction):
     cursor= conn.cursor(cursor=pymysql.cursors.DictCursor)  #打开游标
     # condictions= str(condiction).strip('{').strip('}').replace(':','=',1).replace('\'','',2)
 
-    sql = "select CODE, NAME, industry,stockdesc, base_business, business_scope from " + tablename + " where " + condiction + ";"
+    sql = "select CODE, NAME, industry,stockdesc, base_business, business_scope from " + tablename + " where stockdesc like '%" + condiction + "%' ;"
 
     #print(sql)
-    print(sql)
+    # print(sql)
     try:
         cursor.execute(sql)
         results = cursor.fetchall()
