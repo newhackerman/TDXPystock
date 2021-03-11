@@ -189,6 +189,10 @@ def select_stockinfos(condiction):
 def formatresults(results):
     #results   查询到的数据集
     #header   要输出的表头
+    if len(results)<1:
+        print('无数据，不需要输出！！！')
+        return
+
     header=['代码' , '名称', '行业' , '简介' , '主营业务' ]
     tb = pt.PrettyTable()
     tb.field_names=header #设置表头
@@ -202,12 +206,8 @@ def formatresults(results):
         if len(base_business)>=40:
             base_business=base_business[0:40]
         business_scope = row['business_scope']
-
-        # # 打印结果
-        # print('%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t' % (
-        # date, code, name, kaipanhuanshuoz, kaipanjine, liangbi, xianliang, liutongsizhi, liutongguyi, xifenhangye))
         tb.add_row([CODE, NAME, industry,stockdesc, base_business])
-    s=tb.get_html_string()  #获取html格式
+    # s=tb.get_html_string()  #获取html格式
     print(tb)
 
 if __name__ == '__main__':
