@@ -4,14 +4,16 @@ import json,re
 
 
 class checkStock():
-    url='http://page3.tdx.com.cn:7615/site/pcwebcall_static/bxb/json/%s.js'
-    def baolei(self,stockcode) ->str:
+
+    @staticmethod
+    def baolei(stockcode) ->str:
+        url = 'http://page3.tdx.com.cn:7615/site/pcwebcall_static/bxb/json/%s.js'
         fxlist=[]
         sum=100  #股票评分，默认100分，如果出现风险项则减出相应的分数
-        self.stockcode=stockcode
-        url=self.url %stockcode
+        # self.stockcode=stockcode
+        url1=url %stockcode
         try:
-            response=req.get(url)
+            response=req.get(url1)
         except BaseException as B:
             print(B)
             print('查询异常！！！！')
