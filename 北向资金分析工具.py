@@ -261,7 +261,7 @@ class NorthwardAnalysis():
         # outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         sql = 'select * from northdataAnaly where Hddate=\'' + newdate + '\' order by SHAREHOLDPRICEONE desc limit 10'
-        print(sql)
+        # print(sql)
         conn = conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
@@ -283,7 +283,7 @@ class NorthwardAnalysis():
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         yesterday=self.get_lastDay(outdate)
         sql = 'select * from northdataAnaly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and Zdf >-2 and SCode in ( select SCode from northdataAnaly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEONE desc'
-        print(sql)
+        # print(sql)
         conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # print(sql)
@@ -784,7 +784,7 @@ class NorthwardAnalysis():
         print('\t 4。个股数据展示（输入名称或代码）')
         print('\t 5。打开个股F0（输入名称代码）')
         print('\t 6。手动补齐数据')
-        print('\t 7。个股北资持股占比与市值变动数据写通达信')
+        print('\t 7。个股北资变动数据写通达信')
         print('\t 8。检查个股是否暴雷')
         print('\t 0。退出\n')
         print(
