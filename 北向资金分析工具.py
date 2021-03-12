@@ -18,6 +18,7 @@ import prettytable as pt  # 格式化成表格输出到html文件
 import pymysql
 import requests as req
 import tushare as ts
+from util.checkStock import * #检查个股风险项
 from dateutil.relativedelta import relativedelta
 from lxml import etree
 from pyecharts import options as opts
@@ -41,7 +42,7 @@ class NorthwardAnalysis():
     oneTrunDpath='C:\\十档行情\\T0002\\signals\\signals_user_9604\\'
     pro=None
     jsoncontent=None
-
+    stockcode=''
     def __init__(self):
         self.jsoncontent=self.get_config()
         self.pro = ts.pro_api(self.jsoncontent['tushare'])
@@ -76,6 +77,7 @@ class NorthwardAnalysis():
         parser.add_option("-5", "--F10", type='int', dest="5", help="打开个股F0（输入名称代码）")
         parser.add_option("-6", "--stockbuybank", type='int', dest="6", help="个股持股比例Top10经纪商查询")
         parser.add_option("-7", "--7", type='int', dest="7", help="个股北资持股占比与市值变动数据写通达信")
+        parser.add_option("-8", "--8", type='int', dest="8", help="检查个股是否暴雷")
         parser.add_option("-0", "--0", type='int', dest="store", help="退出")
         parser.add_option("-q", "--quiet",action="store_false", dest="verbose", default=True,help="don't print status messages to stdout")
         (options, args) = parser.parse_args()
@@ -783,6 +785,7 @@ class NorthwardAnalysis():
         print('\t 5。打开个股F0（输入名称代码）')
         print('\t 6。手动补齐数据')
         print('\t 7。个股北资持股占比与市值变动数据写通达信')
+        print('\t 8。检查个股是否暴雷')
         print('\t 0。退出\n')
         print(
             '*****************************************************************************************************\r\n')
@@ -816,7 +819,7 @@ class NorthwardAnalysis():
                 except BaseException as BE:
 
                     choise = int(input('输入错误，请重新输入 ：'))
-                if choise in range(8):
+                if choise in range(9):
                     if choise == 1:
                         isnew = self.compare_Date()  # 判断是否要更新数据
                         if isnew:
@@ -894,9 +897,18 @@ class NorthwardAnalysis():
                         else:
                             self.writeNorthDataOneTrunToTdx(resultset, self.oneTrunDpath, SNAME)
                             self.writeNorthDataPercentToTdx(resultset, self.percentDpath, SNAME)
+                    elif choise == 8:
+                        stockcode = str(input('请输入股票名称或代码:\t'))
+                        if stockcode.isdigit():
+                            # code = self.get_stockname(SNAME)
+                            pass
+                        else:
+                            stockcode = self.get_stockcode(stockcode)
+                        checkStock.baolei(stockcode)
 
                     elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
                         exit(0)
+
                 else:
                     print('输入错误\n')
                     choise = int(input('请输入：'))
