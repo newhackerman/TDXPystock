@@ -20,7 +20,7 @@ def stockcode(HdDate, SCode):
     return text1 + text2
 
     ###################处理个股北资数据
-def Write_southdata(listdata, dpath):
+def Write_southdataanly(listdata, dpath):
     try:
         for row in listdata:  # 依次获取每一行数据
             jsdata = json.loads(row)
@@ -73,7 +73,7 @@ def formatresults(listdata,header):
     conn = dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # 执行的sql语句
-    sql = '''insert into southdata (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    sql = '''insert into southdataanlyanly (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
 
     for row in listdata:  # 依次获取每一行数据
         try:
@@ -161,7 +161,7 @@ def getsouth():
                 "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
                 "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
             formatresults(listdata, header) #格式化输出
-            Write_southdata(listdata, dpath)  # 写北向持股占比数据
+            Write_southdataanly(listdata, dpath)  # 写北向持股占比数据
         except BaseException as BE:
             print(BE)
             continue
@@ -172,7 +172,7 @@ if __name__ == '__main__':
 
 
 '''
-CREATE TABLE IF NOT EXISTS `southdata`( 
+CREATE TABLE IF NOT EXISTS `southdataanly`( 
 HDDATE date, 
 SCODE varchar(8),
 SNAME varchar(20),
@@ -186,8 +186,8 @@ SHAREHOLDPRICEFIVE float,
 SHAREHOLDPRICETEN float
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-create index southdatacode on northdata(SCODE);
-create index southdataHdDate on northdata(HDDATE);
-create index southdataSName on northdata(SNAME);
+create index southdataanlycode on northdata(SCODE);
+create index southdataanlyHdDate on northdata(HDDATE);
+create index southdataanlySName on northdata(SNAME);
 
 '''
