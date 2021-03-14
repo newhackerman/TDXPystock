@@ -1,5 +1,6 @@
 create database stock;
 grant all privileges on stock.* to stock@'%' identified by 'STOCK@test!!' with grant option;
+flush privileges;
 
 --#股票代码表
 CREATE TABLE IF NOT EXISTS `stocks`(
