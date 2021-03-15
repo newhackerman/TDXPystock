@@ -180,17 +180,18 @@ def select_stockinfos(condiction):
         print(be)
         print("Error: unable to fetch data")
     cursor.close()
-    if results:
+    if results is None:
+        print('未查到数据！')
         return results
     else:
         # print('未查询到数据，请更新数据！')
-        return None
+        return results
 
 def formatresults(results):
     #results   查询到的数据集
     #header   要输出的表头
-    if len(results)<1:
-        print('无数据，不需要输出！！！')
+    if results is None:
+        print('无数据输出！！！')
         return
 
     header=['代码' , '名称', '行业' , '简介' , '主营业务' ]
