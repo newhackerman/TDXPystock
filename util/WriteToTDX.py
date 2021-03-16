@@ -137,6 +137,43 @@ class writeToTdx():
             time.sleep(1)
         return northdataAnalyinfos
 
+    # 将当日获取的数据插入表
+    def insertNowdata(self, northdataAnalyinfos):
+        if len(northdataAnalyinfos) == 0:
+            return
+        # print(northdataAnalyinfos)
+        conn = self.dbconnect()
+        cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+        # 执行的sql语句
+        sql = '''insert into northdataanaly (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+        for datalist in northdataAnalyinfos:
+            for row in datalist:  # 依次获取每一行数据
+                try:
+                    jsdata = json.loads(row)
+                    HDDATE = str(jsdata['HDDATE'])[0:10]
+                    SCODE = jsdata['SCODE']
+                    SNAME = jsdata['SNAME']
+                    SHAREHOLDSUM = format(jsdata['SHAREHOLDSUM'] / 100000000, '.3f')
+                    SHARESRATE = jsdata['SHARESRATE']
+                    CLOSEPRICE = jsdata['CLOSEPRICE']
+                    ZDF = jsdata['ZDF']
+                    SHAREHOLDPRICE = format(jsdata['SHAREHOLDPRICE'] / 100000000, '.3f')
+                    SHAREHOLDPRICEONE = format(jsdata['SHAREHOLDPRICEONE'] / 100000000, '.3f')
+                    SHAREHOLDPRICEFIVE = format(jsdata['SHAREHOLDPRICEFIVE'] / 100000000, '.3f')
+                    SHAREHOLDPRICETEN = format(jsdata['SHAREHOLDPRICETEN'] / 100000000, '.3f')
+                    values = (
+                        HDDATE, SCODE, SNAME, SHAREHOLDSUM, SHARESRATE, CLOSEPRICE, ZDF, SHAREHOLDPRICE,
+                        SHAREHOLDPRICEONE,
+                        SHAREHOLDPRICEFIVE, SHAREHOLDPRICETEN)
+                    cursor.execute(sql, values)
+                    # print(values,sql)
+                except BaseException as be:
+                    print(be)
+                    continue
+            conn.commit()
+        conn.commit()
+        conn.close()
+
     # 按条件查询比例与持股市值
     def select_NorthDataFromdb(self, scode):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         # conditions = str(kwords).strip('{').strip('}').replace(':', '=', 1).replace('\'', '', 2)
