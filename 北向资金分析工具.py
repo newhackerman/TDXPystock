@@ -18,6 +18,7 @@ import prettytable as pt  # 格式化成表格输出到html文件
 import pymysql
 import requests as req
 import tushare as ts
+from util.WriteToTDX import *
 from util.checkStock import * #检查个股风险项
 from dateutil.relativedelta import relativedelta
 from lxml import etree
@@ -76,7 +77,7 @@ class NorthwardAnalysis():
         parser.add_option("-4", "--stockview", type='int', dest="4", help="个股南资数据展示（输入名称或代码）")
         parser.add_option("-5", "--F10", type='int', dest="5", help="打开个股F0（输入名称代码）")
         parser.add_option("-6", "--stockbuybank", type='int', dest="6", help="个股持股比例Top10经纪商查询")
-        parser.add_option("-7", "--7", type='int', dest="7", help="个股北资持股占比与市值变动数据写通达信")
+        parser.add_option("-7", "--7", type='int', dest="7", help="北资一键写通达信")
         parser.add_option("-8", "--8", type='int', dest="8", help="检查个股是否暴雷")
         parser.add_option("-0", "--0", type='int', dest="store", help="退出")
         parser.add_option("-q", "--quiet",action="store_false", dest="verbose", default=True,help="don't print status messages to stdout")
@@ -784,7 +785,7 @@ class NorthwardAnalysis():
         print('\t 4。个股数据展示（输入名称或代码）')
         print('\t 5。打开个股F0（输入名称代码）')
         print('\t 6。手动补齐数据')
-        print('\t 7。个股北资变动数据写通达信')
+        print('\t 7。北资一键写通达信')
         print('\t 8。检查个股是否暴雷')
         print('\t 0。退出\n')
         print(
@@ -885,18 +886,8 @@ class NorthwardAnalysis():
                             else:
                                 pass
                     elif choise == 7:
-                        SNAME = str(input('请输入股票名称或代码:\t'))
-                        if SNAME.isdigit():
-                            # code = self.get_stockname(SNAME)
-                            pass
-                        else:
-                            SNAME = self.get_stockcode(SNAME)
-                        resultset = self.getnorth(SNAME)  # 按名称查询北向资金占比
-                        if resultset is None:
-                            print('无北向数据......')
-                        else:
-                            self.writeNorthDataOneTrunToTdx(resultset, self.oneTrunDpath, SNAME)
-                            self.writeNorthDataPercentToTdx(resultset, self.percentDpath, SNAME)
+                        writefile = writeToTdx()
+                        writefile.FullDataWritetoFile()
                     elif choise == 8:
                         stockcode = str(input('请输入股票名称或代码:\t'))
                         if stockcode.isdigit():
