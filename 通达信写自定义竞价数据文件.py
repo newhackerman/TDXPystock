@@ -1,17 +1,21 @@
 ###################本程序为通信达早盘自定义数据的写盘与读取###########################
 from __future__ import division
-import os
 import struct as st
 import tushare as ts
-import string
-import datetime, re
-import time
+import re,time,os
 import pandas as pds
 import shutil
-import dateutil as dt
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+import win32api
+import util.TDX_OpenDataOutput as TDX_OpenDataOutput
 
+#获取当前鼠标位置
+def GetCursorPos():
+    while True:
+        print(win32api.GetCursorPos())
+        time.sleep(3)
+#通达信早盘数据导出
 
 #########解码
 def STOCKuncode(date,codeamo):     #可以解出日期了,竞价数据要用f解
@@ -198,8 +202,9 @@ if __name__=='__main__':
     spathbak = 'c:\\十档行情\\T0002\\exportbak'
     sfile1 = 'c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  # 导出数据为excel /后每天执行一次
     sfile2 = 'c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  # 导出数据为excel /后每天执行一次
-    dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
+    dpath = 'd:\\十档行情\\T0002\\signals\\signals_user_9601\\'
     listfile = os.listdir(spath)
+    TDX_OpenDataOutput.TDX_OpenDataOutput()   #导出竞价数据
     if not os.path.exists(dpath):
         print('目标目录不存在，请检查！')
         exit(1)
@@ -236,53 +241,7 @@ def readTDXdata(filename):     #可以解出日期了,竞价数据要用f解
         return listdata
 #STOCKuncode()
 
-# 将通达信的日线文件转换成CSV格式
-def stockdaydata2csv(source_dir, file_name, target_dir):
-    # 以二进制方式打开源文件
-    try:
-        source_file = open(source_dir + os.sep + file_name, 'rb')
-        buf = source_file.read()
-        source_file.close()
 
-        # 打开目标文件，后缀名为CSV
-        target_file = open(target_dir + os.sep + file_name + '.csv', 'w')
-        buf_size = len(buf)
-        rec_count = int(buf_size / 32)
-        #print(rec_count)
-        begin = 0
-        end = 32
-        # 4字节 如20091229
-        # 开盘价*100
-        # 最高价*100
-        # 最低价*100
-        # 收盘价*100
-        # 成交额
-        # 成交量
-        # 保留值
-
-        header = str('date') + ', ' + str('open') + ', ' + str('high') + ', ' + str('low') + ', ' \
-            + str('close') + ', ' + str('amount') + ', ' + str('vol') + ', ' + str('保留') + '\n'
-        target_file.write(header)
-        for i in range(rec_count):
-            # 将字节流转换成Python数据格式
-            # I: unsigned int
-            # f: float
-            a= st.unpack('IIIIIfII', buf[begin:end])
-            #print(a)
-            line = str(a[0]) + ', ' + str(a[1] / 100.0) + ', ' + str(a[2] / 100.0) + ', ' \
-                + str(a[3] / 100.0) + ', ' + str(a[4] / 100.0) + ', ' + str(a[5] / 10.0) + ', ' \
-                + str(a[6]) + ', ' + str(a[7]) + '\n'
-            #print(line)
-            target_file.write(line)
-            begin += 32
-            end += 32
-        target_file.close()
-    except FileNotFoundError as fnot:
-        print('file is not found')
-    except TypeError as tper:
-        print(tper)
-    except BaseException as ber:
-        print(ber)
 # ##################调用代码
 # source1 = 'C:\\十档行情\\vipdoc\\sz\\lday'
 # #source1 = 'E:\\pythondata\\tmp2'

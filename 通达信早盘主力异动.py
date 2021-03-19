@@ -191,8 +191,8 @@ def tdxstockOpenchange():
 
 if __name__=='__main__':
     tdxstockOpenchange()  #调用
-    kzzfile='D:/pythonTtest/TDXPystock/可转债与正股对应表.txt'
-    kzzlist=readKZZinfo(kzzfile)
+    # kzzfile='D:/pythonTtest/TDXPystock/可转债与正股对应表.txt'
+    # kzzlist=readKZZinfo(kzzfile)
 
 #######################################################3
 

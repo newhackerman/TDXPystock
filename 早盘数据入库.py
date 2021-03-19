@@ -3,6 +3,9 @@ import json,time,re
 import os
 import logging
 import pandas as pds
+from pywinauto import application
+from pywinauto.application import *
+from pywinauto import mouse
 database='stock'
 tablename='stockopendata'
 configfile='D:/mysqlconfig.json'
@@ -22,6 +25,67 @@ def dbconnect():      #建立连接
     conn = pymysql.connect(dict['host'], dict['user'], dict['password']
                            , dict['database'], charset='utf8')
     return conn
+
+#数据导出
+def TDX_OpenDataOutput():
+    app=application.Application()
+    tool_name = r'C:\十档行情\tdxw.exe'
+    window_name = '通达信金融终端通赢版V7.47'
+    app.start(tool_name)
+    app.connect(path=tool_name)
+    mouse.move([985,420])
+    mouse.click('left',[990,422])  #左键在什么位置点击
+    time.sleep(10) #休息8秒，等等数据初始化加载
+    # app.GetCursorPos()
+    #点击A股，导出所有A股早盘数据
+    mouse.click('left', [970, 990])
+    ###点击选项数据导出，导出数据
+    mouse.click('left',[1608, 11])
+    mouse.click('left', [1655, 404])
+    time.sleep(1)
+    mouse.click('left', [827, 397])
+    mouse.click('left', [1055, 547])
+    time.sleep(1)
+    mouse.click('left', [1110, 653])
+
+    time.sleep(50)
+    #点击取消，完成导出
+    mouse.click('left', [1035, 583])
+    time.sleep(1)
+    ###########导出版块早盘数据
+    # 点击版本块指数，导出所有版块数据
+    mouse.click('left', [710, 995])
+    mouse.click('left', [42, 67])
+    ###点击选项数据导出，导出数据
+    mouse.click('left', [1608, 11])
+    mouse.click('left', [1655, 404])
+    time.sleep(1)
+    mouse.click('left', [827, 397])
+    mouse.click('left', [1055, 547])
+    time.sleep(1)
+    mouse.click('left', [1110, 653])
+
+    time.sleep(10)
+    # 点击取消，完成导出
+    mouse.click('left', [1016, 580])
+    # 点击分类--》沪深主要指数，导出所有指数数据
+
+    mouse.click('left', [86, 796])
+    mouse.click('left', [119, 626])
+
+    ###点击选项数据导出，导出数据
+    mouse.click('left', [86, 794])
+    mouse.click('left', [131, 625])
+    time.sleep(1)
+    mouse.click('left', [827, 397])
+    mouse.click('left', [1055, 547])
+    time.sleep(1)
+    mouse.click('left', [1110, 653])
+
+    time.sleep(10)
+    # 点击取消，完成导出
+    mouse.click('left', [1016, 580])
+
 #读取excel 数据入mysql
 def datainsert(configfile,excelfile):
     date1 = re.search(r'\d+.xls$', excelfile).group()[0:8]       #截取文件名中的日期
@@ -205,15 +269,15 @@ def listdir(path): #传入根目录
             file_list.append(file_path)
     return file_list #返回Excel文件路径列表
 
-
 if __name__ == '__main__':
-    path='C:/十档行情/T0002/export/'     #入库数据存放的目录
-    filelist=listdir(path)
-    for file in filelist:
-        if '沪深Ａ股20' in str(file):  #只处理 个股数据
-            print('start inserttodb', file)
-            datainsert(configfile, file)
-            print('insert complete', file)
+    TDX_OpenDataOutput()
+    # path='C:/十档行情/T0002/export/'     #入库数据存放的目录
+    # filelist=listdir(path)
+    # for file in filelist:
+    #     if '沪深Ａ股20' in str(file):  #只处理 个股数据
+    #         print('start inserttodb', file)
+    #         datainsert(configfile, file)
+    #         print('insert complete', file)
 
 
 ''' 表结构如下
