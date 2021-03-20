@@ -1,13 +1,10 @@
 # -*- coding: UTF-8
-import pywinauto
 from pywinauto import application
-from pywinauto.application import *
 from pywinauto import mouse
-from pywinauto import keyboard
-from pywinauto import findwindows
 import win32api
+import win32gui
 import time
-
+import ctypes
 class windowAppopr(object):
     """
     pywin framwork main class
@@ -18,7 +15,7 @@ class windowAppopr(object):
     # m=mouse()
     # k=keyboard()
 
-    def __init__(self):
+    def __init__(self,win32api,win32gui):
         """
         初始化方法，初始化一个app
         """
@@ -137,12 +134,49 @@ class windowAppopr(object):
         time.sleep(1)
 
     def findwindows(self,**kwargs):
-        findwindows.find_windows(**kwargs)
+        windowlist=win32gui.FindWindow(lpClassName=None, lpWindowName=None)
+        return windowlist
+
+    def findwindowsEx(self,**kwargs):
+        windowlist = win32gui.FindWindowEx(hwndParent=1, hwndChildAfter=1, lpszClass=None, lpszWindow=None);
+        return windowlist
+
+    def getwindowTitle(self,handle):
+        windowtitle = win32gui.GetWindowText(handle)
+        return windowtitle
+
+    def getWindowName(self,handle):
+        windowname= win32gui.GetClassName(handle)
+        return windowname
+
+    #获取菜单句柄
+    def getmenuhandle(self,handle):
+        subHandle = win32gui.FindWindowEx(handle, 0, "EDIT", None)
+        if subHandle ==0:
+            menuHandle = win32gui.GetMenu(subHandle)
+            return menuHandle
+        else:
+            return subHandle
+
+    #获取子菜单句柄
+    def getChildhandle(self,menuhandle):
+        subMenuHandle = win32gui.GetSubMenu(menuhandle, 0)
+        return subMenuHandle
+
+    #获取所有子窗口
+
+    def getAllChirdWindows(self,handle):
+        hwndChildList = []
+        win32gui.EnumChildWindows(handle, lambda hwnd, param: param.append(hwnd), hwndChildList)
+        allchildwindows= hwndChildList
+        return allchildwindows
 
     def topwindow(self,app):
         app.window()
     #获取当前鼠标位置
     def GetCursorPos(self):
+        awareness = ctypes.c_int()
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)  # 如果2不行，换1，0试试
         while True:
             print(win32api.GetCursorPos())
             time.sleep(3)
@@ -162,7 +196,7 @@ if __name__ == '__main__':
     #     time.sleep(2)
     # app.close(window_name)
 
-    app = windowAppopr()
+    app = windowAppopr(win32gui,win32api)
     tool_name = r'C:\十档行情\tdxw.exe'
     window_title='通达信金融终端通赢版V7.47'
     window_class='#32770 (Dialog)'

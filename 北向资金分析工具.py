@@ -259,6 +259,7 @@ class NorthwardAnalysis():
     def Select_top10(self):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         header = ['日期', '代码','名称','持股数量', '持股占比','收盘价' , '涨跌幅', '持股市值亿', '一日持股变动亿','五日持股变动亿','十日持股变动亿']
         newdate = self.get_page_newdate()
+        print (newdate)
         # outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         sql = 'select * from northdataAnaly where Hddate=\'' + newdate + '\' order by SHAREHOLDPRICEONE desc limit 10'

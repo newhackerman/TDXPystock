@@ -133,8 +133,8 @@ class southwardAnalysis():
                   'sr': -1,
                   'p': 1,
                   'ps': 50,
-                  'js': 'var DYCpZajM={pages:(tp),data:(x)}',
-                  'rt': '53712406'}
+                  'js': 'var duMsdwGU={pages:(tp),data:(x)}',
+                  'rt': '53873680'}
         # 获取北向数据总页数
         pages = self.get_pages(headers, url, params)
         print('共有数据 %d 页，请稍等......' %pages)
@@ -148,8 +148,8 @@ class southwardAnalysis():
                           'sr': -1,
                           'p': i,
                           'ps': 50,
-                          'js': 'var DYCpZajM={pages:(tp),data:(x)}',
-                          'rt': '53712406'}
+                          'js': 'var duMsdwGU={pages:(tp),data:(x)}',
+                          'rt': '53873680'}
 
             try:
                 response = req.get(url=url, headers=headers, params=params)
@@ -192,6 +192,7 @@ class southwardAnalysis():
                 "SHAREHOLDPRICEFIVE": 2113479276.5,五日市值变化
                 "SHAREHOLDPRICETEN": 3843934536.5,十日市值变化   '''
             southdatainfos.append(listdata)
+            # print('第%d页下载成功' %i)
             time.sleep(1)
 
         print('所有南向数据下载成功！！')
@@ -272,7 +273,7 @@ class southwardAnalysis():
         # outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         sql = 'select * from southdataanly where Hddate=\'' + newdate + '\' order by SHAREHOLDPRICEONE desc limit 10'
-        print(sql)
+        # print(sql)
         conn = conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
