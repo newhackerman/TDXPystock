@@ -51,49 +51,24 @@ CREATE TABLE IF NOT EXISTS `stockopendata`(
 `code`            varchar(8),
 `name`            varchar(12),
 `zhangfu`         float,
-`kaipanhuanshuoz` float,
-`kaipanjine`      float,
-`huanshuonu`      float,
 `liangbi`         float,
-`xianliang`       float,
-`zongliang`       float,
+`kaipan`          float,
+`huanshuonu`      float,
+`kaipanjine`      float,
 `zongjine`        float,
-`xianjia`         float,
-`junjia`          float,
 `liutongguyi`     varchar(15),
 `liutongsizhi`    varchar(15),
-`renjiusizhi`     varchar(10),
-`xifenhangye`     varchar(10),
-`diqu`            varchar(10),
-`siyingniu`       float,
-`huoyuedu`        float,
 `lianzhangtiansu` int,
 `shanrizhangfu`   float,
 `ershirizhangfu`  float,
 `liushirizhangfu` float,
-`huanshuoz`       float,
-`liutongsizhiz`   varchar(15),
-`beitaxishuo`     float,
-`kaipan`          float,
-`gudongrenshuo`   int,
-`renjunchigu`     int,
-`liruntongbi`     float,
-`shuyutongbi`     float,
-`shijingniu`      float,
-`meigujingzhi`    float,
-`meigugongji`     float,
-`meiguweifenpei`  float,
-`meiguxianjinliu` float,
-`maoliniu`        float,
-`yinyeilirunniu`  float,
-`jinlirunniu`     float,
 `date`            DATE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create index stockcode on stockopendata(code);
 create index stockname on stockopendata(name);
-create index stockhanyi on stockopendata(xifenhangye);
-create bitmap index stockdate on stockopendata(date);
+create index stockdate on stockopendata(date);
+CREATE UNIQUE INDEX code_name_stockdate ON stockopendata(code,name,date);
 
 --#自定义数据标记
 CREATE TABLE IF NOT EXISTS `stockmark`(
