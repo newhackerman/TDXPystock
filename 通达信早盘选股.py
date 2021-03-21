@@ -1,8 +1,10 @@
 from __future__ import division
 import tushare as ts
-import datetime, re
+import time,re
 import pandas as pds
 import util.logout as log
+import util.TDX_OpenDataOutput as TDX_OpenDataOutput
+
 pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 #早盘选股，选量比>25的，现量大于3000手，3日涨幅% <15%,流通盘小150亿
@@ -12,22 +14,13 @@ def getstockopenamo(sfile):
     newlist=[]  #存取符合条件的个股记录
     #date1 =time.strftime("%Y%m%d", time.localtime())
     #date1 = sfile[-12:-4:1]  #取文件名中的日期
-    date1 = re.search(r'\d+.xls$', sfile).group()[0:8]
+    date1 = re.search(r'\d+.txt$', sfile).group()[0:8]
     #print('日期为%s\t 早盘选股 '%date1)
     log.logout('日期： %s\t 早盘股 \r---------------------------------------'%date1)
     try:
         count=0
-        list1=pds.read_excel(sfile1)
-        # list2=list1.loc[:,['代码']]
-        # list3=list1.loc[:,['开盘金额']]
-        # list4 = list1.loc[:, ['开盘换手Z']]
-        # list5 = list1.loc[:, ['涨幅%']]
-        # list6 = list1.loc[:, ['现量']]
-        # list7 = list1.loc[:, ['流通市值']]
-        # list8 = list1.loc[:, ['3日涨幅%']]
-        # list9 = list1.loc[:, ['20日涨幅%']]
-        # list10 = list1.loc[:, ['开盘%']]
-        #print(type(list2),type(list3))
+        list1=pds.read_csv(sfile, sep="\t",encoding='gbk')
+
         try:
             for i in  list1.index.values:     #一行一行处理
                 count+=1
@@ -131,7 +124,7 @@ def getstockopenamo(sfile):
 def procesopenstockprice(sfile):
     try:
         sfile1=sfile
-        getstockopenamo(sfile1)  #读取导出的EXCEL 并写入当天的文件中
+        getstockopenamo(sfile1)
     except BaseException as ee:
         print(ee)
         print('处理异常请检查')
@@ -140,13 +133,16 @@ def procesopenstockprice(sfile):
 
 spath='c:\\十档行情\\T0002\\export'
 spathbak='c:\\十档行情\\T0002\\exportbak'
-sfile1='c:\\十档行情\\T0002\\export\\板块指数20201126.xls'  #导出数据为excel /后每天执行一次
-sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
+
+outdate = time.strftime("%Y%m%d", time.localtime())
+sfile1='c:\\十档行情\\T0002\\export\\板块指数'+outdate+'.txt'  #导出数据为excel /后每天执行一次
+sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股'+outdate+'.txt'  #导出数据为excel /后每天执行一次
 dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 
 
 if __name__=='__main__':
-    procesopenstockprice('C:\\十档行情\\T0002\\export\\沪深Ａ股20201211.xls')
+    TDX_OpenDataOutput.TDX_OpenDataOutputTXT()  #导出数据
+    getstockopenamo(sfile1)  #读取导出的txt,选股
 
 
 #listfile =os.listdir(spath)

@@ -251,7 +251,7 @@ class southwardAnalysis():
     def selectdb(self, **kwords):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         conditions = str(kwords).strip('{').strip('}').replace(':', '=', 1).replace('\'', '', 2)
         print(conditions)
-        conn = conn = self.dbconnect()
+        conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 执行的sql语句
         sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN from  southdataanly  '''
@@ -274,7 +274,7 @@ class southwardAnalysis():
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         sql = 'select * from southdataanly where Hddate=\'' + newdate + '\' order by SHAREHOLDPRICEONE desc limit 10'
         # print(sql)
-        conn = conn = self.dbconnect()
+        conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         resultset = cursor.fetchall()

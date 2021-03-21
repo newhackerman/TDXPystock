@@ -2,7 +2,6 @@ import struct as st
 import os,re
 import time
 import util.logout as log
-import 通达信写自定义竞价数据文件 as soamo
 ################本程序为早盘竞价异动处理
 
 #
@@ -132,34 +131,6 @@ def listsort(valuelist):
         # if i>15:
         #     break
     return newlist2
-
-########################以下代码为处理早盘竞价数据################################
-# spath='c:\\十档行情\\T0002\\export'
-# spathbak='c:\\十档行情\\T0002\\exportbak'
-# sfile1='c:\\十档行情\\T0002\\export\\股票指数20201126.xls'  #导出数据为excel /后每天执行一次
-# sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
-# dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
-# listfile =os.listdir(spath)
-# spath='c:\\十档行情\\T0002\\export'
-# spathbak='c:\\十档行情\\T0002\\exportbak'
-# sfile1='c:\\十档行情\\T0002\\export\\股票指数20201126.xls'  #导出数据为excel /后每天执行一次
-# sfile2='c:\\十档行情\\T0002\\export\\沪深Ａ股20201126.xls'  #导出数据为excel /后每天执行一次
-# dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
-# listfile =os.listdir(spath)
-# #下面代码每天调用一次即可
-# for fl in listfile:
-#     print('代处理的文件为：',spath+'\\'+fl)
-#     if fl.endswith('xls'):
-#         soamo.procesdata(spath+'\\'+fl, dpath)
-#         print('文件：%s,处理成功！',spath+'\\'+fl)
-#         if not os.path.exists(spathbak):
-#             os.makedirs(spathbak)
-#         else:
-#             soamo.movefile(spath+'\\'+fl,spathbak+'\\'+fl)
-#             print("move %s -> %s",fl,(spathbak+fl))
-
-
-########################以上代码为处理早盘竞价数据################################
 
 
 ########################### 早盘股票异动提醒（说明：要先写好股票数据）
