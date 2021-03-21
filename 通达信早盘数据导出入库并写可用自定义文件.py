@@ -2,9 +2,6 @@
 from __future__ import division
 import struct as st
 import tushare as ts
-pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-import util.TDX_OpenDataOutput as TDX_OpenDataOutput
 import pymysql
 import json, re
 import shutil
@@ -13,11 +10,20 @@ from pywinauto import application
 from pywinauto.application import *
 from pywinauto import mouse
 
-
-class opendataindb():
+class opendatainTodb():
     database = 'stock'
     tablename = 'stockopendata'
-    configfile = 'D:/mysqlconfig.json'
+    configfile = 'D:/mysqlconfig.json'  #为ｊｓｏｎ格式的配置文件
+
+    def __init__(self):
+        self.jsoncontent=self.get_config()
+        self.pro = ts.pro_api(self.jsoncontent['tushare'])
+
+    def get_config(self):
+        with open(self.configfile, encoding="utf-8") as f:
+            jsoncontent = json.load(f)
+        f.close()
+        return jsoncontent
 
     def file2dict(self,path):
         with open(path, encoding="utf-8") as f:
@@ -358,45 +364,7 @@ def procesdata(sfile,dpath):
         print('处理异常请检查')
     print('处理完成')
 
-
-#下面代码每天调用一次即可
-if __name__=='__main__':
-    spath = 'c:/十档行情/T0002/export/'
-    spathbak = 'c:/十档行情/T0002/exportbak/'
-    dpath = 'c:/十档行情/T0002/signals/signals_user_9601/'
-    listfile = os.listdir(spath)
-    print(listfile)
-    # TDX_OpenDataOutput.TDX_OpenDataOutputTXT()   #导出竞价数据为ＴＸＴ
-
-    #########将数据写入stockopendata表
-    intodb=opendataindb()
-    # filelist = intodb.listdir(spath)
-    for file in listfile:
-        if file.endswith('txt'):
-            print('start inserttodb', file)
-            intodb.datainsert(spath+file)
-            print('insert complete', file)
-    #########将数据写入stockopendata表
-
-    if not os.path.exists(dpath):
-        print('目标目录不存在，请检查！')
-        exit(1)
-    for fl in listfile:
-        if fl.endswith('txt'):
-            print('待处理的文件为：', spath + fl)
-            procesdata(spath+fl, dpath)
-            print('文件：%s处理成功！'%(spath+fl))
-            if not os.path.exists(spathbak):
-                os.makedirs(spathbak)
-            else:
-                movefile(spath+fl,spathbak+fl)  #处理完移走
-                print("move %s -> %s" %(fl,(spathbak+fl)))
-
-     #             #movefile(sfile2,spathbak+'/'+'沪深Ａ股20201126.txt')
-
-
-
-            #通达信竞价文件读取
+#通达信竞价文件读取
 def readTDXdata(filename):     #可以解出日期了,竞价数据要用f解
     with open(filename,'rb') as fr:
         seek=4
@@ -411,5 +379,37 @@ def readTDXdata(filename):     #可以解出日期了,竞价数据要用f解
            listdata.append(text1+text2)
            #print(text1,text2)
         return listdata
-#STOCKuncode()
 
+#下面代码每天调用一次即可
+if __name__=='__main__':
+    spath = 'c:/十档行情/T0002/export/'
+    spathbak = 'c:/十档行情/T0002/exportbak/'
+    dpath = 'c:/十档行情/T0002/signals/signals_user_9601/'
+    listfile = os.listdir(spath)
+    print(listfile)
+
+
+    #########将导出数据写入stockopendata表
+    intodb=opendatainTodb()
+    intodb.TDX_OpenDataOutputTXT()  # 导出竞价数据为ＴＸＴ
+    # filelist = intodb.listdir(spath)
+    for file in listfile:
+        if file.endswith('txt'):
+            print('start inserttodb', file)
+            intodb.datainsert(spath+file)
+            print('insert complete', file)
+    #########将数据写入stockopendata表完成
+
+    if not os.path.exists(dpath):
+        print('目标目录不存在，请检查！')
+        exit(1)
+    for fl in listfile:
+        if fl.endswith('txt'):
+            print('待处理的文件为：', spath + fl)
+            procesdata(spath+fl, dpath)
+            print('文件：%s处理成功！'%(spath+fl))
+            if not os.path.exists(spathbak):
+                os.makedirs(spathbak)
+            else:
+                movefile(spath+fl,spathbak+fl)  #处理完移走
+                print("move %s -> %s" %(fl,(spathbak+fl)))
