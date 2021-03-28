@@ -1,5 +1,12 @@
 import requests as req
 import prettytable as pt
+import re
+from selenium import webdriver
+options=webdriver.ChromeOptions()
+# options.add_argument('--headless')
+# options.add_argument('--disable-gpu')
+options.add_experimental_option('excludeSwitches', ['enable-automation'])  # 允许开发者模式
+brow=webdriver.Chrome(executable_path='../chromedriver.exe',options=options)
 
 def format_tohtml(datalist):
     header = ['股票代码 ', '股票名称 ', '热度值', '热度值变化']
@@ -56,6 +63,18 @@ def getdata():
         datalist.append(data1)
     return datalist
 
+def get_sina_HotStock():
+    url='https://touzi.sina.com.cn/public/strategy'
+    # response=req.get(url=url)
+    response = brow.get(url=url)
+    response=brow.find_element_by_xpath('//*[@id="ms_table_wrap"]/tbody')
+    print(response.text)
+    # print(response)
+    # reg=r'(<tbody><tr>.+?</tbody>)'
+    # content=re.findall(reg,response)
+    # print(content)
+    brow.close()
 if __name__ == '__main__':
-    datalist=getdata()
-    format_tohtml(datalist)
+    # datalist=getdata()
+    # format_tohtml(datalist)
+    get_sina_HotStock()
