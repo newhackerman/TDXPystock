@@ -2,7 +2,7 @@ akshare==0.8.47
 beautifulsoup4==4.9.3
 bs4==0.0.1
 csvtotable==2.1.1
-lxml==4.5.1
+lxml>=4.6.3
 mpl-finance==0.10.1
 mplfinance==0.12.7a5
 muggle-ocr==1.0.3
