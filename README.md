@@ -1,9 +1,18 @@
 # 使用python 玩股票  (代码基于python3 数据库为mysql)
-首先申明:使用本项目中的程序抓取或分析股票数据进行的投资行为,造成的损失本人概不负责,如果不能接受请勿查看下载相关代码
+首先申明:使用本项目中的程序抓取或分析股票数据进行的投资行为,造成的损失本人概不负责,如果不能接受请勿查看下载及使用相关代码
 
 
-使用方法：
+安装使用准备：
+     
+    1、下载代码：git clone https://github.com/newhackerman/TDXPystock.git
+    2、安装好mysql数据库，执行init.sql里的SQL语句完成数据结构的初始化
+    3、执行pip install -r requirements.txt 安装好项目所需要的python包
+    4、建一个数据库连接配置文件：mysqlconfig.json 里面内容为：{"host":"xxxxxx","user":"xxxxxx","password":"xxxxxx","database":"xxxxxx","tushare":"xxxxxx"}  xxxxxx使用真实的配置代替
+    5、代码中使用的一些文件配置路径，请根据自己真实的环境修改
+        
 ---------
+功能使用说明：
+
 一、结合通达信操作准备
       
       1、导出个股竞价数据  
@@ -76,5 +85,5 @@
 
 如果您认为还不错，也可以随意打赏
 
-![二围码](http://a1.qpic.cn/psc?/V50pq8k53VZO9a3umeIZ2wCqaK3By0Ps/bqQfVz5yrrGYSXMvKr.cqVxfLFaYy4E4HwL0Zduhn*Bk5YYQ.Ny0K.TtQVqPBgzetsBsws0o2rCt5Y8uo2PFu5aE6Z.q0U8VnJmbCC7.4*c!/c&ek=1&kp=1&pt=0&bo=8gLKAgAAAAABFwg!&tl=3&vuin=860760123&tm=1613354400&sce=60-2-2&rf=0-0)
+![打赏码](http://a1.qpic.cn/psc?/V50pq8k53VZO9a3umeIZ2wCqaK3By0Ps/bqQfVz5yrrGYSXMvKr.cqVxfLFaYy4E4HwL0Zduhn*Bk5YYQ.Ny0K.TtQVqPBgzetsBsws0o2rCt5Y8uo2PFu5aE6Z.q0U8VnJmbCC7.4*c!/c&ek=1&kp=1&pt=0&bo=8gLKAgAAAAABFwg!&tl=3&vuin=860760123&tm=1613354400&sce=60-2-2&rf=0-0)
 
