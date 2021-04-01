@@ -134,7 +134,7 @@ class southwardAnalysis():
                   'p': 1,
                   'ps': 50,
                   'js': 'var duMsdwGU={pages:(tp),data:(x)}',
-                  'rt': '53873680'}
+                  'rt': '53908160'}
         # 获取北向数据总页数
         pages = self.get_pages(headers, url, params)
         print('共有数据 %d 页，请稍等......' %pages)
@@ -149,21 +149,25 @@ class southwardAnalysis():
                           'p': i,
                           'ps': 50,
                           'js': 'var duMsdwGU={pages:(tp),data:(x)}',
-                          'rt': '53873680'}
+                          'rt': '53908160'}
 
             try:
                 response = req.get(url=url, headers=headers, params=params)
             except BaseException as BE:
-                print('访问异常，重试中！')
+                print('第%s页 访问异常，重试中！' %i)
                 time.sleep(2)
                 count=0
-                while count<3:
-                    response = req.get(url=url, headers=headers, params=params)
+                while count<6:
+                    try:
+                        response = req.get(url=url, headers=headers, params=params)
+                    except BaseException as B2:
+                        print(B2)
                     if response.status_code!=200:
                         count+1
                         print('第 %s 次重试获取 %s 页数据异常！' %(count,i))
-                        time.sleep(2)
+                        time.sleep(5)
                     else:
+                        print('重试成功！！！')
                         break
             bstext = bs4.BeautifulSoup(response.content, 'lxml')
             tempdata = bstext.find_all('p')
