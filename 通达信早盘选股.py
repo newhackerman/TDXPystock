@@ -141,8 +141,8 @@ dpath='C:\\十档行情\\T0002\\signals\\signals_user_9601\\'
 
 
 if __name__=='__main__':
-    TDX_OpenDataOutput.TDX_OpenDataOutputTXT()  #导出数据
-    getstockopenamo(sfile1)  #读取导出的txt,选股
+    # TDX_OpenDataOutput.TDX_OpenDataOutputTXT()  #导出数据
+    getstockopenamo(sfile2)  #读取导出的txt,选股
 
 
 #listfile =os.listdir(spath)

@@ -96,7 +96,7 @@ SHAREHOLDPRICETEN float
 create index southdataanlycode on southdataanly(SCODE);
 create index southdataanlyHdDate on southdataanly(HDDATE);
 create index southdataanlySName on southdataanly(SNAME);
-
+CREATE UNIQUE INDEX southcode_name_stockdate ON southdataanly(SCODE,SNAME,HDDATE,SHARESRATE);
 --北向资金数据
 CREATE TABLE IF NOT EXISTS `northdataAnaly`(
 HDDATE date,
@@ -115,5 +115,6 @@ SHAREHOLDPRICETEN float
 create index northdataAnalycode on northdataAnaly(SCODE);
 create index northdataAnalyHdDate on northdataAnaly(HDDATE);
 create index nnorthdataAnalySName on northdataAnaly(SNAME);
+CREATE UNIQUE INDEX northcode_name_stockdate ON northdataAnaly(SCODE,SNAME,HDDATE,SHARESRATE);
 
 update stockinfo a set markname =(select left(trim(markname),5) from stockmark where markcode =a.mark);
