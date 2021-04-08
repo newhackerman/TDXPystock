@@ -1,6 +1,7 @@
 '''
 此程序用于监控盘中出现万手大单的股票，数据来源于新浪，不保证数据的准确性
 另外是采用http协议获取数据，性能不能保证，如果发现有socket接口一定要告诉我哦
+访问频繁极有可能被封IP,
 author:newhackerman@163.com
 '''
 import requests as req
@@ -8,8 +9,9 @@ import time,datetime,json
 import re
 import pandas as  pd
 import tushare as ts
+from lxml import etree
 import prettytable as pt  # 格式化成表格输出到html文件
-
+import util.proxy as proxy
 class Wanshouge():
     configfile = 'D:/mysqlconfig.json'
     moniStockFile = 'C:/十档行情/T0002/export/长期跟踪股20210408.txt'
@@ -115,24 +117,72 @@ class Wanshouge():
                     continue
                     time.sleep(0.1)
             # stockdf=pd.read_table(tb.get_string())
-
         return wanshoustock
 
+    #查看实时交易详情
+    def get_tradedetail(self,stocklist):
+        if stocklist is None:
+            return
+        else:
+            # stocklist=['sh601919']
+            for stock in stocklist:
+                try:
+                    proxies=proxy.get_proxy()
+                    print(proxies)
+                    url = f'https://vip.stock.finance.sina.com.cn/quotes_service/view/vMS_tradedetail.php?symbol={stock}'
+                    # print(url)
+                    r=req.get(url=url,proxies=proxies)
+                except BaseException as BE:
+                    time.sleep(1)
+                    count = 0
+                    while count < 3:
+                        r = req.get(url=url)
+                        if r.status_code != 200:
+                            count += 1
+                            print('第%s 次 重试中！！！' % (count))
+                            time.sleep(2)
+                        else:
+                            break
+                # r = req.get(url=url)
+                tree=etree.HTML(r.text)
+                trlist=   tree.xpath('/html/body/div[6]/div/div[@class="R"]/div[@class="dataOuter"]/table/tbody/tr')
+                # stockname=tree.xpath('/html/body/div[6]/div/div[@class="R"]//div[@class="hq_title"]/a[4]//text()')
+                # print(stockname)
+                interval=0
+                for tr in trlist:
+                    interval+=1
+                    time=tr.xpath('./th/text()')[0]
+                    price=tr.xpath('./td[1]/text()')[0]
+                    zdf=tr.xpath('./td[2]/text()')[0]
+                    vol = tr.xpath('./td[4]/text()')[0]
+                    amt=str(tr.xpath('./td[5]/text()')[0]).replace(',','',-1)
+                    director=tr.xpath('./th[2]//text()')[0]
+                    # tmpdata = {'代码': stock[2:7], '名称': stockname, '时间': time, '价格': price, '涨跌幅': zdf, '成交量': vol,
+                    #            '成交额':amt,'方向': director}
+                    # print(tmpdata)
+                    if float(vol)/10000>1 and float(amt)/10000>500:  #成交量大于1万且成交额大于500万
+                        tmpdata = {'代码': stock[2:7],  '时间': time, '价格': price, '涨跌幅': zdf, '成交量': vol,
+                                   '成交额': amt, '方向': director}
+                        print(tmpdata)
+                    if interval/20==0:
+                        time.sleep(0.5)
 if __name__ == '__main__':
      analysis=Wanshouge()
      stocklist=analysis.getstocklist() #只监控自己关注的
      # stocklist=analysis.getAllstock()  #全部监控
+
      t1 = '09:20'
-     t2 = '19:50'
+     t2 = '15:30'
      while True:
          now = datetime.datetime.now().strftime("%H:%M")
          if t1 < now < t2:
-             Data=analysis.getonlineData(stocklist)
-             # rint(Data)
-             tmpdata=pd.DataFrame(Data)
-             print(tmpdata)
-             sortData=tmpdata.sort_values(by=['成交万元'], ascending=False)  # 按成交额降序
-             print( sortData)
+             # Data=analysis.getonlineData(stocklist)
+             # # rint(Data)
+             # tmpdata=pd.DataFrame(Data)
+             # print(tmpdata)
+             # sortData=tmpdata.sort_values(by=['成交万元'], ascending=False)  # 按成交额降序
+             # print( sortData)
+             analysis.get_tradedetail(stocklist)  # 获取实情交易详情，并输出万手哥
              time.sleep(3)
          else:
             break
