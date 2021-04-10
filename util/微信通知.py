@@ -26,7 +26,7 @@ class NotesToWX():
             print('短信发送失败！')
 
 
-    def WxPusher(self,title, content):
+    def sendMsgToWX(self,title, content):
         url = 'http://wxpusher.zjiecode.com/api/send/message'
         payload = {
             'appToken': 'AT_cyeB3TnXCmfezmgYVy8i6Nik7ldEx6gO',
@@ -55,8 +55,9 @@ class NotesToWX():
     def query_user(page, page_size, token):
         uidlist=[]
         r= WxPusher.query_user(page, page_size, token=token)
-        if r.json()['success']==True:
-            data=r.json()['data']['records']
+        # print(r)
+        if r['success']==True:
+            data=r['data']['records']
             for s in data:
                 uid=s['uid']
                 nickName=s['nickName']
@@ -67,6 +68,7 @@ if __name__ == '__main__':
     # appsecret='d8d76ad2586e03c896ad3ca836eb229a'
     # get_wchat_token(appID,appsecret)
     # sendmessages('13527892025', 'pythontestSend:SMS')  #非常快，但每月只有30条，不用了
-    WxPusher('messagetitle','messagecontent')
+    NotesToWX=NotesToWX()
+    # NotesToWX.sendMsgToWX('messagetitle','messagecontent')
     appToken= 'AT_cyeB3TnXCmfezmgYVy8i6Nik7ldEx6gO'
     print(NotesToWX.query_user( 0, 100, appToken))
