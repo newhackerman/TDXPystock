@@ -1,11 +1,25 @@
 import struct as st
-import os,re
+import os,re,json
 import time
 import util.logout as log
+import pandas as pd
+import tushare as ts
 ################本程序为早盘竞价异动处理
+configfile = 'D:/mysqlconfig.json'
 
-#
-#
+#读取配置文件
+def get_config():
+    with open(configfile, encoding="utf-8") as f:
+        jsoncontent = json.load(f)
+    f.close()
+    return jsoncontent
+###获取股票列表
+def get_stockcodelist():
+    jsoncontent=get_config()
+    pro = ts.pro_api(jsoncontent['tushare'])
+    stockdata = pd.DataFrame(pro.stock_basic(exchange='', list_status='L',
+                                                      fields='ts_code,symbol,name,area,industry,list_date'))
+    return stockdata
 ####读取股票文件txt 返回一个列表
 def readStockinfo(stockfile):
     stocklist=[]
@@ -135,22 +149,22 @@ def listsort(valuelist):
 
 ########################### 早盘股票异动提醒（说明：要先写好股票数据）
 def tdxstockOpenchange():
-    stockfile = 'D:\\pythonTtest\\TDXPystock\\个股信息列表.txt'
-    stocklist = readStockinfo(stockfile)
+    # stockfile = 'D:/pythonTtest/TDXPystock/个股信息列表.txt'
+    stocklist = get_stockcodelist()
     #print('股票列表为：',stocklist)
-    sdir='C:\\十档行情\\T0002\\signals\\signals_user_9601'
+    sdir='C:/十档行情/T0002/signals/signals_user_9601'
     filelist= os.listdir(sdir)
     #print(len(filelist))
     newfilelist=[]       #股票文件列表
     valuelist=[]
-    for stock in stocklist:    #只需要处理股票文件
-        codenumV,codenamev=stock.split(':') #取得股票代码与名称
-        if codenumV[0:2]=='60':
-            newfile=sdir + '\\' + '1_'+codenumV+'.dat'
+    for stock in stocklist.iterrows():
+        codenumV=str(stock[1]['ts_code'])[0:6]
+        codenamev = stock[1]['name']
+        if codenumV[0:2]=='60' or codenumV[0:2]=='68':
+            newfile=sdir + '/' + '1_'+codenumV+'.dat'
         else:
-            newfile = sdir + '\\' + '0_' + codenumV + '.dat'
+            newfile = sdir + '/' + '0_' + codenumV + '.dat'
         newfilelist.append(newfile)
-
         codenum1, codename1, value = readTDXUerSignals_9601(newfile, codenumV, codenamev)
         try:
             valuelist.append(codenum1+':'+codename1+':'+str(value))

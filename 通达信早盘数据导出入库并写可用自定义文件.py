@@ -89,7 +89,7 @@ class opendatainTodb():
         time.sleep(1)
         mouse.click('left', [1110, 653])
 
-        time.sleep(10)
+        time.sleep(20)
         # 点击取消，完成导出
         mouse.click('left', [1016, 580])
         #沪深主要指数导出
@@ -548,7 +548,7 @@ if __name__=='__main__':
     dpath = 'c:/十档行情/T0002/signals/signals_user_9601/'
     #########将导出数据写入stockopendata表
     intodb=opendatainTodb()
-    intodb.TDX_OpenDataOutputTXT()  # 导出竞价数据为ＴＸＴ
+    # intodb.TDX_OpenDataOutputTXT()  # 导出竞价数据为ＴＸＴ
     listfile = os.listdir(spath)
     print(listfile)
     # filelist = intodb.listdir(spath)
