@@ -59,6 +59,31 @@ def get_proxy():
     else:
      return proxy
 
+    def get_proxyforLIB(self):  #引用别人的代理服器
+        url='https://ip.jiangxianli.com/api/proxy_ip'
+        try:
+            r=req.get(url=url)
+        except BaseException as b:
+            count=0
+            while True:
+                count += 1
+                try:
+                    r = req.get(url=url)
+                    if r.status_code!=200:
+                        continue
+                    else:
+                        break
+                    if count>=3:
+                        break
+                except BaseException as c:
+                    continue
+        jsontext = r.json()['data']
+        ip = jsontext['ip']
+        port = jsontext['port']
+        protocol = jsontext['protocol']
+        proxy = {str(protocol).lower(): str(protocol).lower() + '://' + ip + ':' + port}
+        return proxy
+
 if __name__ == '__main__':
     proxy=get_proxy()
     print(proxy)
