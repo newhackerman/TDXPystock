@@ -508,17 +508,21 @@ class NorthwardAnalysis():
     # 获取表中指定的日期
     def getdbdate(self,hddate):
         sql = 'select  HDDATE from northdataAnaly where HDDATE=\''+hddate+'\' limit 1;'
+        # print(sql)
         conn = conn = self.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         result = cursor.fetchall()
         # print(result)
-        data1=None
+        if result is None:
+            print('无数据')
         for data in result:
             data1 = data['HDDATE']
-            print(data1)
+            # print(data1)
             if data1 is None:
                 return None
+            else:
+                return str(data1)
         cursor.close()
         conn.close()
 
@@ -860,7 +864,7 @@ class NorthwardAnalysis():
 
                         self.openF10(SNAME)  # 打开F10
                     elif choise == 6:
-                        Hddate=input('请输入要补齐的数据日期，Ex: 2021-02-10\t')
+                        Hddate=str(input('请输入要补齐的数据日期，Ex: 2021-02-10\t')).strip()
                         try:
                             if ":" in Hddate:
                                 time.strptime(Hddate, "%Y-%m-%d")
@@ -870,6 +874,7 @@ class NorthwardAnalysis():
                             print('日期输入错误！')
                             continue
                         dbdate = self.getdbdate(Hddate)
+                        # print('db—date:'+str(dbdate))
                         if dbdate ==Hddate:
                             print('表中已有数据！！！')
                         else:
