@@ -153,17 +153,12 @@ class NorthwardAnalysis():
         print('文件：%s 写入成功!' % dfilename)
     # 获取最新的数据日期
     def get_page_newdate(self):
-        url = 'http://data.eastmoney.com/hsgtcg/StockStatistics.aspx?tab=3'
+        url = 'http://dcfm.eastmoney.com/em_mutisvcexpandinterface/api/js/get?&type=HSGTTRDT&st=DATE&sr=-1&token=894050c76af8597a853f5b408b759f5d&p=1&ps=1'
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36'}
         response = req.get(url=url, headers=headers).text
-        tree = etree.HTML(response)
-        tit = tree.xpath(
-            '//*[@id="filter_ggtj"]/div[@class="cate_type"]/ul/li[@class="first at"]/@data-date')[0]
-
-        # print(tit)
-        rex = '(\d{4}-\d{2}-\d{2})'
-        date = re.findall(rex, tit)[0]
+        regx='(\d{4}-\d{2}-\d{2})'
+        date = re.findall(regx, response,re.M)[0]
         return str(date)
 
 
