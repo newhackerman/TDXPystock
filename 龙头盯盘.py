@@ -169,7 +169,7 @@ class topstockMoniter():
 
                 onlineQuote = self.getonlineData_sina(stocklist)
                 if onlineQuote is None:
-                    time.sleep(50)
+                    time.sleep(5)
                     continue
                 else:
                     len1=len(onlineQuote)
@@ -184,9 +184,8 @@ class topstockMoniter():
                         time1=onlineQuote[i]['成交时间']
                         table.add_row([code,name,ztbs,zdf,price,vol,amt,time1])
                     print(table.get_string())
-                time.sleep(50)
+                time.sleep(5)
             else:
-                time.sleep(50)
                 print('非交易日休息中...')
                 time.sleep(300)
 
