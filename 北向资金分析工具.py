@@ -83,6 +83,31 @@ class NorthwardAnalysis():
         parser.add_option("-q", "--quiet",action="store_false", dest="verbose", default=True,help="don't print status messages to stdout")
         (options, args) = parser.parse_args()
         return options, args
+
+    def get_proxy(self):
+        url='https://ip.jiangxianli.com/api/proxy_ip'
+        try:
+            r=req.get(url=url)
+        except BaseException as b:
+            count=0
+            while True:
+                count += 1
+                try:
+                    r = req.get(url=url)
+                    if r.status_code!=200:
+                        continue
+                    else:
+                        break
+                    if count>=3:
+                        break
+                except BaseException as c:
+                    continue
+        jsontext = r.json()['data']
+        ip = jsontext['ip']
+        port = jsontext['port']
+        protocol = jsontext['protocol']
+        proxy = {str(protocol).lower(): str(protocol).lower() + '://' + ip + ':' + port}
+        return proxy
     # 获取上一个交易日
     def get_lastDay(self,today):
         alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
@@ -212,7 +237,7 @@ class NorthwardAnalysis():
         try:
             response = req.get(url=url, headers=headers, params=params)
         except BaseException as BE:
-            response = req.get(url=url, headers=headers, params=params)
+            response = req.get(url=url, headers=headers, params=params,proxies=self.get_proxy())
             if response.status_code!=200:
                 print('访问异常，请重试！')
                 exit(1)
@@ -478,7 +503,7 @@ class NorthwardAnalysis():
         '''
         # s = tb.sort_key('日期','desc')
         s = tb.get_html_string()  # 格式化成html文件
-        # print(s)
+        print(tb.get_string())
         # 将画的图片输出
         kline = '''<img src=./Kline.jpg />'''
         fw = open(outfile, 'a+', encoding='utf-8')
@@ -652,7 +677,7 @@ class NorthwardAnalysis():
                 time.sleep(2)
                 count=0
                 while count<3:
-                    response = req.get(url=url, headers=headers, params=params)
+                    response = req.get(url=url, headers=headers, params=params,proxies=self.get_proxy())
                     if response.status_code!=200:
 
                         count+=1
@@ -818,89 +843,99 @@ class NorthwardAnalysis():
                 try:
                     choise = int(input('请输入：'))
                 except BaseException as BE:
-
                     choise = int(input('输入错误，请重新输入 ：'))
                 if choise in range(9):
-                    if choise == 1:
-                        isnew = self.compare_Date()  # 判断是否要更新数据
-                        if isnew:
-                            print('数据已是最新')
-                        else:
-                            print('数据更新中！')
-                            northdataAnalyinfos = self.getNownorth()
-                            self.insertNowdata(northdataAnalyinfos)
-                            print('数据更新成功！！！')
-                    elif choise == 2:
-                        resultset = self.Select_top10()
-                        self.northdataAnalyFormat(resultset)
-                    elif choise == 3:
-                        resultset = self.Select_Netpurchases()  # 查询南资开始净买的股票
-                        if resultset is None:
-                            print('无满足条件的数据！')
-                        else:
+                    try:
+                        if choise == 1:
+                            isnew = self.compare_Date()  # 判断是否要更新数据
+                            if isnew:
+                                print('数据已是最新')
+                            else:
+                                print('数据更新中！')
+                                northdataAnalyinfos = self.getNownorth()
+                                self.insertNowdata(northdataAnalyinfos)
+                                print('数据更新成功！！！')
+                        elif choise == 2:
+                            resultset = self.Select_top10()
                             self.northdataAnalyFormat(resultset)
-
-                    elif choise == 4:
-                        SNAME = str(input('请输入股票名称或代码:\t'))
-                        if SNAME.isdigit():
-                            # code = self.get_stockname(SNAME)
-                            pass
-                        else:
-                            SNAME = self.get_stockcode(SNAME)
-                        resultset = self.getnorth(SNAME)   # 按名称查询北向资金占比
-                        if resultset is None:
-                            print('无北向数据......')
-                        else:
-                            self.rendertohtml(resultset)
-                    elif choise==5:
-                        SNAME = str(input('请输入股票名称或代码:\t'))
-                        if SNAME.isdigit():
-                            # code = self.get_stockname(SNAME)
-                            pass
-                        else:
-                            SNAME = self.get_stockcode(SNAME)
-                            if SNAME is None:
-                                print('没有该股！！')
-
-                        self.openF10(SNAME)  # 打开F10
-                    elif choise == 6:
-                        Hddate=str(input('请输入要补齐的数据日期，Ex: 2021-02-10\t')).strip()
-                        try:
-                            if ":" in Hddate:
-                                time.strptime(Hddate, "%Y-%m-%d")
+                        elif choise == 3:
+                            resultset = self.Select_Netpurchases()  # 查询南资开始净买的股票
+                            if resultset is None:
+                                print('无满足条件的数据！')
                             else:
-                                time.strptime(Hddate, "%Y-%m-%d")
-                        except:
-                            print('日期输入错误！')
-                            continue
-                        dbdate = self.getdbdate(Hddate)
-                        # print('db—date:'+str(dbdate))
-                        if dbdate ==Hddate:
-                            print('表中已有数据！！！')
-                        else:
-                            northdataAnalyinfos = self.getDesignatedDateData(Hddate)
-                            self.insertNowdata(northdataAnalyinfos)
-                            print('入库成功！！！')
-                            select = str(input('是否要保存到本地文件（Y/）N： '))
-                            if select =='Y' or select=='y':
-                                self.WriteFile(northdataAnalyinfos, Hddate)
+                                self.northdataAnalyFormat(resultset)
+
+                        elif choise == 4:
+                            SNAME = str(input('请输入股票名称或代码:\t')).strip()
+                            if SNAME =='' :
+                                SNAME = str(input('请输入股票名称或代码:\t')).strip()
+                                if SNAME.isdigit():
+                                    if len(SNAME)<6:
+                                        print('代码输入错误')
+                                        SNAME = str(input('请输入股票名称或代码:\t')).strip()
+                                else:
+                                    if SNAME =='':
+                                        continue
+                                    SNAME = self.get_stockcode(SNAME)
+
+                            resultset = self.getnorth(SNAME)   # 按名称查询北向资金占比
+                            if resultset is None:
+                                print('无北向数据......')
                             else:
+                                # print(resultset)
+                                self.rendertohtml(resultset)
+                        elif choise==5:
+                            SNAME = str(input('请输入股票名称或代码:\t'))
+                            if SNAME.isdigit():
+                                # code = self.get_stockname(SNAME)
                                 pass
-                    elif choise == 7:
-                        writefile = writeToTdx()
-                        writefile.FullDataWritetoFile()
-                    elif choise == 8:
-                        stockcode = str(input('请输入股票名称或代码:\t'))
-                        if stockcode.isdigit():
-                            # code = self.get_stockname(SNAME)
-                            pass
-                        else:
-                            stockcode = self.get_stockcode(stockcode)
-                        checkStock.baolei(stockcode)
+                            else:
+                                SNAME = self.get_stockcode(SNAME)
+                                if SNAME is None:
+                                    print('没有该股！！')
 
-                    elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
-                        exit(0)
+                            self.openF10(SNAME)  # 打开F10
+                        elif choise == 6:
+                            Hddate=str(input('请输入要补齐的数据日期，Ex: 2021-02-10\t')).strip()
+                            try:
+                                if ":" in Hddate:
+                                    time.strptime(Hddate, "%Y-%m-%d")
+                                else:
+                                    time.strptime(Hddate, "%Y-%m-%d")
+                            except:
+                                print('日期输入错误！')
+                                continue
+                            dbdate = self.getdbdate(Hddate)
+                            # print('db—date:'+str(dbdate))
+                            if dbdate ==Hddate:
+                                print('表中已有数据！！！')
+                            else:
+                                northdataAnalyinfos = self.getDesignatedDateData(Hddate)
+                                self.insertNowdata(northdataAnalyinfos)
+                                print('入库成功！！！')
+                                select = str(input('是否要保存到本地文件（Y/）N： '))
+                                if select =='Y' or select=='y':
+                                    self.WriteFile(northdataAnalyinfos, Hddate)
+                                else:
+                                    pass
+                        elif choise == 7:
+                            writefile = writeToTdx()
+                            writefile.FullDataWritetoFile()
+                        elif choise == 8:
+                            stockcode = str(input('请输入股票名称或代码:\t'))
+                            if stockcode.isdigit():
+                                # code = self.get_stockname(SNAME)
+                                pass
+                            else:
+                                stockcode = self.get_stockcode(stockcode)
+                            checkStock.baolei(stockcode)
 
+                        elif choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
+                            exit(0)
+                    except BaseException as e:
+                        if choise == 0 or choise=='quit' or choise=='exit' or choise=='q':
+                            exit(0)
+                        continue
                 else:
                     print('输入错误\n')
                     choise = int(input('请输入：'))

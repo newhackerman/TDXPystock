@@ -70,6 +70,31 @@ class southwardAnalysis():
 
         (options, args) = parser.parse_args()
         return options, args
+
+    def get_proxy(self):
+        url = 'https://ip.jiangxianli.com/api/proxy_ip'
+        try:
+            r = req.get(url=url)
+        except BaseException as b:
+            count = 0
+            while True:
+                count += 1
+                try:
+                    r = req.get(url=url)
+                    if r.status_code != 200:
+                        continue
+                    else:
+                        break
+                    if count >= 3:
+                        break
+                except BaseException as c:
+                    continue
+        jsontext = r.json()['data']
+        ip = jsontext['ip']
+        port = jsontext['port']
+        protocol = jsontext['protocol']
+        proxy = {str(protocol).lower(): str(protocol).lower() + '://' + ip + ':' + port}
+        return proxy
     #获取上一个交易日
     def get_lastDay(self,today):
         alldays = self.pro.trade_cal()  #得到所有日期，到今年年尾
@@ -148,6 +173,7 @@ class southwardAnalysis():
                           'rt': '53908160'}
 
             try:
+
                 response = req.get(url=url, headers=headers, params=params)
             except BaseException as BE:
                 print('第%s页 访问异常，重试中！' %i)
@@ -155,7 +181,7 @@ class southwardAnalysis():
                 count=0
                 while count<6:
                     try:
-                        response = req.get(url=url, headers=headers, params=params)
+                        response = req.get(url=url, headers=headers, params=params,proxies=self.get_proxy())
                     except BaseException as B2:
                         print(B2)
                     if response.status_code!=200:
@@ -256,7 +282,7 @@ class southwardAnalysis():
         # 执行的sql语句
         sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN from  southdataanly  '''
         sql = sql + 'where ' + conditions + '  order by HDDATE '
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         resultset = cursor.fetchall()
         cursor.close()
@@ -347,6 +373,7 @@ class southwardAnalysis():
         SHAREHOLDPRICETENlsit = []
         # 取出占比数据
         for data in resultset:
+            # print(data)
             HDDATE = data['HDDATE']
             # HDDATE = datetime.datetime.strptime(HDDATE1, '%Y-%m-%d').strftime('%Y%m%d')
             HDDATELIST.append(HDDATE)
@@ -689,11 +716,15 @@ class southwardAnalysis():
                         self.SouthdataFormat(resultset)
 
                     elif choise == 4:
-                        SNAME = str(input('请输入股票名称或代码:\t'))
+                        SNAME = str(input('请输入股票名称或代码:\t')).strip()
+                        if SNAME =='':
+                            SNAME = str(input('请输入股票名称或代码:\t')).strip()
                         if SNAME.isdigit():
                             resultset = self.selectdb(SCODE=SNAME)  # 按代码查询南向资金占比
                             self.SouthdataFormat(resultset)
                         else:
+                            if SNAME=='':
+                                continue
                             resultset = self.selectdb(SNAME=SNAME)  # 按名称查询南向资金占比
                             self.SouthdataFormat(resultset)
                         self.rendertohtml(resultset)
