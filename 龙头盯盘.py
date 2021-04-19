@@ -7,62 +7,34 @@ import  prettytable as pt
 from PyQt5.Qt import *
 from PySide2.QtWidgets import *
 
-
-class MainWindow(QMainWindow):
+class RunThread(QThread):
+    # python3,pyqt5与之前的版本有些不一样
+    #  通过类成员对象定义信号对象
+    # _signal = pyqtSignal(str)
+    trigger = pyqtSignal()
 
     def __init__(self):
-        super().__init__()  # 调用父类QWidget中的init方法
-        self.setWindowTitle('龙头盯盘 ')
-
-
-        # self.setStyleSheet('background-color:blue;font-size:16px;')
-        self.resize(800, 200)
-        self.text1 = QTextEdit(self)
-        self.text1.resize(800, 200)
-        self.text1.setEnabled(False) #禁止编辑
-        # self.text1.setStyleSheet('color:white;')
-        self.text1.setStyleSheet('color:rgb(255,0,255);background-color:blank;font-size:16px' )
-        self.setFixedSize(self.width(), self.height()) #禁止最大化
+        super().__init__()
         self.stocklist = self.getTopStock()
-        self.timer()
-        self.fun_list()
+    def __del__(self):
+        self.wait()
 
-    def fun_list(self):   #调用要调用的函数
-        # process1=Process(target=self.timer())
-        # process2 = Process(target=self.TimterupdateTime())
-        # process1.start()
-        # process2.start()
-        # process1.join()
-        # process2.join()
+    def run(self):
+        # 处理你要做的业务逻辑，这里是通过一个回调来处理数据，这里的逻辑处理写自己的方法
+        # wechat.start_auto(self.callback)
+        # self._signal.emit(msg);  可以在这里写信号焕发
 
-        self.TimterupdateTime()
-        # self.timer()
+        self.main()
+        time.sleep(20)
+        self.trigger.emit()
 
-    #定义一个时钟
-    def timer(self):
-        # 新建一个QTimer对象
-        self.timer0 = QTimer()
-        self.timer0.setInterval(3000)
-        self.timer0.start()
-        # 信号连接到槽
-        self.timer0.timeout.connect(self.main)  #每隔3秒取一次行情
+        # self._signal.emit(msg)
 
-    def TimterupdateTime(self):
-        # 新建一个QTimer对象
-        self.timer1 = QTimer()
-        self.timer1.setInterval(1000)
-        self.timer1.start()
-        # 信号连接到槽
-        self.timer1.timeout.connect(self.updateTime)  # 每隔1秒更新
+    def callback(self, msg):
+        # 信号焕发，我是通过我封装类的回调来发起的
+        # self._signal.emit(msg)
+        pass
 
-    # 定义槽
-    def updateTime(self):
-        self.setWindowTitle('龙头盯盘'+'\t\t\t'+time.strftime("%X",time.localtime()))
-    # 定义槽
-    # def onTimerOut(self):
-    #     # self.setWindowTitle('我是小程序')
-    #     # self.setWindowTitle(self.windowTitle()+time.strftime("%X",time.localtime()))
-    #     pass
     # 获取龙头
     def getTopStock(self):
         stocklist = []
@@ -215,7 +187,7 @@ class MainWindow(QMainWindow):
         # print(stocklist)
         t1 = '09:20'
         t2 = '15:35'
-        now=datetime.datetime.now().strftime("%H:%M")
+        now = datetime.datetime.now().strftime("%H:%M")
         # if self.isTradeDay() and t1 < now < t2:  # 是否在交易日的交易时间内
         # 是否在交易日的交易时间内
         table = pt.PrettyTable()
@@ -241,10 +213,62 @@ class MainWindow(QMainWindow):
                 amt = onlineQuote[i]['成交万元']
                 time1 = onlineQuote[i]['成交时间']
                 table.add_row([code, name, ztbs, zdf, price, vol, amt, time1])
-
             # print(table.get_string())
+            mainw.result=table.get_string()
 
-            self.text1.setText(table.get_string())
+
+class MainWindow(QMainWindow):
+    result=None
+    def __init__(self):
+        super().__init__()  # 调用父类QWidget中的init方法
+        self.setWindowTitle('龙头盯盘 ')
+        self.resize(800, 200)
+        self.text1 = QTextEdit(self)
+        self.text1.resize(800, 200)
+        self.text1.setEnabled(False) #禁止编辑
+        # self.text1.setStyleSheet('color:white;')
+        self.text1.setStyleSheet('color:rgb(255,0,255);background-color:blank;font-size:16px' )
+        self.setFixedSize(self.width(), self.height()) #禁止最大化
+        self.timer1=QTimer()
+        self.timer1.setInterval(30000)
+        self.timer1.start()
+        self.fun_list()
+
+    def fun_list(self):   #调用要调用的函数
+        self.Work()
+        self.TimterupdateTime()
+        # self.timer()
+
+    def Work(self):
+        self.thread = RunThread()
+        # print(self.thread)
+        self.thread.start()
+        self.text1.setText(self.result)
+        # print(self.result)
+        # self.TimeStop()
+        self.thread.trigger.connect(self.Work)
+
+    def TimeStop(self):
+        self.timer1.stop()
+        # print("运行结束用时",self.lcdNumber.value())
+        self.t = 0
+
+    def TimterupdateTime(self):
+        # 新建一个QTimer对象
+        self.timer2 = QTimer()
+        self.timer2.setInterval(1000)
+        self.timer2.start()
+        # 信号连接到槽
+        self.timer2.timeout.connect(self.updateTime)  # 每隔1秒更新
+
+    # 定义槽
+    def updateTime(self):
+        self.setWindowTitle('龙头盯盘'+'\t\t\t'+time.strftime("%X",time.localtime()))
+    # 定义槽
+    # def onTimerOut(self):
+    #     # self.setWindowTitle('我是小程序')
+    #     # self.setWindowTitle(self.windowTitle()+time.strftime("%X",time.localtime()))
+    #     pass
 
 
 if __name__ == '__main__':
