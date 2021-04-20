@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1131</width>
+    <height>843</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <weight>50</weight>
+    <bold>false</bold>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>操盘神器By:newhackerman@163.com</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>-10</y>
+      <width>1131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(170, 0, 255);
+selection-color: rgb(255, 0, 0);
+font: 10pt &quot;新宋体&quot;;
+background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>10</y>
+       <width>691</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QRadioButton" name="radioButton_superamount">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>超级资金监控</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton3mzhangting">
+        <property name="text">
+         <string>3分钟涨停预警</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButtonbankamountmonitor">
+        <property name="text">
+         <string>板块资金监控</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_drogmonitor">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>龙头盯盘</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QTextEdit" name="textEdit1">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>1131</width>
+      <height>761</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1131</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <widget class="QMenu" name="southAmtmenu">
+    <property name="title">
+     <string>南向资金分析</string>
+    </property>
+    <addaction name="actionsouthDatainserttoDB"/>
+    <addaction name="separator"/>
+    <addaction name="actionsouthTop10Select"/>
+    <addaction name="actionsouthbuy"/>
+    <addaction name="actionsouthDataforone"/>
+    <addaction name="separator"/>
+    <addaction name="actionsouthstockF10"/>
+    <addaction name="actionsouthbusinessTop10"/>
+   </widget>
+   <widget class="QMenu" name="sorthAmtmenu">
+    <property name="title">
+     <string>北向资金分析</string>
+    </property>
+    <addaction name="actionnorthDatainserttoDB"/>
+    <addaction name="separator"/>
+    <addaction name="actionactionnorthTop10Select"/>
+    <addaction name="actionnorthbuy"/>
+    <addaction name="separator"/>
+    <addaction name="actionnorthDataforone"/>
+    <addaction name="actionnorthstockF10"/>
+    <addaction name="actionnorthThunderingSelect"/>
+    <addaction name="separator"/>
+    <addaction name="actionselfAdddata"/>
+    <addaction name="actionnorthdataWriteToTDX"/>
+   </widget>
+   <widget class="QMenu" name="SupperAmtmenu">
+    <property name="title">
+     <string>超级资金监控</string>
+    </property>
+    <widget class="QMenu" name="levelset">
+     <property name="title">
+      <string>监控档位设置</string>
+     </property>
+     <addaction name="actionvol10000"/>
+     <addaction name="actionvol5000"/>
+     <addaction name="actionvol1000"/>
+    </widget>
+    <widget class="QMenu" name="menu_DataOutput">
+     <property name="title">
+      <string>数据导出</string>
+     </property>
+     <addaction name="actionoutTotxt"/>
+     <addaction name="actionoutToCSV"/>
+     <addaction name="actionoutToHtml"/>
+    </widget>
+    <addaction name="levelset"/>
+    <addaction name="actionSuperRealQuote"/>
+    <addaction name="actionMonitorlist"/>
+    <addaction name="menu_DataOutput"/>
+    <addaction name="separator"/>
+    <addaction name="actionclear"/>
+    <addaction name="actionflush"/>
+    <addaction name="actionanalyies"/>
+   </widget>
+   <widget class="QMenu" name="bankmenu">
+    <property name="title">
+     <string>板块资金监控</string>
+    </property>
+    <widget class="QMenu" name="menu_intervalset">
+     <property name="title">
+      <string>监控间隔设置</string>
+     </property>
+     <addaction name="actionflush10s"/>
+     <addaction name="actionflush20s"/>
+     <addaction name="actionflush30s"/>
+     <addaction name="separator"/>
+     <addaction name="actionflush60s"/>
+     <addaction name="actionflush5m"/>
+     <addaction name="actionflush10m"/>
+    </widget>
+    <addaction name="menu_intervalset"/>
+    <addaction name="actionbankstartnmonitor"/>
+   </widget>
+   <widget class="QMenu" name="topStockgetmenu">
+    <property name="title">
+     <string>领先企业获取</string>
+    </property>
+    <addaction name="actionAlist"/>
+    <addaction name="actionHKlist"/>
+    <addaction name="actionUSAlist"/>
+    <addaction name="separator"/>
+    <addaction name="actionStocklistOutput"/>
+   </widget>
+   <widget class="QMenu" name="stock_selectmenu">
+    <property name="title">
+     <string>选股</string>
+    </property>
+    <addaction name="actionSlectStockByA"/>
+    <addaction name="actionSlectStockByF"/>
+    <addaction name="selectlowlinestock"/>
+   </widget>
+   <widget class="QMenu" name="menuMaxstockmonitor">
+    <property name="title">
+     <string>龙头盯盘</string>
+    </property>
+    <addaction name="actiondrogstartmonitor"/>
+   </widget>
+   <widget class="QMenu" name="menuzhangtinganalyies">
+    <property name="title">
+     <string>涨停分析</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu3Mzhangting">
+    <property name="title">
+     <string>3分钟涨停预警</string>
+    </property>
+    <addaction name="action3minzhangstart"/>
+   </widget>
+   <addaction name="SupperAmtmenu"/>
+   <addaction name="menu3Mzhangting"/>
+   <addaction name="bankmenu"/>
+   <addaction name="menuMaxstockmonitor"/>
+   <addaction name="southAmtmenu"/>
+   <addaction name="sorthAmtmenu"/>
+   <addaction name="menuzhangtinganalyies"/>
+   <addaction name="topStockgetmenu"/>
+   <addaction name="stock_selectmenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSuperRealQuote">
+   <property name="text">
+    <string>实时监控开启</string>
+   </property>
+  </action>
+  <action name="actionvol10000">
+   <property name="text">
+    <string>&gt;10000手</string>
+   </property>
+  </action>
+  <action name="actionvol5000">
+   <property name="text">
+    <string>&gt;5000手</string>
+   </property>
+  </action>
+  <action name="actionvol1000">
+   <property name="text">
+    <string>&gt;1000手 </string>
+   </property>
+  </action>
+  <action name="actionMonitorlist">
+   <property name="text">
+    <string>监控列表添加</string>
+   </property>
+   <property name="iconText">
+    <string>监控列表添加</string>
+   </property>
+  </action>
+  <action name="actionoutTotxt">
+   <property name="text">
+    <string>导出为(.TXT)</string>
+   </property>
+  </action>
+  <action name="actionoutToCSV">
+   <property name="text">
+    <string>导出为(.CSV)</string>
+   </property>
+  </action>
+  <action name="actionoutToHtml">
+   <property name="text">
+    <string>导出为(.html)</string>
+   </property>
+  </action>
+  <action name="actionclear">
+   <property name="text">
+    <string>清空</string>
+   </property>
+  </action>
+  <action name="actionflush">
+   <property name="text">
+    <string>刷新</string>
+   </property>
+  </action>
+  <action name="actionflush10s">
+   <property name="text">
+    <string>10秒</string>
+   </property>
+  </action>
+  <action name="actionflush20s">
+   <property name="text">
+    <string>20秒</string>
+   </property>
+  </action>
+  <action name="actionflush30s">
+   <property name="text">
+    <string>30秒</string>
+   </property>
+  </action>
+  <action name="actionflush60s">
+   <property name="text">
+    <string>60秒</string>
+   </property>
+  </action>
+  <action name="actionflush5m">
+   <property name="text">
+    <string>5分钟</string>
+   </property>
+  </action>
+  <action name="actionflush10m">
+   <property name="text">
+    <string>10分钟</string>
+   </property>
+  </action>
+  <action name="actionAlist">
+   <property name="text">
+    <string>A股市场领先企业</string>
+   </property>
+  </action>
+  <action name="actionHKlist">
+   <property name="text">
+    <string>港股市场领先企业</string>
+   </property>
+  </action>
+  <action name="actionUSAlist">
+   <property name="text">
+    <string>美股市场领先企业</string>
+   </property>
+  </action>
+  <action name="actionStocklistOutput">
+   <property name="text">
+    <string>数据导出</string>
+   </property>
+  </action>
+  <action name="actionSlectStockByA">
+   <property name="text">
+    <string>早盘策略选股</string>
+   </property>
+  </action>
+  <action name="actionSlectStockByF">
+   <property name="text">
+    <string>尾盘策略选股</string>
+   </property>
+  </action>
+  <action name="selectlowlinestock">
+   <property name="text">
+    <string>抄底选股</string>
+   </property>
+  </action>
+  <action name="actionsouthDatainserttoDB">
+   <property name="text">
+    <string>数据更新入库</string>
+   </property>
+  </action>
+  <action name="actionsouthTop10Select">
+   <property name="text">
+    <string>净买入前10查询</string>
+   </property>
+  </action>
+  <action name="actionsouthbuy">
+   <property name="text">
+    <string>今日开始净买查询</string>
+   </property>
+  </action>
+  <action name="actionsouthDataforone">
+   <property name="text">
+    <string>个股南资数据查询</string>
+   </property>
+  </action>
+  <action name="actionsouthstockF10">
+   <property name="text">
+    <string>个股F10</string>
+   </property>
+  </action>
+  <action name="actionsouthbusinessTop10">
+   <property name="text">
+    <string>个股前10大经纪商查询</string>
+   </property>
+  </action>
+  <action name="actionanalyies">
+   <property name="text">
+    <string>大单统计分析</string>
+   </property>
+  </action>
+  <action name="actionnorthDatainserttoDB">
+   <property name="text">
+    <string>数据更新入库</string>
+   </property>
+  </action>
+  <action name="actionactionnorthTop10Select">
+   <property name="text">
+    <string>净买入前10查询</string>
+   </property>
+  </action>
+  <action name="actionnorthbuy">
+   <property name="text">
+    <string>今日开始净买查询</string>
+   </property>
+  </action>
+  <action name="actionnorthDataforone">
+   <property name="text">
+    <string>个股北资数据查询</string>
+   </property>
+  </action>
+  <action name="actionnorthstockF10">
+   <property name="text">
+    <string>个股F10</string>
+   </property>
+  </action>
+  <action name="actionselfAdddata">
+   <property name="text">
+    <string>补齐近30日数据</string>
+   </property>
+  </action>
+  <action name="actionnorthdataWriteToTDX">
+   <property name="text">
+    <string>资金数据写入通达信</string>
+   </property>
+  </action>
+  <action name="actionnorthThunderingSelect">
+   <property name="text">
+    <string>个股是否暴雷</string>
+   </property>
+  </action>
+  <action name="action3minzhangstart">
+   <property name="text">
+    <string>3分钟涨停开启</string>
+   </property>
+  </action>
+  <action name="actionbankstartnmonitor">
+   <property name="text">
+    <string>开启板监控</string>
+   </property>
+  </action>
+  <action name="actiondrogstartmonitor">
+   <property name="text">
+    <string>开启龙头盯盘</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
