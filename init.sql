@@ -118,3 +118,34 @@ create index nnorthdataAnalySName on northdataAnaly(SNAME);
 CREATE UNIQUE INDEX northcode_name_stockdate ON northdataAnaly(SCODE,SNAME,HDDATE,SHARESRATE);
 
 update stockinfo a set markname =(select left(trim(markname),5) from stockmark where markcode =a.mark);
+
+-- 用户信息表
+CREATE TABLE IF NOT EXISTS `users`(
+id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+username   VARCHAR(20) NOT NULL,
+password  varchar(1024) NOT NULL,
+phone varchar(15) NOT NULL,
+email  varchar(25),
+idcard varchar(15),
+qqid varchar(15),
+wechat varchar(25),
+payid varchar(25),
+registime date,
+updatetime date,
+level int,
+availdate int,
+useddate int,
+amount float,
+availbalance float,
+Rechargedate date,
+memo varchar(50)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create UNIQUE index usersusername on users(username);
+create UNIQUE index usersphone on users(phone);
+create UNIQUE index usersemail on users(username,phone,email);
+create index usersidcard on users(idcard);
+create index userseqqid on users(qqid);
+create index usersewechat on users(wechat);
+create index usersepayid on users(payid);
+
