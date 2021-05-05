@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1597, 900)
+        MainWindow.resize(1932, 995)
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
 "selection-color:rgb(40,150,200);")
         self.centralwidget.setObjectName("centralwidget")
         self.textEdit_superAmount = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_superAmount.setGeometry(QtCore.QRect(1, 40, 501, 281))
+        self.textEdit_superAmount.setGeometry(QtCore.QRect(0, 30, 491, 321))
         self.textEdit_superAmount.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.textEdit_superAmount.setStyleSheet("background-color: rgb(0, 0, 20);\n"
 "color: rgb(255, 255, 0);\n"
@@ -37,7 +37,7 @@ class Ui_MainWindow(object):
 "border-color: rgb(5, 9, 255);")
         self.textEdit_superAmount.setObjectName("textEdit_superAmount")
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(0, 0, 1731, 22))
+        self.layoutWidget.setGeometry(QtCore.QRect(0, 0, 1511, 22))
         self.layoutWidget.setObjectName("layoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -131,14 +131,14 @@ class Ui_MainWindow(object):
 "font: 12pt \"新宋体\";")
         self.radioButton_drogmonitor.setObjectName("radioButton_drogmonitor")
         self.horizontalLayout.addWidget(self.radioButton_drogmonitor)
-        self.radioButton3mzhangting = QtWidgets.QRadioButton(self.layoutWidget)
-        self.radioButton3mzhangting.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.radioButton3mzhangting.setStyleSheet("border-color: rgb(0, 0, 255);\n"
+        self.radioButtonzhangting = QtWidgets.QRadioButton(self.layoutWidget)
+        self.radioButtonzhangting.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.radioButtonzhangting.setStyleSheet("border-color: rgb(0, 0, 255);\n"
 "background-color: rgb(56, 0, 84);\n"
 "color: rgb(255, 255, 255);\n"
 "font: 12pt \"新宋体\";")
-        self.radioButton3mzhangting.setObjectName("radioButton3mzhangting")
-        self.horizontalLayout.addWidget(self.radioButton3mzhangting)
+        self.radioButtonzhangting.setObjectName("radioButtonzhangting")
+        self.horizontalLayout.addWidget(self.radioButtonzhangting)
         self.radioButtonbankamountmonitor = QtWidgets.QRadioButton(self.layoutWidget)
         self.radioButtonbankamountmonitor.setStyleSheet("border-color: rgb(0, 0, 255);\n"
 "background-color: rgb(56, 0, 84);\n"
@@ -150,7 +150,7 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
         self.textEdit_drogMoniter = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_drogMoniter.setGeometry(QtCore.QRect(0, 340, 501, 261))
+        self.textEdit_drogMoniter.setGeometry(QtCore.QRect(0, 360, 491, 261))
         self.textEdit_drogMoniter.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.textEdit_drogMoniter.setStyleSheet("background-color: rgb(0, 0, 20);\n"
 "color: rgb(255, 255, 0);\n"
@@ -158,46 +158,301 @@ class Ui_MainWindow(object):
 "border-color: rgb(5, 9, 255);")
         self.textEdit_drogMoniter.setObjectName("textEdit_drogMoniter")
         self.textEdit_bankMonitor = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_bankMonitor.setGeometry(QtCore.QRect(510, 20, 1081, 831))
+        self.textEdit_bankMonitor.setGeometry(QtCore.QRect(490, 20, 1031, 631))
         self.textEdit_bankMonitor.setStyleSheet("background-color: rgb(0, 0, 20);\n"
 "color: rgb(255, 255, 0);\n"
-"font: 13pt \"新宋体\";\n"
+"font: 12pt \"新宋体\";\n"
 "border-color: rgb(5, 9, 255);")
         self.textEdit_bankMonitor.setObjectName("textEdit_bankMonitor")
-        self.textEdit_threeMinzhangting = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_threeMinzhangting.setGeometry(QtCore.QRect(0, 620, 501, 231))
-        self.textEdit_threeMinzhangting.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.textEdit_threeMinzhangting.setStyleSheet("background-color: rgb(0, 0, 20);\n"
+        self.textEdit_inttimezhangting = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit_inttimezhangting.setGeometry(QtCore.QRect(0, 630, 1521, 321))
+        self.textEdit_inttimezhangting.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.textEdit_inttimezhangting.setStyleSheet("background-color: rgb(0, 0, 20);\n"
 "color: rgb(255, 255, 0);\n"
-"font: 13pt \"新宋体\";\n"
+"font: 12pt \"新宋体\";\n"
 "border-color: rgb(5, 9, 255);")
-        self.textEdit_threeMinzhangting.setObjectName("textEdit_threeMinzhangting")
-        self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(0, 520, 3, 61))
-        self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
+        self.textEdit_inttimezhangting.setObjectName("textEdit_inttimezhangting")
         self.label_superAmount = QtWidgets.QLabel(self.centralwidget)
-        self.label_superAmount.setGeometry(QtCore.QRect(-10, 20, 511, 20))
+        self.label_superAmount.setGeometry(QtCore.QRect(-10, 20, 501, 16))
         self.label_superAmount.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_superAmount.setAutoFillBackground(False)
         self.label_superAmount.setAlignment(QtCore.Qt.AlignCenter)
         self.label_superAmount.setObjectName("label_superAmount")
         self.label_drogstock = QtWidgets.QLabel(self.centralwidget)
-        self.label_drogstock.setGeometry(QtCore.QRect(-10, 320, 511, 20))
+        self.label_drogstock.setGeometry(QtCore.QRect(-10, 350, 501, 16))
         self.label_drogstock.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_drogstock.setAutoFillBackground(False)
         self.label_drogstock.setAlignment(QtCore.Qt.AlignCenter)
         self.label_drogstock.setObjectName("label_drogstock")
-        self.label_drogstock_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_drogstock_2.setGeometry(QtCore.QRect(0, 600, 501, 20))
-        self.label_drogstock_2.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_drogstock_2.setAutoFillBackground(False)
-        self.label_drogstock_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_drogstock_2.setObjectName("label_drogstock_2")
+        self.label_zhangting = QtWidgets.QLabel(self.centralwidget)
+        self.label_zhangting.setGeometry(QtCore.QRect(0, 620, 491, 16))
+        self.label_zhangting.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_zhangting.setAutoFillBackground(False)
+        self.label_zhangting.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_zhangting.setObjectName("label_zhangting")
+        self.tabWidget_rightcontent = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget_rightcontent.setGeometry(QtCore.QRect(1510, 0, 425, 951))
+        self.tabWidget_rightcontent.setMaximumSize(QtCore.QSize(425, 16777215))
+        self.tabWidget_rightcontent.setStyleSheet("QTabWidget::pane{\n"
+"    border:none;\n"
+"    background: rgb(0, 0, 21);\n"
+"}\n"
+"QTabWidget::tab-bar{\n"
+"        alignment:center;\n"
+"}\n"
+"QTabBar::tab{\n"
+"    background:transparent;\n"
+"    color:white;\n"
+"    min-width:20ex;\n"
+"    min-height:8ex;\n"
+"}\n"
+"QTabBar::tab:hover{\n"
+"    background:rgb(255, 255, 255);\n"
+"}\n"
+"")
+        self.tabWidget_rightcontent.setTabPosition(QtWidgets.QTabWidget.North)
+        self.tabWidget_rightcontent.setTabShape(QtWidgets.QTabWidget.Triangular)
+        self.tabWidget_rightcontent.setObjectName("tabWidget_rightcontent")
+        self.clsnews = QtWidgets.QWidget()
+        self.clsnews.setStyleSheet("color: rgb(255, 0, 0);\n"
+"background-color: rgb(20, 0, 31);")
+        self.clsnews.setObjectName("clsnews")
+        self.textEdit_clxnewsView = QtWidgets.QTextEdit(self.clsnews)
+        self.textEdit_clxnewsView.setGeometry(QtCore.QRect(0, 0, 425, 921))
+        self.textEdit_clxnewsView.setMaximumSize(QtCore.QSize(425, 921))
+        self.textEdit_clxnewsView.setReadOnly(True)
+        self.textEdit_clxnewsView.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
+        self.textEdit_clxnewsView.setObjectName("textEdit_clxnewsView")
+        self.tabWidget_rightcontent.addTab(self.clsnews, "")
+        self.tdxdd = QtWidgets.QWidget()
+        self.tdxdd.setStyleSheet("color: rgb(255, 0, 0);\n"
+"background-color: rgb(20, 0, 31);")
+        self.tdxdd.setObjectName("tdxdd")
+        self.textEdit_tdxdadanView = QtWidgets.QTextEdit(self.tdxdd)
+        self.textEdit_tdxdadanView.setGeometry(QtCore.QRect(0, 0, 425, 921))
+        self.textEdit_tdxdadanView.setMaximumSize(QtCore.QSize(425, 921))
+        self.textEdit_tdxdadanView.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.textEdit_tdxdadanView.setStyleSheet("color: rgb(255, 255, 0);")
+        self.textEdit_tdxdadanView.setReadOnly(True)
+        self.textEdit_tdxdadanView.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
+        self.textEdit_tdxdadanView.setObjectName("textEdit_tdxdadanView")
+        self.tabWidget_rightcontent.addTab(self.tdxdd, "")
+        self.MYSTOCK = QtWidgets.QWidget()
+        self.MYSTOCK.setStyleSheet("color: rgb(255, 0, 0);\n"
+"background-color: rgb(20, 0, 31);")
+        self.MYSTOCK.setObjectName("MYSTOCK")
+        self.tableView_mystock = QtWidgets.QTableView(self.MYSTOCK)
+        self.tableView_mystock.setGeometry(QtCore.QRect(0, 40, 421, 891))
+        self.tableView_mystock.setMaximumSize(QtCore.QSize(425, 16777215))
+        self.tableView_mystock.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.tableView_mystock.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
+        self.tableView_mystock.setStyleSheet("QTableView {\n"
+"    color: rgb(255, 0, 0)                                       /*表格内文字颜色*/\n"
+"    gridline-color:  rgb(255, 0, 0);                              /*表格内框颜色*/\n"
+"    background-color: rgb(35, 0, 53);               /*表格内背景色*/\n"
+"    alternate-background-color: rgb(64, 64, 64);\n"
+"    selection-color: white;                             /*选中区域的文字颜色*/\n"
+"    selection-background-color:rgb(170, 170, 255);        /*选中区域的背景色*/\n"
+"    border: 0px   \n"
+"}\n"
+"QTableView QTableCornerButton::section {\n"
+"    color: white;/*文字颜色*/\n"
+"    background-color: rgb(41, 139, 201);/*背景色*/\n"
+"    border: 5px solid #418bc9;/*边框*/\n"
+"    border-radius:0px;/*边框圆角*/\n"
+"    border-color: rgb(41, 139, 201);/*边框颜色*/\n"
+"    font: bold 11pt;/*字体大小*/\n"
+"    padding:12px 0 0 10px;/*内边距*/\n"
+" }\n"
+"QHeaderView#hHeader::section {\n"
+"    background-color:rgb(0, 0, 74);\n"
+"    color: rgb(255, 255, 255);\n"
+"    padding-left: 1px;\n"
+"    border: 1px solid #6c6c6c;\n"
+"    height:25;\n"
+"}\n"
+"QHeaderView#vHeader::section {\n"
+"    background-color:rgb(0, 0, 74);\n"
+"    color: rgb(255, 255, 255)\n"
+"    width:25;\n"
+"}")
+        self.tableView_mystock.setLineWidth(0)
+        self.tableView_mystock.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.tableView_mystock.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.tableView_mystock.setShowGrid(False)
+        self.tableView_mystock.setSortingEnabled(True)
+        self.tableView_mystock.setObjectName("tableView_mystock")
+        self.tableView_mystock.horizontalHeader().setDefaultSectionSize(80)
+        self.tableView_mystock.horizontalHeader().setMinimumSectionSize(25)
+        self.tableView_mystock.verticalHeader().setMinimumSectionSize(25)
+        self.layoutWidget1 = QtWidgets.QWidget(self.MYSTOCK)
+        self.layoutWidget1.setGeometry(QtCore.QRect(10, 10, 392, 30))
+        self.layoutWidget1.setObjectName("layoutWidget1")
+        self.horizontalLayout_pushButton = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.horizontalLayout_pushButton.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_pushButton.setObjectName("horizontalLayout_pushButton")
+        self.pushButtonaddmysocks = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButtonaddmysocks.setStyleSheet("background-color: rgb(13, 0, 20);\n"
+"font: 11pt \"新宋体\";\n"
+"QPushButton\n"
+"{\n"
+"    background-color: rgb(134,183,200); //背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体颜色\n"
+"}\n"
+"QPushButton:hover\n"
+"{\n"
+"    background-color: rgb(0,130,150); //伪状态经过时背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体为白色\n"
+"}\n"
+" \n"
+"QPushButton:hover:pressed\n"
+"{\n"
+"    background-color:rgb(85,170,255); //伪状态，点击时的背景色\n"
+"    border:2px solid #3C80B1; //\n"
+"    border-radius:5px;\n"
+"    color:white;\n"
+"}")
+        self.pushButtonaddmysocks.setObjectName("pushButtonaddmysocks")
+        self.horizontalLayout_pushButton.addWidget(self.pushButtonaddmysocks)
+        self.pushButtondelmystocks = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButtondelmystocks.setStyleSheet("background-color: rgb(19, 0, 29);\n"
+"font: 11pt \"新宋体\";\n"
+"QPushButton\n"
+"{\n"
+"    background-color: rgb(134,183,200); //背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体颜色\n"
+"}\n"
+" \n"
+"QPushButton:hover\n"
+"{\n"
+"    background-color: rgb(0,130,150); //伪状态经过时背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体为白色\n"
+"}\n"
+" \n"
+"QPushButton:hover:pressed\n"
+"{\n"
+"    background-color:rgb(85,170,255); //伪状态，点击时的背景色\n"
+"    border:2px solid #3C80B1; //\n"
+"    border-radius:5px;\n"
+"    color:white;\n"
+"}")
+        self.pushButtondelmystocks.setObjectName("pushButtondelmystocks")
+        self.horizontalLayout_pushButton.addWidget(self.pushButtondelmystocks)
+        self.pushButtonflushquotestop = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButtonflushquotestop.setStyleSheet("background-color: rgb(19, 0, 29);\n"
+"font: 11pt \"新宋体\";\n"
+"QPushButton\n"
+"{\n"
+"    background-color: rgb(134,183,200); //背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体颜色\n"
+"}\n"
+" \n"
+"QPushButton:hover\n"
+"{\n"
+"    background-color: rgb(0,130,150); //伪状态经过时背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体为白色\n"
+"}\n"
+" \n"
+"QPushButton:hover:pressed\n"
+"{\n"
+"    background-color:rgb(85,170,255); //伪状态，点击时的背景色\n"
+"    border:2px solid #3C80B1; //\n"
+"    border-radius:5px;\n"
+"    color:white;\n"
+"}")
+        self.pushButtonflushquotestop.setObjectName("pushButtonflushquotestop")
+        self.horizontalLayout_pushButton.addWidget(self.pushButtonflushquotestop)
+        self.pushButtonflushquotestart = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButtonflushquotestart.setStyleSheet("background-color: rgb(19, 0, 29);\n"
+"font: 11pt \"新宋体\";\n"
+"QPushButton\n"
+"{\n"
+"    background-color: rgb(134,183,200); //背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体颜色\n"
+"}\n"
+" \n"
+"QPushButton:hover\n"
+"{\n"
+"    background-color: rgb(0,130,150); //伪状态经过时背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体为白色\n"
+"}\n"
+" \n"
+"QPushButton:hover:pressed\n"
+"{\n"
+"    background-color:rgb(85,170,255); //伪状态，点击时的背景色\n"
+"    border:2px solid #3C80B1; //\n"
+"    border-radius:5px;\n"
+"    color:white;\n"
+"}")
+        self.pushButtonflushquotestart.setObjectName("pushButtonflushquotestart")
+        self.horizontalLayout_pushButton.addWidget(self.pushButtonflushquotestart)
+        self.tabWidget_rightcontent.addTab(self.MYSTOCK, "")
+        self.stockcheckhealth = QtWidgets.QWidget()
+        self.stockcheckhealth.setStyleSheet("color: rgb(255, 0, 0);\n"
+"background-color: rgb(20, 0, 31);")
+        self.stockcheckhealth.setObjectName("stockcheckhealth")
+        self.lineEdit_inputstock = QtWidgets.QLineEdit(self.stockcheckhealth)
+        self.lineEdit_inputstock.setGeometry(QtCore.QRect(20, 20, 161, 31))
+        self.lineEdit_inputstock.setStyleSheet("background-color: rgb(0, 0, 0);\n"
+"color: rgb(255, 0, 0);\n"
+"font: 10pt \"新宋体\";")
+        self.lineEdit_inputstock.setObjectName("lineEdit_inputstock")
+        self.textEdit_fengxianlist = QtWidgets.QTextEdit(self.stockcheckhealth)
+        self.textEdit_fengxianlist.setGeometry(QtCore.QRect(0, 60, 425, 871))
+        self.textEdit_fengxianlist.setMaximumSize(QtCore.QSize(425, 16777215))
+        self.textEdit_fengxianlist.setStyleSheet("color: rgb(255, 0, 0);\n"
+"font: 10pt \"新宋体\";")
+        self.textEdit_fengxianlist.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.textEdit_fengxianlist.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.textEdit_fengxianlist.setObjectName("textEdit_fengxianlist")
+        self.pushButton_checkhealth = QtWidgets.QPushButton(self.stockcheckhealth)
+        self.pushButton_checkhealth.setGeometry(QtCore.QRect(240, 20, 111, 31))
+        self.pushButton_checkhealth.setStyleSheet("background-color: rgb(19, 0, 29);\n"
+"font: 11pt \"新宋体\";\n"
+"QPushButton\n"
+"{\n"
+"    background-color: rgb(134,183,200); //背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体颜色\n"
+"}\n"
+" \n"
+"QPushButton:hover\n"
+"{\n"
+"    background-color: rgb(0,130,150); //伪状态经过时背景色\n"
+"    border:2px solid #5F92B2; //边界和边界颜色\n"
+"    border-radius:5px; //边界圆滑\n"
+"    color:white; //字体为白色\n"
+"}\n"
+" \n"
+"QPushButton:hover:pressed\n"
+"{\n"
+"    background-color:rgb(85,170,255); //伪状态，点击时的背景色\n"
+"    border:2px solid #3C80B1; //\n"
+"    border-radius:5px;\n"
+"    color:white;\n"
+"}")
+        self.pushButton_checkhealth.setObjectName("pushButton_checkhealth")
+        self.tabWidget_rightcontent.addTab(self.stockcheckhealth, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1597, 30))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1932, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.menubar.setFont(font)
@@ -214,24 +469,32 @@ class Ui_MainWindow(object):
         self.SupperAmtmenu.setObjectName("SupperAmtmenu")
         self.levelset = QtWidgets.QMenu(self.SupperAmtmenu)
         self.levelset.setObjectName("levelset")
-        self.menu_DataOutput = QtWidgets.QMenu(self.SupperAmtmenu)
-        self.menu_DataOutput.setObjectName("menu_DataOutput")
+        self.menu_dadanDataOutput = QtWidgets.QMenu(self.SupperAmtmenu)
+        self.menu_dadanDataOutput.setObjectName("menu_dadanDataOutput")
+        self.menu_dadananaly = QtWidgets.QMenu(self.SupperAmtmenu)
+        self.menu_dadananaly.setObjectName("menu_dadananaly")
         self.bankmenu = QtWidgets.QMenu(self.menubar)
         self.bankmenu.setObjectName("bankmenu")
         self.menu_intervalset = QtWidgets.QMenu(self.bankmenu)
         self.menu_intervalset.setObjectName("menu_intervalset")
         self.topStockgetmenu = QtWidgets.QMenu(self.menubar)
         self.topStockgetmenu.setObjectName("topStockgetmenu")
-        self.stock_selectmenu = QtWidgets.QMenu(self.menubar)
-        self.stock_selectmenu.setObjectName("stock_selectmenu")
+        self.menu_stock_select = QtWidgets.QMenu(self.menubar)
+        self.menu_stock_select.setObjectName("menu_stock_select")
         self.menuMaxstockmonitor = QtWidgets.QMenu(self.menubar)
         self.menuMaxstockmonitor.setObjectName("menuMaxstockmonitor")
-        self.menuzhangtinganalyies = QtWidgets.QMenu(self.menubar)
-        self.menuzhangtinganalyies.setObjectName("menuzhangtinganalyies")
-        self.menu3Mzhangting = QtWidgets.QMenu(self.menubar)
-        self.menu3Mzhangting.setObjectName("menu3Mzhangting")
-        self.menu_stockNews = QtWidgets.QMenu(self.menubar)
-        self.menu_stockNews.setObjectName("menu_stockNews")
+        self.menuzhangting = QtWidgets.QMenu(self.menubar)
+        self.menuzhangting.setObjectName("menuzhangting")
+        self.menu_MarketOoenAndclose = QtWidgets.QMenu(self.menubar)
+        self.menu_MarketOoenAndclose.setObjectName("menu_MarketOoenAndclose")
+        self.menu = QtWidgets.QMenu(self.menu_MarketOoenAndclose)
+        self.menu.setObjectName("menu")
+        self.menu_myblank = QtWidgets.QMenu(self.menubar)
+        self.menu_myblank.setObjectName("menu_myblank")
+        self.menu_TDXdatascenter = QtWidgets.QMenu(self.menubar)
+        self.menu_TDXdatascenter.setObjectName("menu_TDXdatascenter")
+        self.menu_2 = QtWidgets.QMenu(self.menubar)
+        self.menu_2.setObjectName("menu_2")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         font = QtGui.QFont()
@@ -252,14 +515,14 @@ class Ui_MainWindow(object):
         self.actionvol5000.setObjectName("actionvol5000")
         self.actionvol1000 = QtWidgets.QAction(MainWindow)
         self.actionvol1000.setObjectName("actionvol1000")
-        self.actionMonitorlist = QtWidgets.QAction(MainWindow)
-        self.actionMonitorlist.setObjectName("actionMonitorlist")
-        self.actionoutTotxt = QtWidgets.QAction(MainWindow)
-        self.actionoutTotxt.setObjectName("actionoutTotxt")
-        self.actionoutToCSV = QtWidgets.QAction(MainWindow)
-        self.actionoutToCSV.setObjectName("actionoutToCSV")
-        self.actionoutToHtml = QtWidgets.QAction(MainWindow)
-        self.actionoutToHtml.setObjectName("actionoutToHtml")
+        self.actionMonitorlistAddstock = QtWidgets.QAction(MainWindow)
+        self.actionMonitorlistAddstock.setObjectName("actionMonitorlistAddstock")
+        self.actiondadanoutTotxt = QtWidgets.QAction(MainWindow)
+        self.actiondadanoutTotxt.setObjectName("actiondadanoutTotxt")
+        self.actiondadanoutTocsv = QtWidgets.QAction(MainWindow)
+        self.actiondadanoutTocsv.setObjectName("actiondadanoutTocsv")
+        self.actiondadanoutTohtml = QtWidgets.QAction(MainWindow)
+        self.actiondadanoutTohtml.setObjectName("actiondadanoutTohtml")
         self.actionclear = QtWidgets.QAction(MainWindow)
         self.actionclear.setObjectName("actionclear")
         self.actionflush = QtWidgets.QAction(MainWindow)
@@ -284,12 +547,12 @@ class Ui_MainWindow(object):
         self.actionUSAlist.setObjectName("actionUSAlist")
         self.actionStocklistOutput = QtWidgets.QAction(MainWindow)
         self.actionStocklistOutput.setObjectName("actionStocklistOutput")
-        self.actionSlectStockByA = QtWidgets.QAction(MainWindow)
-        self.actionSlectStockByA.setObjectName("actionSlectStockByA")
-        self.actionSlectStockByF = QtWidgets.QAction(MainWindow)
-        self.actionSlectStockByF.setObjectName("actionSlectStockByF")
-        self.selectlowlinestock = QtWidgets.QAction(MainWindow)
-        self.selectlowlinestock.setObjectName("selectlowlinestock")
+        self.actionSelectStockByAm = QtWidgets.QAction(MainWindow)
+        self.actionSelectStockByAm.setObjectName("actionSelectStockByAm")
+        self.actionSelectStockByPm = QtWidgets.QAction(MainWindow)
+        self.actionSelectStockByPm.setObjectName("actionSelectStockByPm")
+        self.actionSelectlowlinestock = QtWidgets.QAction(MainWindow)
+        self.actionSelectlowlinestock.setObjectName("actionSelectlowlinestock")
         self.actionsouthDatainserttoDB = QtWidgets.QAction(MainWindow)
         self.actionsouthDatainserttoDB.setObjectName("actionsouthDatainserttoDB")
         self.actionsouthTop10Select = QtWidgets.QAction(MainWindow)
@@ -302,8 +565,6 @@ class Ui_MainWindow(object):
         self.actionsouthstockF10.setObjectName("actionsouthstockF10")
         self.actionsouthbusinessTop10 = QtWidgets.QAction(MainWindow)
         self.actionsouthbusinessTop10.setObjectName("actionsouthbusinessTop10")
-        self.actionanalyies = QtWidgets.QAction(MainWindow)
-        self.actionanalyies.setObjectName("actionanalyies")
         self.actionnorthDatainserttoDB = QtWidgets.QAction(MainWindow)
         self.actionnorthDatainserttoDB.setObjectName("actionnorthDatainserttoDB")
         self.actionactionnorthTop10Select = QtWidgets.QAction(MainWindow)
@@ -320,8 +581,6 @@ class Ui_MainWindow(object):
         self.actionnorthdataWriteToTDX.setObjectName("actionnorthdataWriteToTDX")
         self.actionnorthThunderingSelect = QtWidgets.QAction(MainWindow)
         self.actionnorthThunderingSelect.setObjectName("actionnorthThunderingSelect")
-        self.action3minzhangstart = QtWidgets.QAction(MainWindow)
-        self.action3minzhangstart.setObjectName("action3minzhangstart")
         self.actionbankstartnmonitor = QtWidgets.QAction(MainWindow)
         self.actionbankstartnmonitor.setObjectName("actionbankstartnmonitor")
         self.actiondrogstartmonitor = QtWidgets.QAction(MainWindow)
@@ -330,8 +589,6 @@ class Ui_MainWindow(object):
         self.actionvol2000.setObjectName("actionvol2000")
         self.actionSuperstop = QtWidgets.QAction(MainWindow)
         self.actionSuperstop.setObjectName("actionSuperstop")
-        self.action3minzhangstop = QtWidgets.QAction(MainWindow)
-        self.action3minzhangstop.setObjectName("action3minzhangstop")
         self.actionbanknmonitorStop = QtWidgets.QAction(MainWindow)
         self.actionbanknmonitorStop.setObjectName("actionbanknmonitorStop")
         self.actiondrogmonitorstop = QtWidgets.QAction(MainWindow)
@@ -352,8 +609,132 @@ class Ui_MainWindow(object):
         self.actionstocknews_tuozhirili.setObjectName("actionstocknews_tuozhirili")
         self.actionstocknews_globalMainnews = QtWidgets.QAction(MainWindow)
         self.actionstocknews_globalMainnews.setObjectName("actionstocknews_globalMainnews")
-        self.action_lhbordeer = QtWidgets.QAction(MainWindow)
-        self.action_lhbordeer.setObjectName("action_lhbordeer")
+        self.action_lhborder = QtWidgets.QAction(MainWindow)
+        self.action_lhborder.setObjectName("action_lhborder")
+        self.actiontdxSelectStock = QtWidgets.QAction(MainWindow)
+        self.actiontdxSelectStock.setObjectName("actiontdxSelectStock")
+        self.actionNorthfundview = QtWidgets.QAction(MainWindow)
+        self.actionNorthfundview.setObjectName("actionNorthfundview")
+        self.actionMarketCloseView = QtWidgets.QAction(MainWindow)
+        self.actionMarketCloseView.setObjectName("actionMarketCloseView")
+        self.actionopenmyblank = QtWidgets.QAction(MainWindow)
+        self.actionopenmyblank.setObjectName("actionopenmyblank")
+        self.actionfunddirector = QtWidgets.QAction(MainWindow)
+        self.actionfunddirector.setObjectName("actionfunddirector")
+        self.actiondatatonowdirector = QtWidgets.QAction(MainWindow)
+        self.actiondatatonowdirector.setObjectName("actiondatatonowdirector")
+        self.actionSmartselectstock = QtWidgets.QAction(MainWindow)
+        self.actionSmartselectstock.setObjectName("actionSmartselectstock")
+        self.actionthslhb = QtWidgets.QAction(MainWindow)
+        self.actionthslhb.setObjectName("actionthslhb")
+        self.actionkaipanlaFP = QtWidgets.QAction(MainWindow)
+        self.actionkaipanlaFP.setObjectName("actionkaipanlaFP")
+        self.actiondabankanban = QtWidgets.QAction(MainWindow)
+        self.actiondabankanban.setObjectName("actiondabankanban")
+        self.actionpertradeview = QtWidgets.QAction(MainWindow)
+        self.actionpertradeview.setObjectName("actionpertradeview")
+        self.actionaiwencai = QtWidgets.QAction(MainWindow)
+        self.actionaiwencai.setObjectName("actionaiwencai")
+        self.actionluobotuoyan = QtWidgets.QAction(MainWindow)
+        self.actionluobotuoyan.setObjectName("actionluobotuoyan")
+        self.actiontradeingcount = QtWidgets.QAction(MainWindow)
+        self.actiontradeingcount.setObjectName("actiontradeingcount")
+        self.actionhottopic = QtWidgets.QAction(MainWindow)
+        self.actionhottopic.setObjectName("actionhottopic")
+        self.actiontopichottop = QtWidgets.QAction(MainWindow)
+        self.actiontopichottop.setObjectName("actiontopichottop")
+        self.actionCompanies_PerformanceForecast = QtWidgets.QAction(MainWindow)
+        self.actionCompanies_PerformanceForecast.setObjectName("actionCompanies_PerformanceForecast")
+        self.actionfanxinxia = QtWidgets.QAction(MainWindow)
+        self.actionfanxinxia.setObjectName("actionfanxinxia")
+        self.actionsuperordersendmsg = QtWidgets.QAction(MainWindow)
+        self.actionsuperordersendmsg.setObjectName("actionsuperordersendmsg")
+        self.actioncloseSendmsg = QtWidgets.QAction(MainWindow)
+        self.actioncloseSendmsg.setObjectName("actioncloseSendmsg")
+        self.actionPERSTOCKANALYIES = QtWidgets.QAction(MainWindow)
+        self.actionPERSTOCKANALYIES.setObjectName("actionPERSTOCKANALYIES")
+        self.actionJUST5DAYANALYIES = QtWidgets.QAction(MainWindow)
+        self.actionJUST5DAYANALYIES.setObjectName("actionJUST5DAYANALYIES")
+        self.actionTODAYANAALYIES = QtWidgets.QAction(MainWindow)
+        self.actionTODAYANAALYIES.setObjectName("actionTODAYANAALYIES")
+        self.actionopenmarketdatatop20 = QtWidgets.QAction(MainWindow)
+        self.actionopenmarketdatatop20.setObjectName("actionopenmarketdatatop20")
+        self.actionopendataoutTotdx = QtWidgets.QAction(MainWindow)
+        self.actionopendataoutTotdx.setObjectName("actionopendataoutTotdx")
+        self.actiononedaydadananalyies = QtWidgets.QAction(MainWindow)
+        self.actiononedaydadananalyies.setObjectName("actiononedaydadananalyies")
+        self.actionperfectdirctor = QtWidgets.QAction(MainWindow)
+        self.actionperfectdirctor.setObjectName("actionperfectdirctor")
+        self.actionintimezhangtingstart = QtWidgets.QAction(MainWindow)
+        self.actionintimezhangtingstart.setObjectName("actionintimezhangtingstart")
+        self.actionintimezhangtingstop = QtWidgets.QAction(MainWindow)
+        self.actionintimezhangtingstop.setObjectName("actionintimezhangtingstop")
+        self.page_cjrlsy = QtWidgets.QAction(MainWindow)
+        self.page_cjrlsy.setObjectName("page_cjrlsy")
+        self.tdxsj_tzrl_tzrl = QtWidgets.QAction(MainWindow)
+        self.tdxsj_tzrl_tzrl.setObjectName("tdxsj_tzrl_tzrl")
+        self.tdxsj_xgzx_xgzx = QtWidgets.QAction(MainWindow)
+        self.tdxsj_xgzx_xgzx.setObjectName("tdxsj_xgzx_xgzx")
+        self.tdxsj_lhbd = QtWidgets.QAction(MainWindow)
+        self.tdxsj_lhbd.setObjectName("tdxsj_lhbd")
+        self.tdxsj_rzrq_rzrq = QtWidgets.QAction(MainWindow)
+        self.tdxsj_rzrq_rzrq.setObjectName("tdxsj_rzrq_rzrq")
+        self.tdxsj_cgbd_cgbd = QtWidgets.QAction(MainWindow)
+        self.tdxsj_cgbd_cgbd.setObjectName("tdxsj_cgbd_cgbd")
+        self.tdxsj_zfsp_zfsp = QtWidgets.QAction(MainWindow)
+        self.tdxsj_zfsp_zfsp.setObjectName("tdxsj_zfsp_zfsp")
+        self.tdxsj_dzjy_dzjy = QtWidgets.QAction(MainWindow)
+        self.tdxsj_dzjy_dzjy.setObjectName("tdxsj_dzjy_dzjy")
+        self.tdxsj_cbjd_cbjd = QtWidgets.QAction(MainWindow)
+        self.tdxsj_cbjd_cbjd.setObjectName("tdxsj_cbjd_cbjd")
+        self.tdxsj_jzfx_jzfx = QtWidgets.QAction(MainWindow)
+        self.tdxsj_jzfx_jzfx.setObjectName("tdxsj_jzfx_jzfx")
+        self.tdxsj_jgcg_jgcg = QtWidgets.QAction(MainWindow)
+        self.tdxsj_jgcg_jgcg.setObjectName("tdxsj_jgcg_jgcg")
+        self.tdxsj_hddy_hddy = QtWidgets.QAction(MainWindow)
+        self.tdxsj_hddy_hddy.setObjectName("tdxsj_hddy_hddy")
+        self.tdxsj_sctj_sctj = QtWidgets.QAction(MainWindow)
+        self.tdxsj_sctj_sctj.setObjectName("tdxsj_sctj_sctj")
+        self.tdxsj_gzqh_gzqh = QtWidgets.QAction(MainWindow)
+        self.tdxsj_gzqh_gzqh.setObjectName("tdxsj_gzqh_gzqh")
+        self.tdxsj_mgsj_mgsj = QtWidgets.QAction(MainWindow)
+        self.tdxsj_mgsj_mgsj.setObjectName("tdxsj_mgsj_mgsj")
+        self.tdxsj_jjsj_jjsj = QtWidgets.QAction(MainWindow)
+        self.tdxsj_jjsj_jjsj.setObjectName("tdxsj_jjsj_jjsj")
+        self.tdxsj_hghy_hghy = QtWidgets.QAction(MainWindow)
+        self.tdxsj_hghy_hghy.setObjectName("tdxsj_hghy_hghy")
+        self.actionasdfs = QtWidgets.QAction(MainWindow)
+        self.actionasdfs.setObjectName("actionasdfs")
+        self.actionsadfre = QtWidgets.QAction(MainWindow)
+        self.actionsadfre.setObjectName("actionsadfre")
+        self.actionsadfasdf = QtWidgets.QAction(MainWindow)
+        self.actionsadfasdf.setObjectName("actionsadfasdf")
+        self.actionweer = QtWidgets.QAction(MainWindow)
+        self.actionweer.setObjectName("actionweer")
+        self.actionsadfsaf = QtWidgets.QAction(MainWindow)
+        self.actionsadfsaf.setObjectName("actionsadfsaf")
+        self.actionsdfsaw = QtWidgets.QAction(MainWindow)
+        self.actionsdfsaw.setObjectName("actionsdfsaw")
+        self.actionsadfsaf_2 = QtWidgets.QAction(MainWindow)
+        self.actionsadfsaf_2.setObjectName("actionsadfsaf_2")
+        self.tdxsj_ggsj_ggsj = QtWidgets.QAction(MainWindow)
+        self.tdxsj_ggsj_ggsj.setObjectName("tdxsj_ggsj_ggsj")
+        self.pc_tcld_bkzqb = QtWidgets.QAction(MainWindow)
+        self.pc_tcld_bkzqb.setObjectName("pc_tcld_bkzqb")
+        self.tdxsj_hysj_hysj = QtWidgets.QAction(MainWindow)
+        self.tdxsj_hysj_hysj.setObjectName("tdxsj_hysj_hysj")
+        self.actionthszhangtingfenxiExtools = QtWidgets.QAction(MainWindow)
+        self.actionthszhangtingfenxiExtools.setObjectName("actionthszhangtingfenxiExtools")
+        self.actionEXgujiayuce = QtWidgets.QAction(MainWindow)
+        self.actionEXgujiayuce.setObjectName("actionEXgujiayuce")
+        self.actionkongjianmima = QtWidgets.QAction(MainWindow)
+        self.actionkongjianmima.setObjectName("actionkongjianmima")
+        self.actioncaopanshou = QtWidgets.QAction(MainWindow)
+        self.actioncaopanshou.setObjectName("actioncaopanshou")
+        self.actionpc_zjlx_xg = QtWidgets.QAction(MainWindow)
+        self.actionpc_zjlx_xg.setObjectName("actionpc_zjlx_xg")
+        self.actionjinqihiuyi = QtWidgets.QAction(MainWindow)
+        self.actionjinqihiuyi.setObjectName("actionjinqihiuyi")
         self.southAmtmenu.addAction(self.actionsouthDatainserttoDB)
         self.southAmtmenu.addSeparator()
         self.southAmtmenu.addAction(self.actionsouthTop10Select)
@@ -373,22 +754,28 @@ class Ui_MainWindow(object):
         self.sorthAmtmenu.addSeparator()
         self.sorthAmtmenu.addAction(self.actionselfAdddata)
         self.sorthAmtmenu.addAction(self.actionnorthdataWriteToTDX)
+        self.sorthAmtmenu.addAction(self.actionNorthfundview)
         self.levelset.addAction(self.actionvol10000)
         self.levelset.addAction(self.actionvol5000)
         self.levelset.addAction(self.actionvol2000)
         self.levelset.addAction(self.actionvol1000)
-        self.menu_DataOutput.addAction(self.actionoutTotxt)
-        self.menu_DataOutput.addAction(self.actionoutToCSV)
-        self.menu_DataOutput.addAction(self.actionoutToHtml)
-        self.SupperAmtmenu.addAction(self.levelset.menuAction())
+        self.menu_dadanDataOutput.addAction(self.actiondadanoutTotxt)
+        self.menu_dadanDataOutput.addAction(self.actiondadanoutTocsv)
+        self.menu_dadanDataOutput.addAction(self.actiondadanoutTohtml)
+        self.menu_dadananaly.addAction(self.actionPERSTOCKANALYIES)
+        self.menu_dadananaly.addAction(self.actionTODAYANAALYIES)
+        self.menu_dadananaly.addAction(self.actiononedaydadananalyies)
+        self.menu_dadananaly.addAction(self.actionJUST5DAYANALYIES)
         self.SupperAmtmenu.addAction(self.actionSuperRealQuote)
-        self.SupperAmtmenu.addAction(self.actionMonitorlist)
-        self.SupperAmtmenu.addAction(self.menu_DataOutput.menuAction())
-        self.SupperAmtmenu.addSeparator()
-        self.SupperAmtmenu.addAction(self.actionclear)
-        self.SupperAmtmenu.addAction(self.actionflush)
-        self.SupperAmtmenu.addAction(self.actionanalyies)
         self.SupperAmtmenu.addAction(self.actionSuperstop)
+        self.SupperAmtmenu.addAction(self.actionsuperordersendmsg)
+        self.SupperAmtmenu.addAction(self.actioncloseSendmsg)
+        self.SupperAmtmenu.addSeparator()
+        self.SupperAmtmenu.addAction(self.levelset.menuAction())
+        self.SupperAmtmenu.addAction(self.actionMonitorlistAddstock)
+        self.SupperAmtmenu.addAction(self.menu_dadanDataOutput.menuAction())
+        self.SupperAmtmenu.addAction(self.menu_dadananaly.menuAction())
+        self.SupperAmtmenu.addSeparator()
         self.menu_intervalset.addAction(self.actionflush10s)
         self.menu_intervalset.addAction(self.actionflush20s)
         self.menu_intervalset.addAction(self.actionflush30s)
@@ -397,6 +784,7 @@ class Ui_MainWindow(object):
         self.menu_intervalset.addAction(self.actionflush5m)
         self.menu_intervalset.addAction(self.actionflush10m)
         self.bankmenu.addAction(self.menu_intervalset.menuAction())
+        self.bankmenu.addSeparator()
         self.bankmenu.addAction(self.actionbankstartnmonitor)
         self.bankmenu.addAction(self.actionbanknmonitorStop)
         self.topStockgetmenu.addAction(self.actionAlist)
@@ -404,35 +792,86 @@ class Ui_MainWindow(object):
         self.topStockgetmenu.addAction(self.actionUSAlist)
         self.topStockgetmenu.addSeparator()
         self.topStockgetmenu.addAction(self.actionStocklistOutput)
-        self.stock_selectmenu.addAction(self.actionSlectStockByA)
-        self.stock_selectmenu.addAction(self.actionSlectStockByF)
-        self.stock_selectmenu.addAction(self.selectlowlinestock)
+        self.menu_stock_select.addAction(self.actiontdxSelectStock)
+        self.menu_stock_select.addAction(self.actionSmartselectstock)
+        self.menu_stock_select.addAction(self.actiondatatonowdirector)
+        self.menu_stock_select.addSeparator()
+        self.menu_stock_select.addAction(self.actionSelectStockByAm)
+        self.menu_stock_select.addAction(self.actionSelectStockByPm)
+        self.menu_stock_select.addAction(self.actionSelectlowlinestock)
+        self.menu_stock_select.addAction(self.actionpc_zjlx_xg)
         self.menuMaxstockmonitor.addAction(self.actiondrogstartmonitor)
         self.menuMaxstockmonitor.addAction(self.actiondrogmonitorstop)
-        self.menuzhangtinganalyies.addAction(self.actionToddayzhangting)
-        self.menuzhangtinganalyies.addAction(self.action_lhbordeer)
-        self.menuzhangtinganalyies.addAction(self.actionzhangtingdataoutput)
-        self.menu3Mzhangting.addAction(self.action3minzhangstart)
-        self.menu3Mzhangting.addAction(self.action3minzhangstop)
-        self.menu_stockNews.addAction(self.actionnews_leadernews)
-        self.menu_stockNews.addAction(self.actionstocknews_zhangche)
-        self.menu_stockNews.addAction(self.actionstocknews_hangyiezhisun)
-        self.menu_stockNews.addAction(self.actionperStockNews)
-        self.menu_stockNews.addSeparator()
-        self.menu_stockNews.addAction(self.actionstocknews_tuozhirili)
-        self.menu_stockNews.addAction(self.actionstocknews_globalMainnews)
+        self.menuzhangting.addAction(self.actionintimezhangtingstart)
+        self.menuzhangting.addAction(self.actionintimezhangtingstop)
+        self.menuzhangting.addSeparator()
+        self.menuzhangting.addAction(self.actionToddayzhangting)
+        self.menuzhangting.addAction(self.action_lhborder)
+        self.menuzhangting.addAction(self.actionfanxinxia)
+        self.menuzhangting.addAction(self.actionthslhb)
+        self.menuzhangting.addSeparator()
+        self.menuzhangting.addAction(self.actiondabankanban)
+        self.menuzhangting.addAction(self.actionzhangtingdataoutput)
+        self.menuzhangting.addSeparator()
+        self.menu.addAction(self.actionopenmarketdatatop20)
+        self.menu.addAction(self.actionopendataoutTotdx)
+        self.menu_MarketOoenAndclose.addAction(self.menu.menuAction())
+        self.menu_MarketOoenAndclose.addAction(self.actionMarketCloseView)
+        self.menu_MarketOoenAndclose.addAction(self.actionkaipanlaFP)
+        self.menu_myblank.addAction(self.actionopenmyblank)
+        self.menu_myblank.addAction(self.actionfunddirector)
+        self.menu_myblank.addAction(self.actionpertradeview)
+        self.menu_myblank.addAction(self.actiontradeingcount)
+        self.menu_myblank.addSeparator()
+        self.menu_myblank.addAction(self.actionluobotuoyan)
+        self.menu_myblank.addAction(self.actiontopichottop)
+        self.menu_myblank.addSeparator()
+        self.menu_myblank.addAction(self.actionaiwencai)
+        self.menu_myblank.addAction(self.actionCompanies_PerformanceForecast)
+        self.menu_myblank.addAction(self.pc_tcld_bkzqb)
+        self.menu_myblank.addAction(self.actionjinqihiuyi)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_tzrl_tzrl)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_xgzx_xgzx)
+        self.menu_TDXdatascenter.addAction(self.page_cjrlsy)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_lhbd)
+        self.menu_TDXdatascenter.addSeparator()
+        self.menu_TDXdatascenter.addAction(self.tdxsj_sctj_sctj)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_rzrq_rzrq)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_cgbd_cgbd)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_dzjy_dzjy)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_zfsp_zfsp)
+        self.menu_TDXdatascenter.addSeparator()
+        self.menu_TDXdatascenter.addAction(self.tdxsj_jzfx_jzfx)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_jgcg_jgcg)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_gzqh_gzqh)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_hddy_hddy)
+        self.menu_TDXdatascenter.addSeparator()
+        self.menu_TDXdatascenter.addAction(self.tdxsj_cbjd_cbjd)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_ggsj_ggsj)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_mgsj_mgsj)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_jjsj_jjsj)
+        self.menu_TDXdatascenter.addAction(self.tdxsj_hghy_hghy)
+        self.menu_TDXdatascenter.addSeparator()
+        self.menu_TDXdatascenter.addAction(self.tdxsj_hysj_hysj)
+        self.menu_2.addAction(self.actionthszhangtingfenxiExtools)
+        self.menu_2.addAction(self.actionEXgujiayuce)
+        self.menu_2.addAction(self.actionkongjianmima)
+        self.menu_2.addAction(self.actioncaopanshou)
         self.menubar.addAction(self.SupperAmtmenu.menuAction())
         self.menubar.addAction(self.bankmenu.menuAction())
         self.menubar.addAction(self.menuMaxstockmonitor.menuAction())
-        self.menubar.addAction(self.menuzhangtinganalyies.menuAction())
-        self.menubar.addAction(self.menu3Mzhangting.menuAction())
+        self.menubar.addAction(self.menuzhangting.menuAction())
         self.menubar.addAction(self.southAmtmenu.menuAction())
         self.menubar.addAction(self.sorthAmtmenu.menuAction())
-        self.menubar.addAction(self.menu_stockNews.menuAction())
         self.menubar.addAction(self.topStockgetmenu.menuAction())
-        self.menubar.addAction(self.stock_selectmenu.menuAction())
+        self.menubar.addAction(self.menu_MarketOoenAndclose.menuAction())
+        self.menubar.addAction(self.menu_stock_select.menuAction())
+        self.menubar.addAction(self.menu_myblank.menuAction())
+        self.menubar.addAction(self.menu_TDXdatascenter.menuAction())
+        self.menubar.addAction(self.menu_2.menuAction())
 
         self.retranslateUi(MainWindow)
+        self.tabWidget_rightcontent.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -442,39 +881,52 @@ class Ui_MainWindow(object):
         self.radioButton_superamount.setText(_translate("MainWindow", "         超级资金监控"))
         self.radioButton_drogmonitor.setText(_translate("MainWindow", "           龙头盯盘"))
         self.radioButton_drogmonitor.setShortcut(_translate("MainWindow", "Ctrl+3"))
-        self.radioButton3mzhangting.setText(_translate("MainWindow", "      3分钟涨停"))
-        self.radioButton3mzhangting.setShortcut(_translate("MainWindow", "Ctrl+4"))
+        self.radioButtonzhangting.setText(_translate("MainWindow", "      实时涨停"))
+        self.radioButtonzhangting.setShortcut(_translate("MainWindow", "Ctrl+4"))
         self.radioButtonbankamountmonitor.setText(_translate("MainWindow", "     板块资金监控"))
         self.radioButtonbankamountmonitor.setShortcut(_translate("MainWindow", "Ctrl+1"))
         self.label.setText(_translate("MainWindow", "未来添加功能"))
         self.textEdit_drogMoniter.setDocumentTitle(_translate("MainWindow", "龙头"))
         self.textEdit_bankMonitor.setDocumentTitle(_translate("MainWindow", "板块实时资金"))
-        self.textEdit_threeMinzhangting.setDocumentTitle(_translate("MainWindow", "龙头"))
+        self.textEdit_inttimezhangting.setDocumentTitle(_translate("MainWindow", "龙头"))
         self.label_superAmount.setText(_translate("MainWindow", "大单"))
         self.label_drogstock.setText(_translate("MainWindow", "龙头"))
-        self.label_drogstock_2.setText(_translate("MainWindow", "3分钟涨停"))
+        self.label_zhangting.setText(_translate("MainWindow", "实时涨停"))
+        self.tabWidget_rightcontent.setTabText(self.tabWidget_rightcontent.indexOf(self.clsnews), _translate("MainWindow", "财联社新闻"))
+        self.tabWidget_rightcontent.setTabText(self.tabWidget_rightcontent.indexOf(self.tdxdd), _translate("MainWindow", "通达信大单"))
+        self.pushButtonaddmysocks.setText(_translate("MainWindow", "添加"))
+        self.pushButtondelmystocks.setText(_translate("MainWindow", "删除"))
+        self.pushButtonflushquotestop.setText(_translate("MainWindow", "停止"))
+        self.pushButtonflushquotestart.setText(_translate("MainWindow", "开启"))
+        self.tabWidget_rightcontent.setTabText(self.tabWidget_rightcontent.indexOf(self.MYSTOCK), _translate("MainWindow", "自选股"))
+        self.pushButton_checkhealth.setText(_translate("MainWindow", "检   查"))
+        self.tabWidget_rightcontent.setTabText(self.tabWidget_rightcontent.indexOf(self.stockcheckhealth), _translate("MainWindow", "扫雷"))
         self.southAmtmenu.setTitle(_translate("MainWindow", "南向资金分析"))
         self.sorthAmtmenu.setTitle(_translate("MainWindow", "北向资金分析"))
         self.SupperAmtmenu.setTitle(_translate("MainWindow", "超级资金监控"))
         self.levelset.setTitle(_translate("MainWindow", "监控档位设置"))
-        self.menu_DataOutput.setTitle(_translate("MainWindow", "数据导出"))
+        self.menu_dadanDataOutput.setTitle(_translate("MainWindow", "数据导出"))
+        self.menu_dadananaly.setTitle(_translate("MainWindow", "大单统计分析"))
         self.bankmenu.setTitle(_translate("MainWindow", "板块资金监控"))
         self.menu_intervalset.setTitle(_translate("MainWindow", "监控间隔设置"))
         self.topStockgetmenu.setTitle(_translate("MainWindow", "领先企业获取"))
-        self.stock_selectmenu.setTitle(_translate("MainWindow", "     选    股       "))
+        self.menu_stock_select.setTitle(_translate("MainWindow", "     选    股   "))
         self.menuMaxstockmonitor.setTitle(_translate("MainWindow", "  龙头盯盘  "))
-        self.menuzhangtinganalyies.setTitle(_translate("MainWindow", " 涨停分析  "))
-        self.menu3Mzhangting.setTitle(_translate("MainWindow", "3分钟涨停预警"))
-        self.menu_stockNews.setTitle(_translate("MainWindow", "新闻资讯"))
-        self.actionSuperRealQuote.setText(_translate("MainWindow", "实时监控开启"))
+        self.menuzhangting.setTitle(_translate("MainWindow", "  涨   停  "))
+        self.menu_MarketOoenAndclose.setTitle(_translate("MainWindow", "开/复盘"))
+        self.menu.setTitle(_translate("MainWindow", "早盘"))
+        self.menu_myblank.setTitle(_translate("MainWindow", "我的面板"))
+        self.menu_TDXdatascenter.setTitle(_translate("MainWindow", "数据中心"))
+        self.menu_2.setTitle(_translate("MainWindow", "外挂工具"))
+        self.actionSuperRealQuote.setText(_translate("MainWindow", "开启实时监控"))
         self.actionvol10000.setText(_translate("MainWindow", ">10000手"))
         self.actionvol5000.setText(_translate("MainWindow", ">5000手"))
         self.actionvol1000.setText(_translate("MainWindow", ">1000手 "))
-        self.actionMonitorlist.setText(_translate("MainWindow", "监控列表添加"))
-        self.actionMonitorlist.setIconText(_translate("MainWindow", "监控列表添加"))
-        self.actionoutTotxt.setText(_translate("MainWindow", "导出为(.TXT)"))
-        self.actionoutToCSV.setText(_translate("MainWindow", "导出为(.CSV)"))
-        self.actionoutToHtml.setText(_translate("MainWindow", "导出为(.html)"))
+        self.actionMonitorlistAddstock.setText(_translate("MainWindow", "监控列表添加"))
+        self.actionMonitorlistAddstock.setIconText(_translate("MainWindow", "监控列表添加"))
+        self.actiondadanoutTotxt.setText(_translate("MainWindow", "导出为(.TXT)"))
+        self.actiondadanoutTocsv.setText(_translate("MainWindow", "导出为(.CSV)"))
+        self.actiondadanoutTohtml.setText(_translate("MainWindow", "导出为(.html)"))
         self.actionclear.setText(_translate("MainWindow", "清空"))
         self.actionflush.setText(_translate("MainWindow", "刷新"))
         self.actionflush10s.setText(_translate("MainWindow", "10秒"))
@@ -487,16 +939,15 @@ class Ui_MainWindow(object):
         self.actionHKlist.setText(_translate("MainWindow", "港股市场领先企业"))
         self.actionUSAlist.setText(_translate("MainWindow", "美股市场领先企业"))
         self.actionStocklistOutput.setText(_translate("MainWindow", "数据导出"))
-        self.actionSlectStockByA.setText(_translate("MainWindow", "早盘策略选股"))
-        self.actionSlectStockByF.setText(_translate("MainWindow", "尾盘策略选股"))
-        self.selectlowlinestock.setText(_translate("MainWindow", "抄底选股"))
+        self.actionSelectStockByAm.setText(_translate("MainWindow", "早盘策略选股"))
+        self.actionSelectStockByPm.setText(_translate("MainWindow", "尾盘策略选股"))
+        self.actionSelectlowlinestock.setText(_translate("MainWindow", "抄底选股"))
         self.actionsouthDatainserttoDB.setText(_translate("MainWindow", "数据更新入库"))
         self.actionsouthTop10Select.setText(_translate("MainWindow", "净买入前10查询"))
         self.actionsouthbuy.setText(_translate("MainWindow", "今日开始净买查询"))
         self.actionsouthDataforone.setText(_translate("MainWindow", "个股南资数据查询"))
         self.actionsouthstockF10.setText(_translate("MainWindow", "个股F10"))
         self.actionsouthbusinessTop10.setText(_translate("MainWindow", "个股前10大经纪商查询"))
-        self.actionanalyies.setText(_translate("MainWindow", "大单统计分析"))
         self.actionnorthDatainserttoDB.setText(_translate("MainWindow", "数据更新入库"))
         self.actionactionnorthTop10Select.setText(_translate("MainWindow", "净买入前10查询"))
         self.actionnorthbuy.setText(_translate("MainWindow", "今日开始净买查询"))
@@ -505,15 +956,13 @@ class Ui_MainWindow(object):
         self.actionselfAdddata.setText(_translate("MainWindow", "补齐近30日数据"))
         self.actionnorthdataWriteToTDX.setText(_translate("MainWindow", "资金数据写入通达信"))
         self.actionnorthThunderingSelect.setText(_translate("MainWindow", "个股是否暴雷"))
-        self.action3minzhangstart.setText(_translate("MainWindow", "3分钟涨停开启"))
         self.actionbankstartnmonitor.setText(_translate("MainWindow", "开启板块监控"))
         self.actiondrogstartmonitor.setText(_translate("MainWindow", "开启龙头盯盘"))
         self.actionvol2000.setText(_translate("MainWindow", ">2000手"))
-        self.actionSuperstop.setText(_translate("MainWindow", "停止监控"))
-        self.action3minzhangstop.setText(_translate("MainWindow", "监控停止"))
+        self.actionSuperstop.setText(_translate("MainWindow", "停止实时监控"))
         self.actionbanknmonitorStop.setText(_translate("MainWindow", "停止监控"))
         self.actiondrogmonitorstop.setText(_translate("MainWindow", "停止盯盘"))
-        self.actionToddayzhangting.setText(_translate("MainWindow", "当日涨停"))
+        self.actionToddayzhangting.setText(_translate("MainWindow", "选股宝涨停盯盘"))
         self.actionzhangtingdataoutput.setText(_translate("MainWindow", "涨停数据导出"))
         self.actionnews_leadernews.setText(_translate("MainWindow", "领导活动"))
         self.actionstocknews_zhangche.setText(_translate("MainWindow", "国家政策"))
@@ -521,4 +970,68 @@ class Ui_MainWindow(object):
         self.actionperStockNews.setText(_translate("MainWindow", "个股资讯"))
         self.actionstocknews_tuozhirili.setText(_translate("MainWindow", "投资日历"))
         self.actionstocknews_globalMainnews.setText(_translate("MainWindow", "全球资讯"))
-        self.action_lhbordeer.setText(_translate("MainWindow", "龙虎榜单"))
+        self.action_lhborder.setText(_translate("MainWindow", "龙虎榜单"))
+        self.actiontdxSelectStock.setText(_translate("MainWindow", "通达信策略选股"))
+        self.actionNorthfundview.setText(_translate("MainWindow", "北向资金概览"))
+        self.actionMarketCloseView.setText(_translate("MainWindow", "复盘"))
+        self.actionopenmyblank.setText(_translate("MainWindow", "打开我的面板"))
+        self.actionfunddirector.setText(_translate("MainWindow", "资金动向"))
+        self.actiondatatonowdirector.setText(_translate("MainWindow", "数据看盘选股"))
+        self.actionSmartselectstock.setText(_translate("MainWindow", "智能条件选股"))
+        self.actionthslhb.setText(_translate("MainWindow", "同花顺龙虎榜"))
+        self.actionkaipanlaFP.setText(_translate("MainWindow", "开盘啦复盘"))
+        self.actiondabankanban.setText(_translate("MainWindow", "打板看盘"))
+        self.actionpertradeview.setText(_translate("MainWindow", "逐笔追踪"))
+        self.actionaiwencai.setText(_translate("MainWindow", "爱问财"))
+        self.actionluobotuoyan.setText(_translate("MainWindow", "萝卜投研"))
+        self.actiontradeingcount.setText(_translate("MainWindow", "盘中统计"))
+        self.actionhottopic.setText(_translate("MainWindow", "热点主题"))
+        self.actiontopichottop.setText(_translate("MainWindow", "题材龙头"))
+        self.actionCompanies_PerformanceForecast.setText(_translate("MainWindow", "业绩预告"))
+        self.actionfanxinxia.setText(_translate("MainWindow", "方新侠"))
+        self.actionsuperordersendmsg.setText(_translate("MainWindow", "开启微信通知"))
+        self.actioncloseSendmsg.setText(_translate("MainWindow", "关闭微信通知"))
+        self.actionPERSTOCKANALYIES.setText(_translate("MainWindow", "个股大单分析"))
+        self.actionJUST5DAYANALYIES.setText(_translate("MainWindow", "最近5天大单分析"))
+        self.actionTODAYANAALYIES.setText(_translate("MainWindow", "当天大单分析"))
+        self.actionopenmarketdatatop20.setText(_translate("MainWindow", "早盘竞价额top20"))
+        self.actionopendataoutTotdx.setText(_translate("MainWindow", "早盘数据写通达信"))
+        self.actiononedaydadananalyies.setText(_translate("MainWindow", "某天大单数据分析"))
+        self.actionperfectdirctor.setText(_translate("MainWindow", "最强风口"))
+        self.actionintimezhangtingstart.setText(_translate("MainWindow", "涨停监控开启"))
+        self.actionintimezhangtingstop.setText(_translate("MainWindow", "涨停监控停止"))
+        self.page_cjrlsy.setText(_translate("MainWindow", "港美股日历"))
+        self.page_cjrlsy.setIconText(_translate("MainWindow", "港美股日历"))
+        self.tdxsj_tzrl_tzrl.setText(_translate("MainWindow", "投资日历"))
+        self.tdxsj_xgzx_xgzx.setText(_translate("MainWindow", "新股日历"))
+        self.tdxsj_lhbd.setText(_translate("MainWindow", "龙虎榜单"))
+        self.tdxsj_rzrq_rzrq.setText(_translate("MainWindow", "融资融券"))
+        self.tdxsj_cgbd_cgbd.setText(_translate("MainWindow", "持股变动"))
+        self.tdxsj_zfsp_zfsp.setText(_translate("MainWindow", "增发配送"))
+        self.tdxsj_dzjy_dzjy.setText(_translate("MainWindow", "大宗交易"))
+        self.tdxsj_cbjd_cbjd.setText(_translate("MainWindow", "财报数据"))
+        self.tdxsj_jzfx_jzfx.setText(_translate("MainWindow", "价值分析"))
+        self.tdxsj_jgcg_jgcg.setText(_translate("MainWindow", "机构持股"))
+        self.tdxsj_hddy_hddy.setText(_translate("MainWindow", "调研互动"))
+        self.tdxsj_sctj_sctj.setText(_translate("MainWindow", "市场统计"))
+        self.tdxsj_gzqh_gzqh.setText(_translate("MainWindow", "股指期货"))
+        self.tdxsj_mgsj_mgsj.setText(_translate("MainWindow", "美股数据"))
+        self.tdxsj_jjsj_jjsj.setText(_translate("MainWindow", "基金数据"))
+        self.tdxsj_hghy_hghy.setText(_translate("MainWindow", "宏观数据"))
+        self.actionasdfs.setText(_translate("MainWindow", "asdfs"))
+        self.actionsadfre.setText(_translate("MainWindow", "sadfre"))
+        self.actionsadfasdf.setText(_translate("MainWindow", "sadfasdf"))
+        self.actionweer.setText(_translate("MainWindow", "weer"))
+        self.actionsadfsaf.setText(_translate("MainWindow", "sadfsaf"))
+        self.actionsdfsaw.setText(_translate("MainWindow", "sdfsaw"))
+        self.actionsadfsaf_2.setText(_translate("MainWindow", "sadfsaf"))
+        self.tdxsj_ggsj_ggsj.setText(_translate("MainWindow", "港股数据"))
+        self.pc_tcld_bkzqb.setText(_translate("MainWindow", "近期热点回顾"))
+        self.tdxsj_hysj_hysj.setText(_translate("MainWindow", "行业数据"))
+        self.actionthszhangtingfenxiExtools.setText(_translate("MainWindow", "同花顺涨停分析工具"))
+        self.actionthszhangtingfenxiExtools.setToolTip(_translate("MainWindow", "同花顺涨停分析工具"))
+        self.actionEXgujiayuce.setText(_translate("MainWindow", "股价预测"))
+        self.actionkongjianmima.setText(_translate("MainWindow", "空间密码"))
+        self.actioncaopanshou.setText(_translate("MainWindow", "操盘手学习"))
+        self.actionpc_zjlx_xg.setText(_translate("MainWindow", "资金数据选股"))
+        self.actionjinqihiuyi.setText(_translate("MainWindow", "近期会议"))

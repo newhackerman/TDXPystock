@@ -81,6 +81,7 @@ def TDX_OpenDataOutputTXT():
     tool_name = r'C:\十档行情\tdxw.exe'
     window_name = '通达信金融终端通赢版V7.47'
     app.start(tool_name)
+
     time.sleep(3)
     app.connect(path=tool_name)
     time.sleep(5)

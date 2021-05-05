@@ -115,5 +115,6 @@ class Ui_Dialog(object):
         self.label_2.setText(_translate("Dialog", "密码："))
         self.loginclearButton.setText(_translate("Dialog", "清除"))
         self.loginsubmitButton.setText(_translate("Dialog", "登录"))
+        self.loginsubmitButton.setShortcut(_translate("Dialog", "Return"))
         self.label_3.setText(_translate("Dialog", "第一次使用请点击注册"))
         self.user_register.setText(_translate("Dialog", "注册"))

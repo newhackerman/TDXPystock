@@ -116,6 +116,9 @@ selection-background-color: rgb(225, 219, 255);</string>
       <property name="text">
        <string>登录</string>
       </property>
+      <property name="shortcut">
+       <string>Return</string>
+      </property>
      </widget>
     </item>
     <item row="0" column="1" colspan="2">

@@ -15,8 +15,10 @@ options.add_argument('--disable-gpu')
 if __name__ == '__main__':
     stockfile='./美股代码列表.csv'
     supperstock='./美股领先企业列表.txt'
-    pdsdata=pds.read_csv(stockfile,sep=",",header=None,names=['代码','名称','所属行业'])  #指定标题，标题可以是自定义，header=0:表示有标题行，会把第一行当作标题
-    pdsdata=pdsdata.drop_duplicates(subset=['代码'],keep='first',inplace=True) #去重
+    pdsdata=pds.read_csv(stockfile,sep="$",header=None,names=['代码','名称','所属行业'])  #指定标题，标题可以是自定义，header=0:表示有标题行，会把第一行当作标题
+    # print(pdsdata)
+    # pdsdata=pdsdata.drop_duplicates(subset=['代码'],keep='first',inplace=True) #去重
+    # print(pdsdata)
     stockinfo=[] #存储符合条件的企业
     url='http://quotes.sina.com.cn/usstock/hq/summary.php?s=%s'
     browser = webdriver.Chrome(executable_path='./../chromedriver.exe',options=options)
@@ -66,12 +68,12 @@ if __name__ == '__main__':
 
         for desc in list:
             if str(desc) in  str(stockdesc) and  '之一' not in str(stockdesc):
-                str1=code+','+name+','+linebank+','+stockdesc
+                str1=code+'$'+name+'$'+linebank+'$'+stockdesc
                 print(str1)
                 stockinfo.append(str1)
                 j+=1
     print('共有%d家' %j)
     with open(supperstock,'w',encoding='utf-8') as fw:
-        fw.write('代码，名称，行业，简介'+'\n')
+        fw.write('代码$名称$行业$简介'+'\n')
         for textvalue in stockinfo:
             fw.write(str(textvalue)+'\n')
