@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1932</width>
-    <height>995</height>
+    <height>999</height>
    </rect>
   </property>
   <property name="font">
@@ -389,25 +389,6 @@ border-color: rgb(5, 9, 255);</string>
      <string>龙头</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="textEdit_bankMonitor">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>20</y>
-      <width>1031</width>
-      <height>631</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 0, 20);
-color: rgb(255, 255, 0);
-font: 12pt &quot;新宋体&quot;;
-border-color: rgb(5, 9, 255);</string>
-    </property>
-    <property name="documentTitle">
-     <string>板块实时资金</string>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="textEdit_inttimezhangting">
     <property name="geometry">
      <rect>
@@ -511,6 +492,9 @@ border-color: rgb(5, 9, 255);</string>
       <height>16777215</height>
      </size>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true">QTabWidget::pane{
 	border:none;
@@ -537,7 +521,7 @@ QTabBar::tab:hover{
      <enum>QTabWidget::Triangular</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="clsnews">
      <property name="styleSheet">
@@ -561,6 +545,12 @@ background-color: rgb(20, 0, 31);</string>
         <width>425</width>
         <height>921</height>
        </size>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
       </property>
       <property name="readOnly">
        <bool>true</bool>
@@ -596,6 +586,9 @@ background-color: rgb(20, 0, 31);</string>
       <property name="cursor" stdset="0">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 0);</string>
       </property>
@@ -621,7 +614,7 @@ background-color: rgb(20, 0, 31);</string>
         <x>0</x>
         <y>40</y>
         <width>421</width>
-        <height>891</height>
+        <height>881</height>
        </rect>
       </property>
       <property name="maximumSize">
@@ -630,11 +623,14 @@ background-color: rgb(20, 0, 31);</string>
         <height>16777215</height>
        </size>
       </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
+       <enum>Qt::ClickFocus</enum>
       </property>
       <property name="contextMenuPolicy">
-       <enum>Qt::DefaultContextMenu</enum>
+       <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">QTableView {
@@ -646,15 +642,10 @@ background-color: rgb(20, 0, 31);</string>
     selection-background-color:rgb(170, 170, 255);        /*选中区域的背景色*/
     border: 0px   
 }
-QTableView QTableCornerButton::section {
-    color: white;/*文字颜色*/
-    background-color: rgb(41, 139, 201);/*背景色*/
-    border: 5px solid #418bc9;/*边框*/
-    border-radius:0px;/*边框圆角*/
-    border-color: rgb(41, 139, 201);/*边框颜色*/
-    font: bold 11pt;/*字体大小*/
-    padding:12px 0 0 10px;/*内边距*/
- }
+tableView QTableCornerButton::section {
+    border: 1px solid gray;
+    background-color: rgb(16, 0, 25);
+} 
 QHeaderView#hHeader::section {
     background-color:rgb(0, 0, 74);
     color: rgb(255, 255, 255);
@@ -932,6 +923,60 @@ QPushButton:hover:pressed
      </widget>
     </widget>
    </widget>
+   <widget class="QTableView" name="tableView_bankMonitor">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>20</y>
+      <width>1031</width>
+      <height>621</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>新宋体</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::CustomContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 0);
+background-color: rgb(16, 0, 25);
+tableView QTableCornerButton::section {
+    border: 1px solid gray;
+    background-color: rgb(16, 0, 25);
+} </string>
+    </property>
+    <property name="showGrid">
+     <bool>true</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>25</number>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>25</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>25</number>
+    </attribute>
+   </widget>
+   <zorder>tableView_bankMonitor</zorder>
+   <zorder>textEdit_superAmount</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>textEdit_drogMoniter</zorder>
+   <zorder>textEdit_inttimezhangting</zorder>
+   <zorder>label_superAmount</zorder>
+   <zorder>label_drogstock</zorder>
+   <zorder>label_zhangting</zorder>
+   <zorder>tabWidget_rightcontent</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

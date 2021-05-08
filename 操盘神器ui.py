@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1932, 995)
+        MainWindow.resize(1932, 999)
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
@@ -157,13 +157,6 @@ class Ui_MainWindow(object):
 "font: 13pt \"新宋体\";\n"
 "border-color: rgb(5, 9, 255);")
         self.textEdit_drogMoniter.setObjectName("textEdit_drogMoniter")
-        self.textEdit_bankMonitor = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_bankMonitor.setGeometry(QtCore.QRect(490, 20, 1031, 631))
-        self.textEdit_bankMonitor.setStyleSheet("background-color: rgb(0, 0, 20);\n"
-"color: rgb(255, 255, 0);\n"
-"font: 12pt \"新宋体\";\n"
-"border-color: rgb(5, 9, 255);")
-        self.textEdit_bankMonitor.setObjectName("textEdit_bankMonitor")
         self.textEdit_inttimezhangting = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit_inttimezhangting.setGeometry(QtCore.QRect(0, 630, 1521, 321))
         self.textEdit_inttimezhangting.setLayoutDirection(QtCore.Qt.LeftToRight)
@@ -193,6 +186,7 @@ class Ui_MainWindow(object):
         self.tabWidget_rightcontent = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget_rightcontent.setGeometry(QtCore.QRect(1510, 0, 425, 951))
         self.tabWidget_rightcontent.setMaximumSize(QtCore.QSize(425, 16777215))
+        self.tabWidget_rightcontent.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.tabWidget_rightcontent.setStyleSheet("QTabWidget::pane{\n"
 "    border:none;\n"
 "    background: rgb(0, 0, 21);\n"
@@ -220,6 +214,8 @@ class Ui_MainWindow(object):
         self.textEdit_clxnewsView = QtWidgets.QTextEdit(self.clsnews)
         self.textEdit_clxnewsView.setGeometry(QtCore.QRect(0, 0, 425, 921))
         self.textEdit_clxnewsView.setMaximumSize(QtCore.QSize(425, 921))
+        self.textEdit_clxnewsView.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.textEdit_clxnewsView.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.textEdit_clxnewsView.setReadOnly(True)
         self.textEdit_clxnewsView.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.textEdit_clxnewsView.setObjectName("textEdit_clxnewsView")
@@ -232,6 +228,7 @@ class Ui_MainWindow(object):
         self.textEdit_tdxdadanView.setGeometry(QtCore.QRect(0, 0, 425, 921))
         self.textEdit_tdxdadanView.setMaximumSize(QtCore.QSize(425, 921))
         self.textEdit_tdxdadanView.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.textEdit_tdxdadanView.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.textEdit_tdxdadanView.setStyleSheet("color: rgb(255, 255, 0);")
         self.textEdit_tdxdadanView.setReadOnly(True)
         self.textEdit_tdxdadanView.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
@@ -242,10 +239,11 @@ class Ui_MainWindow(object):
 "background-color: rgb(20, 0, 31);")
         self.MYSTOCK.setObjectName("MYSTOCK")
         self.tableView_mystock = QtWidgets.QTableView(self.MYSTOCK)
-        self.tableView_mystock.setGeometry(QtCore.QRect(0, 40, 421, 891))
+        self.tableView_mystock.setGeometry(QtCore.QRect(0, 40, 421, 881))
         self.tableView_mystock.setMaximumSize(QtCore.QSize(425, 16777215))
-        self.tableView_mystock.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.tableView_mystock.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
+        self.tableView_mystock.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.tableView_mystock.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.tableView_mystock.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.tableView_mystock.setStyleSheet("QTableView {\n"
 "    color: rgb(255, 0, 0)                                       /*表格内文字颜色*/\n"
 "    gridline-color:  rgb(255, 0, 0);                              /*表格内框颜色*/\n"
@@ -255,15 +253,10 @@ class Ui_MainWindow(object):
 "    selection-background-color:rgb(170, 170, 255);        /*选中区域的背景色*/\n"
 "    border: 0px   \n"
 "}\n"
-"QTableView QTableCornerButton::section {\n"
-"    color: white;/*文字颜色*/\n"
-"    background-color: rgb(41, 139, 201);/*背景色*/\n"
-"    border: 5px solid #418bc9;/*边框*/\n"
-"    border-radius:0px;/*边框圆角*/\n"
-"    border-color: rgb(41, 139, 201);/*边框颜色*/\n"
-"    font: bold 11pt;/*字体大小*/\n"
-"    padding:12px 0 0 10px;/*内边距*/\n"
-" }\n"
+"tableView QTableCornerButton::section {\n"
+"    border: 1px solid gray;\n"
+"    background-color: rgb(16, 0, 25);\n"
+"} \n"
 "QHeaderView#hHeader::section {\n"
 "    background-color:rgb(0, 0, 74);\n"
 "    color: rgb(255, 255, 255);\n"
@@ -450,6 +443,35 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_checkhealth.setObjectName("pushButton_checkhealth")
         self.tabWidget_rightcontent.addTab(self.stockcheckhealth, "")
+        self.tableView_bankMonitor = QtWidgets.QTableView(self.centralwidget)
+        self.tableView_bankMonitor.setGeometry(QtCore.QRect(490, 20, 1031, 621))
+        font = QtGui.QFont()
+        font.setFamily("新宋体")
+        font.setPointSize(12)
+        self.tableView_bankMonitor.setFont(font)
+        self.tableView_bankMonitor.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.tableView_bankMonitor.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.tableView_bankMonitor.setStyleSheet("color: rgb(255, 255, 0);\n"
+"background-color: rgb(16, 0, 25);\n"
+"tableView QTableCornerButton::section {\n"
+"    border: 1px solid gray;\n"
+"    background-color: rgb(16, 0, 25);\n"
+"} ")
+        self.tableView_bankMonitor.setShowGrid(True)
+        self.tableView_bankMonitor.setSortingEnabled(True)
+        self.tableView_bankMonitor.setObjectName("tableView_bankMonitor")
+        self.tableView_bankMonitor.horizontalHeader().setMinimumSectionSize(25)
+        self.tableView_bankMonitor.verticalHeader().setDefaultSectionSize(25)
+        self.tableView_bankMonitor.verticalHeader().setMinimumSectionSize(25)
+        self.tableView_bankMonitor.raise_()
+        self.textEdit_superAmount.raise_()
+        self.layoutWidget.raise_()
+        self.textEdit_drogMoniter.raise_()
+        self.textEdit_inttimezhangting.raise_()
+        self.label_superAmount.raise_()
+        self.label_drogstock.raise_()
+        self.label_zhangting.raise_()
+        self.tabWidget_rightcontent.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1932, 30))
@@ -871,7 +893,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_2.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_rightcontent.setCurrentIndex(3)
+        self.tabWidget_rightcontent.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -887,7 +909,6 @@ class Ui_MainWindow(object):
         self.radioButtonbankamountmonitor.setShortcut(_translate("MainWindow", "Ctrl+1"))
         self.label.setText(_translate("MainWindow", "未来添加功能"))
         self.textEdit_drogMoniter.setDocumentTitle(_translate("MainWindow", "龙头"))
-        self.textEdit_bankMonitor.setDocumentTitle(_translate("MainWindow", "板块实时资金"))
         self.textEdit_inttimezhangting.setDocumentTitle(_translate("MainWindow", "龙头"))
         self.label_superAmount.setText(_translate("MainWindow", "大单"))
         self.label_drogstock.setText(_translate("MainWindow", "龙头"))
