@@ -35,6 +35,8 @@ class PandasModel(QtCore.QAbstractTableModel):
                     if float(it) <0:
                         return QtGui.QBrush(QtCore.Qt.green)
 
+            if role == Qt.TextAlignmentRole:
+                return Qt.AlignCenter
             # if role == QtCore.Qt.BackgroundColorRole:
             #     if current_column == 3:
             #         it = self._df.iloc[index.row(), current_column]
@@ -79,9 +81,13 @@ class PandasModel(QtCore.QAbstractTableModel):
         self.layoutAboutToBeChanged.emit()
         self._df.sort_values(colname, ascending= order == QtCore.Qt.AscendingOrder, inplace=True)
         self._df.reset_index(inplace=True, drop=True)
+        Main.sortorder=order
+        Main.orderbycolunm=colname
         self.layoutChanged.emit()
 
 class Main(QMainWindow):
+    sortorder=1
+    orderbycolunm =''
     def __init__(self,parent=None):
         super().__init__()
         self.setWindowTitle('根据条件改变颜色')
@@ -91,13 +97,27 @@ class Main(QMainWindow):
              '3日涨幅': ['-1', '-4.12']})
         self.model = PandasModel(pddata)
         self.tableView.setModel(self.model)
-        self.tableView.setFixedSize(900,600)
+        self.initui()
         self.tableView.show()
 
+    def initui(self):
+        self.tableView.setFixedSize(900, 600)
+        self.tableView.setSortingEnabled(True)
+        self.tableView.horizontalHeader().setStyleSheet(
+            "QHeaderView::section {""color: red;padding-left: 2px;border: 1px solid #6c6c6c;background-color:rgb(16, 0, 25);font: bold 12pt};");
+        # self.ui.tableView_bankMonitor.horizontalHeader().setFont(font)
+        self.tableView.verticalHeader().setStyleSheet("QHeaderView::section {"
+                                                                     "color: red;padding-left: 2px;border: 1px solid #6c6c6c;background-color:rgb(16, 0, 25)}");
+
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch);  # 根据内容自动调整列宽
+        self.tableView.horizontalHeader().setStretchLastSection(True);  # 最后一列自动铺满
+        self.tableView.setStyleSheet(
+            "QTableView{border: 1px;color: yellow;background-color:  rgb(16, 0, 25)};tableView QTableCornerButton::section {border: 1px solid gray; background-color: rgb(16, 0, 25);}")
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    main = Main()
+
+    runmain = Main()
     # main.show()
     sys.exit(app.exec_())
