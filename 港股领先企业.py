@@ -24,7 +24,7 @@ if __name__ == '__main__':
         i+=1
         #请求50次后休息2秒钟
         if i%100==0:
-            time.sleep(10)
+            time.sleep(3)
         code=str(data[1]['代码']).rjust(5,'0')  #data[0] 表示索引行，读进来后会自加一列为行号
         #print(code)
         name=str(data[1]['名称'])
@@ -47,12 +47,12 @@ if __name__ == '__main__':
 
         for desc in list:
             if str(desc) in  str(stockdesc) and  '之一' not in str(stockdesc):
-                str1=code+','+name+','+linebank+','+stockdesc
+                str1=code+'$'+name+'$'+linebank+'$'+stockdesc
                 print(str1)
                 stockinfo.append(str1)
                 j+=1
     print('共有%d家' %j)
     with open(supperstock,'w',encoding='utf-8') as fw:
-        fw.write('代码，名称，行业，简介'+'\n')
+        fw.write('代码$名称$行业$简介'+'\n')
         for textvalue in stockinfo:
             fw.write(str(textvalue)+'\n')

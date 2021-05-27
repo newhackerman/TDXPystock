@@ -148,4 +148,18 @@ create index usersidcard on users(idcard);
 create index userseqqid on users(qqid);
 create index usersewechat on users(wechat);
 create index usersepayid on users(payid);
+---#竞价数据表
+CREATE TABLE IF NOT EXISTS `jinjiadata`(
+HDDATE date,
+code varchar(8),
+name varchar(20),
+vol int,
+price float,
+amount float,
+drict varchar(4)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE INDEX jinjiadatacode on jinjiadata(Code);
+CREATE UNIQUE INDEX jinjiadatacodenamedate on jinjiadata(HDDATE,code,name); - 一天只能有一条竞价数据
+create index jinjiadataHDDATE on jinjiadata(HDDATE);
+create index jinjiadataname on jinjiadata(name);
