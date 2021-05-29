@@ -72,9 +72,10 @@ CREATE UNIQUE INDEX code_name_stockdate ON stockopendata(code,name,date);
 
 --#自定义数据标记
 CREATE TABLE IF NOT EXISTS `stockmark`(
-`markcode`            varchar(8),
-`markname`            varchar(12),
-primary key (`markcode`)
+`code`            varchar(8),
+`name`            varchar(10),
+`market`            varchar(12),
+primary key (`code`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -163,3 +164,9 @@ CREATE INDEX jinjiadatacode on jinjiadata(Code);
 CREATE UNIQUE INDEX jinjiadatacodenamedate on jinjiadata(HDDATE,code,name); - 一天只能有一条竞价数据
 create index jinjiadataHDDATE on jinjiadata(HDDATE);
 create index jinjiadataname on jinjiadata(name);
+
+---存储近三年的日期，判断是否为交易日
+CREATE TABLE IF NOT EXISTS `datelist`(
+date date,
+isopen int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
