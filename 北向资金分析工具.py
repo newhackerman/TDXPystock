@@ -25,6 +25,7 @@ from lxml import etree
 from pyecharts import options as opts
 from pyecharts.charts import Page, Line
 from optparse import OptionParser
+from TradeDay import tradeday
 
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 
@@ -38,7 +39,7 @@ from optparse import OptionParser
 class NorthwardAnalysis():
     database = 'stock'
     tablename = 'northdataAnaly'
-    configfile = 'D:/mysqlconfig.json'
+    configfile = './config/mysqlconfig.json'
     percentDpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9602\\'
     oneTrunDpath='C:\\十档行情\\T0002\\signals\\signals_user_9604\\'
     pro=None
@@ -108,19 +109,7 @@ class NorthwardAnalysis():
         protocol = jsontext['protocol']
         proxy = {str(protocol).lower(): str(protocol).lower() + '://' + ip + ':' + port}
         return proxy
-    # 获取上一个交易日
-    def get_lastDay(self,today):
-        alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
-        # print(alldays)
-        tradingdays = alldays[alldays['is_open'] == 1]  # 得到所有交易开盘日
-        # print(tradingdays)
-        today = today.strftime('%Y%m%d')
-        if today in tradingdays['cal_date'].values:
-            tradingdays_list = tradingdays['cal_date'].tolist()
-            today_index = tradingdays_list.index(today)
-            last_day = tradingdays_list[int(today_index) - 1]  # 从列表中前一个数据即为上一个交易日
-            yesterday = str(last_day)[0:4] + '-' + str(last_day)[4:6] + '-' + str(last_day)[6:8]
-            return yesterday
+
     ###################处理个股北资占比数据写通达信文件
     def writeNorthDataPercentToTdx(self,listdata, percentDpath,SCode):
         #确定要写的目标文件名：
@@ -303,7 +292,7 @@ class NorthwardAnalysis():
         header = ['日期', '代码','名称','持股数量', '持股占比','收盘价' , '涨跌幅', '持股市值亿', '一日持股变动亿','五日持股变动亿','十日持股变动亿']
         newdate = self.get_page_newdate()
         outdate = datetime.datetime.strptime(newdate, "%Y-%m-%d")
-        yesterday=self.get_lastDay(outdate)
+        yesterday=tradeday.getyestodayTradeday(outdate)
         sql = 'select * from northdataAnaly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and Zdf >-2 and SCode in ( select SCode from northdataAnaly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEONE desc'
         # print(sql)
         conn = self.dbconnect()

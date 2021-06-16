@@ -7,12 +7,13 @@ import tushare as ts
 import datetime
 from lxml import etree
 import prettytable as pt
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+# import statsmodels.tsa.stattools as stat
 import numpy as np
-import statsmodels.tsa.stattools as stat
-from keras.layers import LSTM, Dense
-from keras.models import Sequential
 
+# from keras.layers import LSTM, Dense
+# from keras.models import Sequential
+import akshare as ak  #api 使用：https://akshare-4gize6tod19f2d2e-1252952517.tcloudbaseapp.com/index.html
 
 class StockQuoteForward():
     pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
@@ -41,7 +42,7 @@ class StockQuoteForward():
                     print(stock[1]['name'])
                     # print(str(stock[1]['ts_code'])[0:6])
                     return str(stock[1]['name'])
-                else:
+                # else:
                     continue
         else:
             return stockcode
@@ -83,7 +84,8 @@ class StockQuoteForward():
 
         br.open(renderfile)
 
-    def getHK_stockQuote(self,scode):  #调用的是yahoo财经，速度很慢
+    # 调用的是yahoo财经，速度很慢，经常超时
+    def getHK_stockQuote(self,scode):
         stockData=[]
         table=pt.PrettyTable()
 
@@ -123,132 +125,138 @@ class StockQuoteForward():
         else:
             print('访问错误，未取到数据')
             return None
-    def QuoteForward(self,data):
-
-        subdata = data.iloc[:-30, :4]
-        for i in range(4):
-            pvalue = stat.adfuller(subdata.values[:, i], 1)[1]
-            print("指标 ", data.columns[i], " 单位根检验的p值为：", pvalue)
-
-        subdata_diff1 = subdata.iloc[1:, :].values - subdata.iloc[:-1, :].values
-        for i in range(4):
-            pvalue = stat.adfuller(subdata_diff1[:, i], 1)[1]
-            print("指标 ", data.columns[i], " 单位根检验的p值为：", pvalue)
-
-        # 模型阶数从1开始逐一增加
-        rows, cols = subdata_diff1.shape
-        aicList = []
-        lmList = []
-
-        for p in range(1, 11):
-            baseData = None
-            for i in range(p, rows):
-                tmp_list = list(subdata_diff1[i, :]) + list(subdata_diff1[i - p:i].flatten())
-                if baseData is None:
-                    baseData = [tmp_list]
-                else:
-                    baseData = np.r_[baseData, [tmp_list]]
-            X = np.c_[[1] * baseData.shape[0], baseData[:, cols:]]
-            Y = baseData[:, 0:cols]
-            coefMatrix = np.matmul(np.matmul(np.linalg.inv(np.matmul(X.T, X)), X.T), Y)
-            aic = np.log(np.linalg.det(np.cov(Y - np.matmul(X, coefMatrix), rowvar=False))) + 2 * (
-                        coefMatrix.shape[0] - 1) ** 2 * p / baseData.shape[0]
-            aicList.append(aic)
-            lmList.append(coefMatrix)
-        #基于lmList[1]中获取各指标对应的线性模型，对未来30期的数据进行预测，并与验证数据集进行比较分析
-        p = np.argmin(aicList) + 1
-        n = rows
-
-        preddf = None
-        for i in range(30):
-            predData = list(subdata_diff1[n + i - p:n + i].flatten())
-            predVals = np.matmul([1] + predData, lmList[p - 1])
-            # 使用逆差分运算，还原预测值
-            predVals = data.iloc[n + i, :].values[:4] + predVals
-            if preddf is None:
-                preddf = [predVals]
-            else:
-                preddf = np.r_[preddf, [predVals]]
-            # 为subdata_diff1增加一条新记录
-            subdata_diff1 = np.r_[subdata_diff1, [data.iloc[n + i + 1, :].values[:4] - data.iloc[n + i, :].values[:4]]]
-
-        #进一步，绘制二维图表观察预测数据与真实数据的逼近情况
-        plt.figure(figsize=(10, 7))
-        for i in range(4):
-            plt.subplot(2, 2, i + 1)
-            plt.plot(range(30), data.iloc[-30:data.shape[0], i].values, 'o-', c='black')
-            plt.plot(range(30), preddf[:, i], 'o--', c='gray')
-            plt.ylim(1000, 1200)
-            plt.ylabel("$" + data.columns[i] + "$")
-        plt.show()
-        v = 100 * (1 - np.sum(np.abs(preddf - data.iloc[-30:data.shape[0], :4]).values) / np.sum(
-            data.iloc[-30:data.shape[0], :4].values))
-        print("Evaluation on test data: accuracy = %0.2f%% \n" % v)
-
-        # 分析预测残差情况
-        (np.abs(preddf - data.iloc[-30:data.shape[0], :4]) / data.iloc[-30:data.shape[0], :4]).describe()
-
-        plt.figure(figsize=(10, 7))
-        for i in range(4):
-            plt.subplot(2, 2, i + 1)
-            plt.plot(range(30), data.iloc[-30:data.shape[0], i].values, 'o-', c='black')
-            plt.plot(range(30), preddf[:, i], 'o--', c='gray')
-            plt.ylim(1000, 1200)
-            plt.ylabel("$" + data.columns[i] + "$")
-        plt.show()
-        v = 100 * (1 - np.sum(np.abs(preddf - data.iloc[-30:data.shape[0], :4]).values) / np.sum(
-            data.iloc[-30:data.shape[0], : 4].values))
-        print("Evaluation on test data: accuracy = %0.2f%% \n" % v)
+    #股票预测
+    # def QuoteForward(self,data):
+    #     subdata = data.iloc[:-30, :4]
+    #     for i in range(4):
+    #         pvalue = stat.adfuller(subdata.values[:, i], 1)[1]
+    #         print("指标 ", data.columns[i], " 单位根检验的p值为：", pvalue)
+    #
+    #     subdata_diff1 = subdata.iloc[1:, :].values - subdata.iloc[:-1, :].values
+    #     for i in range(4):
+    #         pvalue = stat.adfuller(subdata_diff1[:, i], 1)[1]
+    #         print("指标 ", data.columns[i], " 单位根检验的p值为：", pvalue)
+    #
+    #     # 模型阶数从1开始逐一增加
+    #     rows, cols = subdata_diff1.shape
+    #     aicList = []
+    #     lmList = []
+    #
+    #     for p in range(1, 11):
+    #         baseData = None
+    #         for i in range(p, rows):
+    #             tmp_list = list(subdata_diff1[i, :]) + list(subdata_diff1[i - p:i].flatten())
+    #             if baseData is None:
+    #                 baseData = [tmp_list]
+    #             else:
+    #                 baseData = np.r_[baseData, [tmp_list]]
+    #         X = np.c_[[1] * baseData.shape[0], baseData[:, cols:]]
+    #         Y = baseData[:, 0:cols]
+    #         coefMatrix = np.matmul(np.matmul(np.linalg.inv(np.matmul(X.T, X)), X.T), Y)
+    #         aic = np.log(np.linalg.det(np.cov(Y - np.matmul(X, coefMatrix), rowvar=False))) + 2 * (
+    #                     coefMatrix.shape[0] - 1) ** 2 * p / baseData.shape[0]
+    #         aicList.append(aic)
+    #         lmList.append(coefMatrix)
+    #     #基于lmList[1]中获取各指标对应的线性模型，对未来30期的数据进行预测，并与验证数据集进行比较分析
+    #     p = np.argmin(aicList) + 1
+    #     n = rows
+    #
+    #     preddf = None
+    #     for i in range(30):
+    #         predData = list(subdata_diff1[n + i - p:n + i].flatten())
+    #         predVals = np.matmul([1] + predData, lmList[p - 1])
+    #         # 使用逆差分运算，还原预测值
+    #         predVals = data.iloc[n + i, :].values[:4] + predVals
+    #         if preddf is None:
+    #             preddf = [predVals]
+    #         else:
+    #             preddf = np.r_[preddf, [predVals]]
+    #         # 为subdata_diff1增加一条新记录
+    #         subdata_diff1 = np.r_[subdata_diff1, [data.iloc[n + i + 1, :].values[:4] - data.iloc[n + i, :].values[:4]]]
+    #
+    #     #进一步，绘制二维图表观察预测数据与真实数据的逼近情况
+    #     plt.figure(figsize=(10, 7))
+    #     for i in range(4):
+    #         plt.subplot(2, 2, i + 1)
+    #         plt.plot(range(30), data.iloc[-30:data.shape[0], i].values, 'o-', c='black')
+    #         plt.plot(range(30), preddf[:, i], 'o--', c='gray')
+    #         plt.ylim(1000, 1200)
+    #         plt.ylabel("$" + data.columns[i] + "$")
+    #     plt.show()
+    #     v = 100 * (1 - np.sum(np.abs(preddf - data.iloc[-30:data.shape[0], :4]).values) / np.sum(
+    #         data.iloc[-30:data.shape[0], :4].values))
+    #     print("Evaluation on test data: accuracy = %0.2f%% \n" % v)
+    #
+    #     # 分析预测残差情况
+    #     (np.abs(preddf - data.iloc[-30:data.shape[0], :4]) / data.iloc[-30:data.shape[0], :4]).describe()
+    #
+    #     plt.figure(figsize=(10, 7))
+    #     for i in range(4):
+    #         plt.subplot(2, 2, i + 1)
+    #         plt.plot(range(30), data.iloc[-30:data.shape[0], i].values, 'o-', c='black')
+    #         plt.plot(range(30), preddf[:, i], 'o--', c='gray')
+    #         plt.ylim(1000, 1200)
+    #         plt.ylabel("$" + data.columns[i] + "$")
+    #     plt.show()
+    #     v = 100 * (1 - np.sum(np.abs(preddf - data.iloc[-30:data.shape[0], :4]).values) / np.sum(
+    #         data.iloc[-30:data.shape[0], : 4].values))
+    #     print("Evaluation on test data: accuracy = %0.2f%% \n" % v)
 
     #基于LSTM算法的预测
-    def LSTM_QuoteForward(self,data):
-        SEQLEN = 21  #SEQLEN表示使用前期数据的长度
-        dim_in = 4      #输入数据的维度
-        dim_out = 4     #表示输出数据的维度
-        pred_len = 30   #预测数据的长度
-        vmean = data.iloc[:, :4].apply(lambda x: np.mean(x))
-        vstd = data.iloc[:, :4].apply(lambda x: np.std(x))
-        t0 = data.iloc[:, :4].apply(lambda x: (x - np.mean(x)) / np.std(x)).values
-        X_train = np.zeros((t0.shape[0] - SEQLEN - pred_len, SEQLEN, dim_in))
-        Y_train = np.zeros((t0.shape[0] - SEQLEN - pred_len, dim_out), )
-        X_test = np.zeros((pred_len, SEQLEN, dim_in))
-        Y_test = np.zeros((pred_len, dim_out), )
-        #以上为数据初始化
-        for i in range(SEQLEN, t0.shape[0] - pred_len):
-            Y_train[i - SEQLEN] = t0[i]
-            X_train[i - SEQLEN] = t0[(i - SEQLEN):i]
-        for i in range(t0.shape[0] - pred_len, t0.shape[0]):
-            Y_test[i - t0.shape[0] + pred_len] = t0[i]
-            X_test[i - t0.shape[0] + pred_len] = t0[(i - SEQLEN):i]
-
-        model = Sequential()
-        model.add(LSTM(64, input_shape=(SEQLEN, dim_in), activation='relu', recurrent_dropout=0.01))
-        model.add(Dense(dim_out, activation='linear'))
-        model.compile(loss='mean_squared_error', optimizer='rmsprop')
-        history = model.fit(X_train, Y_train, epochs=200, batch_size=10, validation_split=0)
-        preddf = model.predict(X_test) * vstd.values + vmean.values
-        #输出预测
-        preddf
-        preddf.shape
-        #预测效果评估
-        import matplotlib.pyplot as plt
-        plt.figure(figsize=(10, 7))
-        for i in range(4):
-            plt.subplot(2, 2, i + 1)
-            plt.plot(range(30), data.iloc[-30:data.shape[0], i].values, 'o-', c='black')
-            plt.plot(range(30), preddf[:, i], 'o--', c='gray')
-            plt.ylim(1000, 1200)
-            plt.ylabel("$" + data.columns[i] + "$")
-        plt.show()
-        v = 100 * (1 - np.sum(np.abs(preddf - data.iloc[-30:data.shape[0], :4]).values) / np.sum(
-            data.iloc[-30:data.shape[0], : 4].values))
-        print("Evaluation on test data: accuracy = %0.2f%% \n" % v)
-        # Evaluation on test data: accuracy = 99.01%
+    # def LSTM_QuoteForward(self,data):
+    #     SEQLEN = 21  #SEQLEN表示使用前期数据的长度
+    #     dim_in = 4      #输入数据的维度
+    #     dim_out = 4     #表示输出数据的维度
+    #     pred_len = 30   #预测数据的长度
+    #     vmean = data.iloc[:, :4].apply(lambda x: np.mean(x))
+    #     vstd = data.iloc[:, :4].apply(lambda x: np.std(x))
+    #     t0 = data.iloc[:, :4].apply(lambda x: (x - np.mean(x)) / np.std(x)).values
+    #     X_train = np.zeros((t0.shape[0] - SEQLEN - pred_len, SEQLEN, dim_in))
+    #     Y_train = np.zeros((t0.shape[0] - SEQLEN - pred_len, dim_out), )
+    #     X_test = np.zeros((pred_len, SEQLEN, dim_in))
+    #     Y_test = np.zeros((pred_len, dim_out), )
+    #     #以上为数据初始化
+    #     for i in range(SEQLEN, t0.shape[0] - pred_len):
+    #         Y_train[i - SEQLEN] = t0[i]
+    #         X_train[i - SEQLEN] = t0[(i - SEQLEN):i]
+    #     for i in range(t0.shape[0] - pred_len, t0.shape[0]):
+    #         Y_test[i - t0.shape[0] + pred_len] = t0[i]
+    #         X_test[i - t0.shape[0] + pred_len] = t0[(i - SEQLEN):i]
+    #
+    #     model = Sequential()
+    #     model.add(LSTM(64, input_shape=(SEQLEN, dim_in), activation='relu', recurrent_dropout=0.01))
+    #     model.add(Dense(dim_out, activation='linear'))
+    #     model.compile(loss='mean_squared_error', optimizer='rmsprop')
+    #     history = model.fit(X_train, Y_train, epochs=200, batch_size=10, validation_split=0)
+    #     preddf = model.predict(X_test) * vstd.values + vmean.values
+    #     #输出预测
+    #     preddf
+    #     preddf.shape
+    #     #预测效果评估
+    #     import matplotlib.pyplot as plt
+    #     plt.figure(figsize=(10, 7))
+    #     for i in range(4):
+    #         plt.subplot(2, 2, i + 1)
+    #         plt.plot(range(30), data.iloc[-30:data.shape[0], i].values, 'o-', c='black')
+    #         plt.plot(range(30), preddf[:, i], 'o--', c='gray')
+    #         plt.ylim(1000, 1200)
+    #         plt.ylabel("$" + data.columns[i] + "$")
+    #     plt.show()
+    #     v = 100 * (1 - np.sum(np.abs(preddf - data.iloc[-30:data.shape[0], :4]).values) / np.sum(
+    #         data.iloc[-30:data.shape[0], : 4].values))
+    #     print("Evaluation on test data: accuracy = %0.2f%% \n" % v)
+    #     # Evaluation on test data: accuracy = 99.01%
+    #获取基金排名
+    def get_Topjijin(self):
+        repsponse=ak.fund_em_open_fund_rank()
+        print(repsponse.head(21))
+        return repsponse.head(21)
 
 if __name__ == '__main__':
     sq=StockQuoteForward()
     # data=sq.getStockDatelQuote('600511')
     # sq.drawLine(data,'600511')
-    table_head,table_data,stockData=sq.getHK_stockQuote('1765')
-    print(table_data,stockData)
+    # table_head,table_data,stockData=sq.getHK_stockQuote('1765')
+    # print(table_data,stockData)
+    sq.get_Topjijin()
 

@@ -6,7 +6,7 @@ import json
 import requests
 from util import proxy
 
-supperstock = './A股领先企业列表.txt'
+supperstock = u'./config/A股领先企业列表.txt'
 ###获取股票代码
 def get_stocklist():
     pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')

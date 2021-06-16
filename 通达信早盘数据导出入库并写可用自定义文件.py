@@ -16,7 +16,7 @@ from pywinauto import mouse
 class opendatainTodb():
     database = 'stock'
     tablename = 'stockopendata'
-    configfile = 'D:/mysqlconfig.json'  #为ｊｓｏｎ格式的配置文件
+    configfile = './config/mysqlconfig.json'  #为ｊｓｏｎ格式的配置文件
 
     def __init__(self):
         self.jsoncontent=self.get_config()

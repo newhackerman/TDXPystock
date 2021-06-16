@@ -10,7 +10,7 @@ class writeToTdx():
     filepath=''
     database = 'stock'
     tablename = 'northdataAnaly'
-    configfile = 'D:/mysqlconfig.json'
+    configfile = './config/mysqlconfig.json'
     percentDpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9602\\'
     oneTrunDpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9604\\'
     pro = None

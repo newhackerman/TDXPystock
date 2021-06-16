@@ -8,7 +8,7 @@ import datetime
 import pymysql
 database='stock'
 tablename='stockopendata'
-configfile='D:/mysqlconfig.json'
+configfile='./config/mysqlconfig.json'
 dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9603\\'
 #########编码成通达信可识别的数据
 def stockcode(HdDate, SCode):

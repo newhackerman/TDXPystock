@@ -7,7 +7,7 @@ from pywinauto.application import *
 from pywinauto import mouse
 database='stock'
 tablename='stockopendata'
-configfile='D:/mysqlconfig.json'
+configfile='./config/mysqlconfig.json'
 #excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
 #读取json格式的配置文件
 def file2dict(path):

@@ -76,7 +76,7 @@ def insertstockinfos(conn,file,tablename):
 if __name__ == '__main__':
     bindfile='D:/pythonTtest/TDXPystock/板块列表.txt'
     stockfile='D:/pythonTtest/TDXPystock/个股信息列表.txt'
-    configfile = 'D:/mysqlconfig.json'
+    configfile = './config/mysqlconfig.json'
     stockinfofile='D:/pythonTtest/TDXPystock/stockinfos.txt'
     bandtb='bands'
     stocktb='stocks'

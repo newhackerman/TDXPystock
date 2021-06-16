@@ -6,7 +6,7 @@ import time,json,sys
 import tushare as ts
 import pandas as pd
 import prettytable as pt
-configfile = 'D:/mysqlconfig.json'
+configfile = './config/mysqlconfig.json'
 file = './A股信息简介与主营.csv'
 #读取配置文件
 def get_config():

@@ -1,5 +1,5 @@
 create database stock;
-grant all privileges on stock.* to stock@'%' identified by 'STOCK@test!!' with grant option;
+grant all privileges on stock.* to stock@'%' identified by '!!' with grant option;
 flush privileges;
 
 --#股票代码表
@@ -74,9 +74,9 @@ CREATE UNIQUE INDEX code_name_stockdate ON stockopendata(code,name,date);
 CREATE TABLE IF NOT EXISTS `stockmark`(
 `code`            varchar(8),
 `name`            varchar(10),
-`market`            varchar(12),
-primary key (`code`)
+`market`            varchar(12)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX code_name_market ON stockmark(code,name,market);
 
 
 --南向资金数据
@@ -118,7 +118,7 @@ create index northdataAnalyHdDate on northdataAnaly(HDDATE);
 create index nnorthdataAnalySName on northdataAnaly(SNAME);
 CREATE UNIQUE INDEX northcode_name_stockdate ON northdataAnaly(SCODE,SNAME,HDDATE,SHARESRATE);
 
-update stockinfo a set markname =(select left(trim(markname),5) from stockmark where markcode =a.mark);
+update stockinfo a set mark =(select left(trim(market),5) from stockmark where code =a.mark);
 
 -- 用户信息表
 CREATE TABLE IF NOT EXISTS `users`(
@@ -161,7 +161,7 @@ drict varchar(4)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE INDEX jinjiadatacode on jinjiadata(Code);
-CREATE UNIQUE INDEX jinjiadatacodenamedate on jinjiadata(HDDATE,code,name); - 一天只能有一条竞价数据
+CREATE UNIQUE INDEX jinjiadatacodenamedate on jinjiadata(HDDATE,code,name); -- 一天只能有一条竞价数据
 create index jinjiadataHDDATE on jinjiadata(HDDATE);
 create index jinjiadataname on jinjiadata(name);
 
@@ -170,3 +170,29 @@ CREATE TABLE IF NOT EXISTS `datelist`(
 date date,
 isopen int
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--早盘1分钟数据
+CREATE TABLE IF NOT EXISTS `stockfirstmindata`(
+HDDATE date,
+htime  varchar(10),
+code varchar(8),
+name varchar(20),
+vol int,
+price float,
+amount float,
+drict varchar(4),
+market int,
+buycount int,
+sellcount int
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE INDEX stockfirstmindatacode on stockfirstmindata(Code);
+CREATE UNIQUE INDEX timecodenamedate on stockfirstmindata(HDDATE,htime,code,name);
+create index stockfirstmindataHDDATE on stockfirstmindata(HDDATE);
+create index stockfirstmindataname on stockfirstmindata(name);
+
+
+--数据同步到阿里云
+--mysqldump -u root -p密码 stock jinjiadata| mysql -h 47.107.130.152 -p密码 stock
+--mysqldump  -u root -p stock  >stock.sql
+--mysql -h 47.107.130.152 -u stock -p stock <stock.sql
+

@@ -5,7 +5,7 @@ import util.logout as log
 import pandas as pd
 import tushare as ts
 ################本程序为早盘竞价异动处理
-configfile = 'D:/mysqlconfig.json'
+configfile = './config/mysqlconfig.json'
 
 #读取配置文件
 def get_config():

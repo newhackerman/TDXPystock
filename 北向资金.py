@@ -9,7 +9,7 @@ from lxml import  etree
 
 database='stock'
 tablename='stockopendata'
-configfile='D:/mysqlconfig.json'
+configfile='./config/mysqlconfig.json'
 dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9602\\'  #通达信北资数据目录
 #excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
 

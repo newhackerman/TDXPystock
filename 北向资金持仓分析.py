@@ -17,9 +17,6 @@ pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 import warnings
 warnings.filterwarnings('ignore')  #控制台不输出warning 信息
 
-
-#ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-import baostock as bs
 outfile=''
 ###获取股票代码
 def get_stockcode(stockname):
@@ -68,19 +65,6 @@ def get_stock_dateData(stockcode,start_date,end_date):
     #print(stockcode,start_date,end_date)
     df = pro.daily(ts_code=stockcode, start_date=start_date,end_date=end_date)
     df=df.sort_values(by=['trade_date'],ascending=True)  #按日期升序
-    #从baostock获取数据
-    # lg = bs.login()
-    # rs = bs.query_history_k_data_plus(stockcode,
-    #                                   "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
-    #                                   start_date=start_date, end_date=end_date,
-    #                                   frequency="30m", adjustflag="3")
-    # data_list = []
-    # while (rs.error_code == '0') & rs.next():
-    #     # 获取一条记录，将记录合并在一起
-    #     data_list.append(rs.get_row_data())
-    # result = pd.DataFrame(data_list, columns=rs.fields)
-
-    #print(df)
     return df
 
 def format_tohtml(listdata):

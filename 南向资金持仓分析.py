@@ -23,7 +23,7 @@ ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
 
 database='stock'
 tablename='stockopendata'
-configfile='D:/mysqlconfig.json'
+configfile='./config/mysqlconfig.json'
 dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9603\\'
 
 #读取json格式的配置文件

@@ -13,8 +13,8 @@ options.add_argument('--disable-gpu')
 
 
 if __name__ == '__main__':
-    stockfile='./美股代码列表.csv'
-    supperstock='./美股领先企业列表.txt'
+    stockfile=u'./config/美股代码列表.csv'
+    supperstock=u'./config/美股领先企业列表.txt'
     pdsdata=pds.read_csv(stockfile,sep="$",header=None,names=['代码','名称','所属行业'])  #指定标题，标题可以是自定义，header=0:表示有标题行，会把第一行当作标题
     # print(pdsdata)
     # pdsdata=pdsdata.drop_duplicates(subset=['代码'],keep='first',inplace=True) #去重

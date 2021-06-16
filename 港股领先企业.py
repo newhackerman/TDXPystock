@@ -5,8 +5,8 @@ import time
 
 
 if __name__ == '__main__':
-    stockfile='./港股代码列表.csv'
-    supperstock='./港股领先企业列表.txt'
+    stockfile=u'./config/港股代码列表.csv'
+    supperstock=u'./config/港股领先企业列表.txt'
     pdsdata=pds.read_csv(stockfile,sep=",",header=None,names=['代码','名称','所属行业'])  #指定标题，标题可以是自定义，header=0:表示有标题行，会把第一行当作标题
     stockinfo=[] #存储符合条件的企业
     url='https://news.futunn.com/wiki/hk'

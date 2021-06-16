@@ -4,7 +4,7 @@ import tushare as ts
 import json,datetime
 import pandas as pd
 import  pymysql
-configfile='D:/mysqlconfig.json'
+configfile='./config/mysqlconfig.json'
 class tradeday:
     def __init__(self):
         self.pro = ts.pro_api(tradeday.get_config()['tushare'])
@@ -19,9 +19,10 @@ class tradeday:
         jsoncontent =tradeday.get_config()
         conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
                                jsoncontent['database'], charset='utf8')
+
         return conn
     #将交易日入库，1年执行一次即可
-    def __gettradeday(self):
+    def gettradeday(self):
         tradedaylist=[]
         try:
             alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
@@ -46,9 +47,9 @@ class tradeday:
         '''date type:  2021-05-28'''
         len1=len(date1)
         if len1>0:
-            date=date1[0]
+            date=str(date1[0])
         else:
-            date = datetime.datetime.now().strftime('%Y-%m-%d')
+            date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         flag=True
         conn = tradeday.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
@@ -83,10 +84,14 @@ class tradeday:
             return str(res)
     #获取上一个交易日
     @staticmethod
-    def getyestodayTradeday():
+    def getyestodayTradeday(*date1):
+        len1=len(date1)
+        if len1>0:
+            date=str(date1[0])
+        else:
+            date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         conn = tradeday.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-        date=datetime.datetime.now().strftime('%Y-%m-%d')
         sql = 'select * from datelist where date<=\'' + date + '\''  #取到今天为止的所有日期数据
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -106,7 +111,7 @@ class tradeday:
             return None
         conn = tradeday.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-        date = datetime.datetime.now().strftime('%Y-%m-%d')
+        date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         sql = 'select * from datelist where date<=\'' + date + '\''  # 取到今天为止的所有日期数据
         cursor.execute(sql)
         result = cursor.fetchall()
