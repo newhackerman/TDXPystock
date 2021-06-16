@@ -130,7 +130,7 @@ class tradeday:
             return None
         conn = tradeday.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
-        date = datetime.datetime.now().strftime('%Y-%m-%d')
+        date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         sql = 'select * from datelist where date<=\'' + date + '\''  # 取到今天为止的所有日期数据
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -153,10 +153,11 @@ class tradeday:
 
 if __name__ == '__main__':
     test=tradeday()
-    # isopen=test.isTradeDay('2021-05-28')
+    # isopen=test.isTradeDay('2021-05-29')
     # print(isopen)
-    lasttradeday=test.getlastNtradeday(7)
-    print(lasttradeday)
+    # lasttradeday=test.getlastNtradedaylist(7)
+    # print(lasttradeday)
+    # test.gettradeday()
 '''
 --南向资金数据
 CREATE TABLE IF NOT EXISTS `datelist`(
