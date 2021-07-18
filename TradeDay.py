@@ -1,26 +1,13 @@
-import time
-
 import tushare as ts
 import json,datetime
 import pandas as pd
 import  pymysql
+from dboprater import DB as db
 configfile='./config/mysqlconfig.json'
 class tradeday:
     def __init__(self):
-        self.pro = ts.pro_api(tradeday.get_config()['tushare'])
-    @staticmethod
-    def get_config():
-        with open(configfile, encoding="utf-8") as f:
-            jsoncontent = json.load(f)
-        f.close()
-        return jsoncontent
-    @staticmethod
-    def dbconnect():
-        jsoncontent =tradeday.get_config()
-        conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
-                               jsoncontent['database'], charset='utf8')
+        self.pro = ts.pro_api(db.get_config()['tushare'])
 
-        return conn
     #将交易日入库，1年执行一次即可
     def gettradeday(self):
         tradedaylist=[]
@@ -28,7 +15,7 @@ class tradeday:
             alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
             alldays=alldays.iloc[10000:,::]
             # alldays=pd.DataFrame(alldays.loc[:,'cal_date','is_open'])
-            conn=self.dbconnect()
+            conn=db.dbconnect()
             currsor=conn.cursor(cursor=pymysql.cursors.DictCursor)
             sql ='insert into datelist (date,isopen) values(%s,%s)'
             for days in alldays.iterrows():
@@ -51,7 +38,7 @@ class tradeday:
         else:
             date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         flag=True
-        conn = tradeday.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         sql = 'select * from datelist where date=\''+date+'\''
         cursor.execute(sql)
@@ -69,7 +56,7 @@ class tradeday:
     #获取最近一个交易日
     @staticmethod
     def getlastTradeday():
-        conn = tradeday.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         date=datetime.datetime.now().strftime('%Y-%m-%d')
         sql = 'select * from datelist where date<=\'' + date + '\''  #取到今天为止的所有日期数据
@@ -90,7 +77,7 @@ class tradeday:
             date=str(date1[0])
         else:
             date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
-        conn = tradeday.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         sql = 'select * from datelist where date<=\'' + date + '\''  #取到今天为止的所有日期数据
         cursor.execute(sql)
@@ -109,7 +96,7 @@ class tradeday:
         if str(n).isalpha():
             print('输入错误')
             return None
-        conn = tradeday.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         sql = 'select * from datelist where date<=\'' + date + '\''  # 取到今天为止的所有日期数据
@@ -128,7 +115,7 @@ class tradeday:
         if str(n).isalpha():
             print('输入错误')
             return None
-        conn = tradeday.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         date = str(datetime.datetime.now().strftime('%Y-%m-%d'))
         sql = 'select * from datelist where date<=\'' + date + '\''  # 取到今天为止的所有日期数据
@@ -155,8 +142,8 @@ if __name__ == '__main__':
     test=tradeday()
     # isopen=test.isTradeDay('2021-05-29')
     # print(isopen)
-    # lasttradeday=test.getlastNtradedaylist(7)
-    # print(lasttradeday)
+    lasttradeday=test.getlastNtradedaylist(7)
+    print(lasttradeday)
     # test.gettradeday()
 '''
 --南向资金数据

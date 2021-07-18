@@ -2,7 +2,6 @@
 import tushare as ts
 import pandas as pd
 import time
-import json
 import requests
 from util import proxy
 

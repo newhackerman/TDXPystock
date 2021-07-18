@@ -4,7 +4,7 @@ import json,datetime
 import pymysql
 import struct as st
 import tushare as ts
-from lxml import etree
+from ..dboprater import DB as db
 
 class writeToTdx():
     filepath=''
@@ -18,7 +18,7 @@ class writeToTdx():
     stockcode = ''
 
     def __init__(self):
-        self.jsoncontent = self.get_config()
+        self.jsoncontent = db.get_config()
         self.pro = ts.pro_api(self.jsoncontent['tushare'])
 
     #########编码成通达信可识别的数据
@@ -30,21 +30,9 @@ class writeToTdx():
         # print(text2)
         return text1 + text2
 
-    def get_config(self):
-        with open(self.configfile, encoding="utf-8") as f:
-            jsoncontent = json.load(f)
-        f.close()
-        return jsoncontent
-
-    def dbconnect(self):
-        jsoncontent = self.get_config()
-        conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
-                               jsoncontent['database'], charset='utf8')
-        return conn
-
     #查询有北资数据的股票列表
     def get_Northstocklist(self):
-        conn=self.dbconnect()
+        conn=db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         stocklist=[]
         sql='''select distinct(SCODE) as scode from  northdataAnaly'''
@@ -142,7 +130,7 @@ class writeToTdx():
         if len(northdataAnalyinfos) == 0:
             return
         # print(northdataAnalyinfos)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 执行的sql语句
         sql = '''insert into northdataanaly (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
@@ -178,7 +166,7 @@ class writeToTdx():
     def select_NorthDataFromdb(self, scode):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         # conditions = str(kwords).strip('{').strip('}').replace(':', '=', 1).replace('\'', '', 2)
         # print(conditions)
-        conn = conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 执行的sql语句
         sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF ,SHAREHOLDPRICE ,SHAREHOLDPRICEONE ,SHAREHOLDPRICEFIVE ,SHAREHOLDPRICETEN from  northdataAnaly  '''
@@ -259,7 +247,7 @@ class writeToTdx():
     # 获取表中最新的日期
     def getdb_maxdate(self):
         sql = 'select max(HDDATE) as "HDDATE" from northdataAnaly '
-        conn = conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         result = cursor.fetchall()

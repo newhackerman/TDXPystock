@@ -118,15 +118,6 @@ class RunThread(QThread):
                 onlinequote.append(tmpdict)
         return onlinequote
 
-    def isTradeDay(self):
-        alldays = self.pro.trade_cal()  # 得到所有日期，到今年年尾
-        tradingdays = alldays[alldays['is_open'] == 1]  # 得到所有交易开盘日
-        today = datetime.datetime.now().strftime('%Y%m%d')
-        if today in tradingdays['cal_date'].values:
-            return True
-        else:
-            return False
-
     def get_proxy(self):
         url = 'https://ip.jiangxianli.com/api/proxy_ip'
         try:

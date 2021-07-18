@@ -5,25 +5,11 @@ import pandas as pds
 from pywinauto import application
 from pywinauto.application import *
 from pywinauto import mouse
+from dboprater import DB as db
 database='stock'
 tablename='stockopendata'
 configfile='./config/mysqlconfig.json'
 #excelfile='C:/十档行情/T0002/exportbak/沪深Ａ股20201130.xls'
-#读取json格式的配置文件
-def file2dict(path):
-    with open(path, encoding="utf-8") as f:
-        jsoncontent=json.load(f)
-        #if jsoncontent.startswith(u'\ufeff'):
-        #     jsoncontent = jsoncontent.encode('utf8')[3:].decode('utf8')
-        return jsoncontent
-
-def dbconnect():      #建立连接
-    dict = []
-    dict = file2dict(configfile)  # 获取连接数据库需要的相关信息
-      # 创建数据库连接
-    conn = pymysql.connect(dict['host'], dict['user'], dict['password']
-                           , dict['database'], charset='utf8')
-    return conn
 
 def TDX_OpenDataOutputTXT():
     app=application.Application()
@@ -100,7 +86,7 @@ def TDX_OpenDataOutputTXT():
 # 获取表中指定的日期
 def getdbdate(date):
     sql = 'select  date from stockopendata where date=\''+date+'\' limit 1;'
-    conn = dbconnect()
+    conn = db.dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -120,7 +106,7 @@ def getdbdate(date):
 def datainsert(configfile,excelfile):
     date1 = re.search(r'\d+.txt$', excelfile).group()[0:8]       #截取文件名中的日期
     # 创建数据库连接
-    conn =  dbconnect()
+    conn = db.dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # newdate=getdbdate(date1)
     # if newdate:

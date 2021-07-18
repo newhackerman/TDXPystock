@@ -20,7 +20,7 @@ from pyecharts.charts import Bar, Page, Line
 from pyecharts import options as opts
 from TradeDay import tradeday
 import akshare as ak  #api 使用：https://akshare-4gize6tod19f2d2e-1252952517.tcloudbaseapp.com/index.html
-
+from dboprater import DB as db
 
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 
@@ -40,23 +40,8 @@ class southwardAnalysis():
     jsoncontent = None
 
     def __init__(self):
-        self.jsoncontent = self.get_config()
+        self.jsoncontent = db.get_config()
         self.pro = ts.pro_api(self.jsoncontent['tushare'])
-
-    def get_config(self):
-        with open(self.configfile, encoding="utf-8") as f:
-            jsoncontent = json.load(f)
-        f.close()
-        return jsoncontent
-
-    def dbconnect(self):
-        # 读取json格式的配置文件
-        with open(self.configfile, encoding="utf-8") as f:
-            jsoncontent = json.load(f)
-        f.close()
-        conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
-                               jsoncontent['database'], charset='utf8')
-        return conn
 
     def get_optparse(self):
         parser = OptionParser()
@@ -224,7 +209,7 @@ class southwardAnalysis():
     def insertdb(self, southdatainfos):
         if len(southdatainfos) == 0:
             return
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 由于每次取的是全量数据，先将表清空
         sql1 = 'delete from southdataanly'
@@ -265,7 +250,7 @@ class southwardAnalysis():
     def selectdb(self, **kwords):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         conditions = str(kwords).strip('{').strip('}').replace(':', '=', 1).replace('\'', '', 2)
         print(conditions)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 执行的sql语句
         sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN from  southdataanly  '''
@@ -288,7 +273,7 @@ class southwardAnalysis():
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         sql = 'select * from southdataanly where Hddate=\'' + newdate + '\' order by SHAREHOLDPRICEONE desc limit 10'
         # print(sql)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         resultset = cursor.fetchall()
@@ -311,7 +296,7 @@ class southwardAnalysis():
         print(newdate,yesterday)
         sql = 'select * from southdataanly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>1 and SHAREHOLDPRICEFIVE>-2 and zdf >-2 and SCODE in ( select SCODE from southdataanly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEFIVE desc'
         # print(sql)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # print(sql)
         cursor.execute(sql)
@@ -498,7 +483,7 @@ class southwardAnalysis():
     # 获取表中最新的日期
     def getdb_maxdate(self):
         sql = 'select max(HDDATE) as "HDDATE" from southdataanly '
-        conn = conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         result = cursor.fetchall()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1932</width>
-    <height>999</height>
+    <width>1937</width>
+    <height>998</height>
    </rect>
   </property>
   <property name="font">
@@ -31,15 +31,16 @@ background-color:qlineargradient(x1: 0, y1: 0, x2: 0.7, y2:0.7,stop: 0.5 #991e00
     <string notr="true">color: rgb(255, 255, 255);
 border-color: rgb(16, 8, 255);
 background-color:qlineargradient(x1: 0, y1: 0, x2: 0.7, y2:0.7,stop: 0.5 #991e00, stop: 1 #660033);
-selection-color:rgb(40,150,200);</string>
+selection-color:rgb(255, 0, 0);
+selection-background-color: rgb(0, 0, 62);</string>
    </property>
    <widget class="QTextEdit" name="textEdit_superAmount">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>30</y>
+      <y>40</y>
       <width>491</width>
-      <height>321</height>
+      <height>341</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -55,325 +56,13 @@ border-color: rgb(5, 9, 255);</string>
      <string>超级资金</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1511</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QRadioButton" name="radioButton_superamount">
-       <property name="styleSheet">
-        <string notr="true">border-color: rgb(0, 0, 255);
-background-color: rgb(56, 0, 84);
-color: rgb(255, 255, 255);
-font: 12pt &quot;新宋体&quot;;</string>
-       </property>
-       <property name="text">
-        <string>         超级资金监控</string>
-       </property>
-       <property name="shortcut">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_drogmonitor">
-       <property name="palette">
-        <palette>
-         <active>
-          <colorrole role="WindowText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Button">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Text">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="ButtonText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Base">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Window">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="HighlightedText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>40</red>
-             <green>150</green>
-             <blue>200</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="PlaceholderText">
-           <brush brushstyle="NoBrush">
-            <color alpha="128">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-         </active>
-         <inactive>
-          <colorrole role="WindowText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Button">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Text">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="ButtonText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Base">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Window">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="HighlightedText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>40</red>
-             <green>150</green>
-             <blue>200</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="PlaceholderText">
-           <brush brushstyle="NoBrush">
-            <color alpha="128">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-         </inactive>
-         <disabled>
-          <colorrole role="WindowText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Button">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Text">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="ButtonText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Base">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="Window">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>56</red>
-             <green>0</green>
-             <blue>84</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="HighlightedText">
-           <brush brushstyle="SolidPattern">
-            <color alpha="255">
-             <red>40</red>
-             <green>150</green>
-             <blue>200</blue>
-            </color>
-           </brush>
-          </colorrole>
-          <colorrole role="PlaceholderText">
-           <brush brushstyle="NoBrush">
-            <color alpha="128">
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </brush>
-          </colorrole>
-         </disabled>
-        </palette>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-color: rgb(0, 0, 255);
-background-color: rgb(56, 0, 84);
-color: rgb(255, 255, 255);
-font: 12pt &quot;新宋体&quot;;</string>
-       </property>
-       <property name="text">
-        <string>           龙头盯盘</string>
-       </property>
-       <property name="shortcut">
-        <string>Ctrl+3</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButtonzhangting">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border-color: rgb(0, 0, 255);
-background-color: rgb(56, 0, 84);
-color: rgb(255, 255, 255);
-font: 12pt &quot;新宋体&quot;;</string>
-       </property>
-       <property name="text">
-        <string>      实时涨停</string>
-       </property>
-       <property name="shortcut">
-        <string>Ctrl+4</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButtonbankamountmonitor">
-       <property name="styleSheet">
-        <string notr="true">border-color: rgb(0, 0, 255);
-background-color: rgb(56, 0, 84);
-color: rgb(255, 255, 255);
-font: 12pt &quot;新宋体&quot;;</string>
-       </property>
-       <property name="text">
-        <string>     板块资金监控</string>
-       </property>
-       <property name="shortcut">
-        <string>Ctrl+1</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>未来添加功能</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QTextEdit" name="textEdit_drogMoniter">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>360</y>
-      <width>491</width>
-      <height>261</height>
+      <y>390</y>
+      <width>501</width>
+      <height>231</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -382,29 +71,7 @@ font: 12pt &quot;新宋体&quot;;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(0, 0, 20);
 color: rgb(255, 255, 0);
-font: 13pt &quot;新宋体&quot;;
-border-color: rgb(5, 9, 255);</string>
-    </property>
-    <property name="documentTitle">
-     <string>龙头</string>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit_inttimezhangting">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>630</y>
-      <width>1521</width>
-      <height>321</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 0, 20);
-color: rgb(255, 255, 0);
-font: 12pt &quot;新宋体&quot;;
+font: 11pt &quot;新宋体&quot;;
 border-color: rgb(5, 9, 255);</string>
     </property>
     <property name="documentTitle">
@@ -415,7 +82,7 @@ border-color: rgb(5, 9, 255);</string>
     <property name="geometry">
      <rect>
       <x>-10</x>
-      <y>20</y>
+      <y>30</y>
       <width>501</width>
       <height>16</height>
      </rect>
@@ -436,10 +103,10 @@ border-color: rgb(5, 9, 255);</string>
    <widget class="QLabel" name="label_drogstock">
     <property name="geometry">
      <rect>
-      <x>-10</x>
-      <y>350</y>
-      <width>501</width>
-      <height>16</height>
+      <x>0</x>
+      <y>380</y>
+      <width>491</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -452,7 +119,7 @@ border-color: rgb(5, 9, 255);</string>
      <string>龙头</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_zhangting">
@@ -492,6 +159,11 @@ border-color: rgb(5, 9, 255);</string>
       <height>16777215</height>
      </size>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -523,83 +195,9 @@ QTabBar::tab:hover{
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="clsnews">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);
-background-color: rgb(20, 0, 31);</string>
-     </property>
-     <attribute name="title">
-      <string>财联社新闻</string>
-     </attribute>
-     <widget class="QTextEdit" name="textEdit_clxnewsView">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>425</width>
-        <height>921</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>425</width>
-        <height>921</height>
-       </size>
-      </property>
-      <property name="cursor" stdset="0">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="focusPolicy">
-       <enum>Qt::ClickFocus</enum>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="textInteractionFlags">
-       <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tdxdd">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);
-background-color: rgb(20, 0, 31);</string>
-     </property>
-     <attribute name="title">
-      <string>通达信大单</string>
-     </attribute>
-     <widget class="QTextEdit" name="textEdit_tdxdadanView">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>425</width>
-        <height>921</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>425</width>
-        <height>921</height>
-       </size>
-      </property>
-      <property name="cursor" stdset="0">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 0);</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="textInteractionFlags">
-       <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-      </property>
-     </widget>
-    </widget>
+    <property name="movable">
+     <bool>true</bool>
+    </property>
     <widget class="QWidget" name="MYSTOCK">
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 0, 0);
@@ -684,20 +282,17 @@ QHeaderView#vHeader::section {
        <number>25</number>
       </attribute>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QPushButton" name="pushButtonaddmysocks">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>392</width>
-        <height>30</height>
+        <width>61</width>
+        <height>28</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_pushButton">
-       <item>
-        <widget class="QPushButton" name="pushButtonaddmysocks">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(13, 0, 20);
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(13, 0, 20);
 font: 11pt &quot;新宋体&quot;;
 QPushButton
 {
@@ -721,50 +316,22 @@ QPushButton:hover:pressed
     border-radius:5px;
     color:white;
 }</string>
-         </property>
-         <property name="text">
-          <string>添加</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButtondelmystocks">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(19, 0, 29);
-font: 11pt &quot;新宋体&quot;;
-QPushButton
-{
-    background-color: rgb(134,183,200); //背景色
-    border:2px solid #5F92B2; //边界和边界颜色
-    border-radius:5px; //边界圆滑
-    color:white; //字体颜色
-}
- 
-QPushButton:hover
-{
-    background-color: rgb(0,130,150); //伪状态经过时背景色
-    border:2px solid #5F92B2; //边界和边界颜色
-    border-radius:5px; //边界圆滑
-    color:white; //字体为白色
-}
- 
-QPushButton:hover:pressed
-{
-    background-color:rgb(85,170,255); //伪状态，点击时的背景色
-    border:2px solid #3C80B1; //
-    border-radius:5px;
-    color:white;
-}</string>
-         </property>
-         <property name="text">
-          <string>删除</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonflushquotestop">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(19, 0, 29);
+      </property>
+      <property name="text">
+       <string>添加</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButtondelmystocks">
+      <property name="geometry">
+       <rect>
+        <x>86</x>
+        <y>10</y>
+        <width>61</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(19, 0, 29);
 font: 11pt &quot;新宋体&quot;;
 QPushButton
 {
@@ -789,16 +356,22 @@ QPushButton:hover:pressed
     border-radius:5px;
     color:white;
 }</string>
-         </property>
-         <property name="text">
-          <string>停止</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButtonflushquotestart">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(19, 0, 29);
+      </property>
+      <property name="text">
+       <string>删除</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButtonflushquotestart">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>10</y>
+        <width>61</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(19, 0, 29);
 font: 11pt &quot;新宋体&quot;;
 QPushButton
 {
@@ -823,13 +396,167 @@ QPushButton:hover:pressed
     border-radius:5px;
     color:white;
 }</string>
-         </property>
-         <property name="text">
-          <string>开启</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </property>
+      <property name="text">
+       <string>开启</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButtonflushquotestop">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>10</y>
+        <width>61</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(19, 0, 29);
+font: 11pt &quot;新宋体&quot;;
+QPushButton
+{
+    background-color: rgb(134,183,200); //背景色
+    border:2px solid #5F92B2; //边界和边界颜色
+    border-radius:5px; //边界圆滑
+    color:white; //字体颜色
+}
+ 
+QPushButton:hover
+{
+    background-color: rgb(0,130,150); //伪状态经过时背景色
+    border:2px solid #5F92B2; //边界和边界颜色
+    border-radius:5px; //边界圆滑
+    color:white; //字体为白色
+}
+ 
+QPushButton:hover:pressed
+{
+    background-color:rgb(85,170,255); //伪状态，点击时的背景色
+    border:2px solid #3C80B1; //
+    border-radius:5px;
+    color:white;
+}</string>
+      </property>
+      <property name="text">
+       <string>停止</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButtonvoiceremainder">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>10</y>
+        <width>79</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(19, 0, 29);
+font: 11pt &quot;新宋体&quot;;
+QPushButton
+{
+    background-color: rgb(134,183,200); //背景色
+    border:2px solid #5F92B2; //边界和边界颜色
+    border-radius:5px; //边界圆滑
+    color:white; //字体颜色
+}
+ 
+QPushButton:hover
+{
+    background-color: rgb(0,130,150); //伪状态经过时背景色
+    border:2px solid #5F92B2; //边界和边界颜色
+    border-radius:5px; //边界圆滑
+    color:white; //字体为白色
+}
+ 
+QPushButton:hover:pressed
+{
+    background-color:rgb(85,170,255); //伪状态，点击时的背景色
+    border:2px solid #3C80B1; //
+    border-radius:5px;
+    color:white;
+}</string>
+      </property>
+      <property name="text">
+       <string>语音开关</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="clsnews">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(20, 0, 31);</string>
+     </property>
+     <attribute name="title">
+      <string>财联社新闻</string>
+     </attribute>
+     <widget class="QTextEdit" name="textEdit_clxnewsView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>425</width>
+        <height>921</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>425</width>
+        <height>921</height>
+       </size>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tdxdd">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);
+background-color: rgb(20, 0, 31);</string>
+     </property>
+     <attribute name="title">
+      <string>通达信大单</string>
+     </attribute>
+     <widget class="QTextEdit" name="textEdit_tdxdadanView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>425</width>
+        <height>921</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>425</width>
+        <height>921</height>
+       </size>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 0);</string>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="stockcheckhealth">
@@ -938,6 +665,9 @@ QPushButton:hover:pressed
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::ClickFocus</enum>
     </property>
@@ -968,22 +698,136 @@ tableView QTableCornerButton::section {
      <number>25</number>
     </attribute>
    </widget>
+   <widget class="QTableView" name="tableView_zhangtingdata">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>630</y>
+      <width>1521</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::ClickFocus</enum>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::CustomContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 0);
+background-color: rgb(16, 0, 25);
+tableView QTableCornerButton::section {
+    border: 1px solid gray;
+    background-color: rgb(16, 0, 25);
+ 	selection-color: rgb(255, 0, 0);                             /*选中区域的文字颜色*/
+    selection-background-color:rgb(16, 0, 25);        /*选中区域的背景色*/
+} </string>
+    </property>
+    <property name="lineWidth">
+     <number>0</number>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="dragEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="dragDropMode">
+     <enum>QAbstractItemView::DragDrop</enum>
+    </property>
+    <property name="defaultDropAction">
+     <enum>Qt::MoveAction</enum>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::MultiSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectItems</enum>
+    </property>
+    <property name="showGrid">
+     <bool>false</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>20</number>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>60</number>
+    </attribute>
+    <attribute name="horizontalHeaderStretchLastSection">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>25</number>
+    </attribute>
+    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+     <bool>true</bool>
+    </attribute>
+   </widget>
+   <widget class="QLabel" name="label_informations">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1511</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Agency FB</family>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 63);
+color: rgb(255, 0, 0);
+font: 11pt &quot;Agency FB&quot;;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>textEdit_drogMoniter</zorder>
+   <zorder>tableView_zhangtingdata</zorder>
    <zorder>tableView_bankMonitor</zorder>
    <zorder>textEdit_superAmount</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>textEdit_drogMoniter</zorder>
-   <zorder>textEdit_inttimezhangting</zorder>
    <zorder>label_superAmount</zorder>
    <zorder>label_drogstock</zorder>
-   <zorder>label_zhangting</zorder>
    <zorder>tabWidget_rightcontent</zorder>
+   <zorder>label_zhangting</zorder>
+   <zorder>label_informations</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1932</width>
+     <width>1937</width>
      <height>30</height>
     </rect>
    </property>
@@ -1000,33 +844,31 @@ selection-color:rgb(40,150,200);</string>
    </property>
    <widget class="QMenu" name="southAmtmenu">
     <property name="title">
-     <string>南向资金分析</string>
+     <string> 南资分析 </string>
     </property>
     <addaction name="actionsouthDatainserttoDB"/>
     <addaction name="separator"/>
-    <addaction name="actionsouthTop10Select"/>
+    <addaction name="actionsouthTop20Select"/>
     <addaction name="actionsouthbuy"/>
     <addaction name="actionsouthDataforone"/>
     <addaction name="separator"/>
-    <addaction name="actionsouthstockF10"/>
-    <addaction name="actionsouthbusinessTop10"/>
+    <addaction name="actionsouthbusinessTop20"/>
+    <addaction name="actionSouthmoreFunction"/>
    </widget>
    <widget class="QMenu" name="sorthAmtmenu">
     <property name="title">
-     <string>北向资金分析</string>
+     <string> 北资分析 </string>
     </property>
-    <addaction name="actionnorthDatainserttoDB"/>
-    <addaction name="separator"/>
-    <addaction name="actionactionnorthTop10Select"/>
-    <addaction name="actionnorthbuy"/>
+    <addaction name="action_opennorthanalyiesForm"/>
+    <addaction name="actionsuportjust30dayNorthData"/>
+    <addaction name="actionnorthTop20Select"/>
+    <addaction name="actionnorthbuyup"/>
     <addaction name="separator"/>
     <addaction name="actionnorthDataforone"/>
-    <addaction name="actionnorthstockF10"/>
-    <addaction name="actionnorthThunderingSelect"/>
-    <addaction name="separator"/>
-    <addaction name="actionselfAdddata"/>
+    <addaction name="actionnorthFindstockF10"/>
     <addaction name="actionnorthdataWriteToTDX"/>
     <addaction name="actionNorthfundview"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="SupperAmtmenu">
     <property name="title">
@@ -1066,8 +908,10 @@ selection-color:rgb(40,150,200);</string>
     <addaction name="levelset"/>
     <addaction name="actionMonitorlistAddstock"/>
     <addaction name="menu_dadanDataOutput"/>
-    <addaction name="menu_dadananaly"/>
+    <addaction name="actionxlwanshoudan"/>
     <addaction name="separator"/>
+    <addaction name="menu_dadananaly"/>
+    <addaction name="actionstockhistoryawardselect"/>
    </widget>
    <widget class="QMenu" name="bankmenu">
     <property name="title">
@@ -1089,6 +933,7 @@ selection-color:rgb(40,150,200);</string>
     <addaction name="separator"/>
     <addaction name="actionbankstartnmonitor"/>
     <addaction name="actionbanknmonitorStop"/>
+    <addaction name="actionbankyidong"/>
    </widget>
    <widget class="QMenu" name="topStockgetmenu">
     <property name="title">
@@ -1104,10 +949,12 @@ selection-color:rgb(40,150,200);</string>
     <property name="title">
      <string>     选    股   </string>
     </property>
+    <addaction name="actioniwencaixg"/>
+    <addaction name="actiondfcfxg"/>
     <addaction name="actiontdxSelectStock"/>
     <addaction name="actionSmartselectstock"/>
-    <addaction name="actiondatatonowdirector"/>
     <addaction name="separator"/>
+    <addaction name="actionactionrelationglgsld"/>
     <addaction name="actionSelectStockByAm"/>
     <addaction name="actionSelectStockByPm"/>
     <addaction name="actionSelectlowlinestock"/>
@@ -1119,6 +966,11 @@ selection-color:rgb(40,150,200);</string>
     </property>
     <addaction name="actiondrogstartmonitor"/>
     <addaction name="actiondrogmonitorstop"/>
+    <addaction name="separator"/>
+    <addaction name="actionpankouyidong"/>
+    <addaction name="separator"/>
+    <addaction name="actionjiguopankoudata"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuzhangting">
     <property name="title">
@@ -1135,42 +987,41 @@ selection-color:rgb(40,150,200);</string>
     <addaction name="actiondabankanban"/>
     <addaction name="actionzhangtingdataoutput"/>
     <addaction name="separator"/>
+    <addaction name="actiondfcfqsgc"/>
    </widget>
    <widget class="QMenu" name="menu_MarketOoenAndclose">
     <property name="title">
      <string>开/复盘</string>
     </property>
-    <widget class="QMenu" name="menu">
-     <property name="title">
-      <string>早盘</string>
-     </property>
-     <addaction name="actionopenmarketdatatop20"/>
-     <addaction name="actionopendataoutTotdx"/>
-    </widget>
-    <addaction name="menu"/>
+    <addaction name="actionzhaopanfx"/>
     <addaction name="actionMarketCloseView"/>
     <addaction name="actionkaipanlaFP"/>
    </widget>
    <widget class="QMenu" name="menu_myblank">
     <property name="title">
-     <string>我的面板</string>
+     <string> 我的面板 </string>
     </property>
-    <addaction name="actionopenmyblank"/>
+    <addaction name="actionhgldx"/>
     <addaction name="actionfunddirector"/>
     <addaction name="actionpertradeview"/>
     <addaction name="actiontradeingcount"/>
     <addaction name="separator"/>
     <addaction name="actionluobotuoyan"/>
     <addaction name="actiontopichottop"/>
-    <addaction name="separator"/>
-    <addaction name="actionaiwencai"/>
     <addaction name="actionCompanies_PerformanceForecast"/>
+    <addaction name="actionaiwencai"/>
+    <addaction name="separator"/>
     <addaction name="pc_tcld_bkzqb"/>
     <addaction name="actionjinqihiuyi"/>
+    <addaction name="actionAhistoryPEAndPB"/>
+    <addaction name="actionopenquotecenter"/>
+    <addaction name="separator"/>
+    <addaction name="actionopenstrategyManager"/>
+    <addaction name="actionopentradeterminetor"/>
    </widget>
    <widget class="QMenu" name="menu_TDXdatascenter">
     <property name="title">
-     <string>数据中心</string>
+     <string> 数据中心 </string>
     </property>
     <addaction name="tdxsj_tzrl_tzrl"/>
     <addaction name="tdxsj_xgzx_xgzx"/>
@@ -1198,17 +1049,34 @@ selection-color:rgb(40,150,200);</string>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>外挂工具</string>
+     <string> 外挂工具 </string>
     </property>
+    <addaction name="actioncaopanshou"/>
     <addaction name="actionthszhangtingfenxiExtools"/>
     <addaction name="actionEXgujiayuce"/>
     <addaction name="actionkongjianmima"/>
-    <addaction name="actioncaopanshou"/>
+    <addaction name="separator"/>
+    <addaction name="actionltfpsq"/>
+   </widget>
+   <widget class="QMenu" name="menu_zixun">
+    <property name="title">
+     <string>  资   讯  </string>
+    </property>
+    <addaction name="actionmarketNews"/>
+    <addaction name="action_zsyj"/>
+   </widget>
+   <widget class="QMenu" name="menu_jingjia">
+    <property name="title">
+     <string>  竞   价  </string>
+    </property>
+    <addaction name="actionjingjiadataAnalyies"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="SupperAmtmenu"/>
    <addaction name="bankmenu"/>
    <addaction name="menuMaxstockmonitor"/>
    <addaction name="menuzhangting"/>
+   <addaction name="menu_jingjia"/>
    <addaction name="southAmtmenu"/>
    <addaction name="sorthAmtmenu"/>
    <addaction name="topStockgetmenu"/>
@@ -1217,6 +1085,7 @@ selection-color:rgb(40,150,200);</string>
    <addaction name="menu_myblank"/>
    <addaction name="menu_TDXdatascenter"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_zixun"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="font">
@@ -1355,9 +1224,9 @@ selection-color:rgb(40,150,200);</string>
     <string>数据更新入库</string>
    </property>
   </action>
-  <action name="actionsouthTop10Select">
+  <action name="actionsouthTop20Select">
    <property name="text">
-    <string>净买入前10查询</string>
+    <string>净买入前20查询</string>
    </property>
   </action>
   <action name="actionsouthbuy">
@@ -1375,9 +1244,9 @@ selection-color:rgb(40,150,200);</string>
     <string>个股F10</string>
    </property>
   </action>
-  <action name="actionsouthbusinessTop10">
+  <action name="actionsouthbusinessTop20">
    <property name="text">
-    <string>个股前10大经纪商查询</string>
+    <string>个股经纪商查询</string>
    </property>
   </action>
   <action name="actionnorthDatainserttoDB">
@@ -1385,19 +1254,28 @@ selection-color:rgb(40,150,200);</string>
     <string>数据更新入库</string>
    </property>
   </action>
-  <action name="actionactionnorthTop10Select">
+  <action name="actionnorthTop20Select">
    <property name="text">
-    <string>净买入前10查询</string>
+    <string>净买入前20查询</string>
    </property>
   </action>
-  <action name="actionnorthbuy">
+  <action name="actionnorthbuyup">
    <property name="text">
     <string>今日开始净买查询</string>
    </property>
   </action>
   <action name="actionnorthDataforone">
    <property name="text">
-    <string>个股北资数据查询</string>
+    <string>个股北资查询</string>
+   </property>
+   <property name="toolTip">
+    <string>个股北资历史走势</string>
+   </property>
+   <property name="whatsThis">
+    <string extracomment="展示个股资历史数据与趋势图"/>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="actionnorthstockF10">
@@ -1405,14 +1283,14 @@ selection-color:rgb(40,150,200);</string>
     <string>个股F10</string>
    </property>
   </action>
-  <action name="actionselfAdddata">
+  <action name="actionsuportjust30dayNorthData">
    <property name="text">
     <string>补齐近30日数据</string>
    </property>
   </action>
   <action name="actionnorthdataWriteToTDX">
    <property name="text">
-    <string>资金数据写入通达信</string>
+    <string>北资写入通达信</string>
    </property>
   </action>
   <action name="actionnorthThunderingSelect">
@@ -1502,17 +1380,17 @@ selection-color:rgb(40,150,200);</string>
   </action>
   <action name="actionNorthfundview">
    <property name="text">
-    <string>北向资金概览</string>
+    <string>南北资概览</string>
    </property>
   </action>
   <action name="actionMarketCloseView">
    <property name="text">
-    <string>复盘</string>
+    <string>每日盘面分析(TDX)</string>
    </property>
   </action>
-  <action name="actionopenmyblank">
+  <action name="actionopenstrategyManager">
    <property name="text">
-    <string>打开我的面板</string>
+    <string>打开策略管理</string>
    </property>
   </action>
   <action name="actionfunddirector">
@@ -1809,6 +1687,146 @@ selection-color:rgb(40,150,200);</string>
   <action name="actionjinqihiuyi">
    <property name="text">
     <string>近期会议</string>
+   </property>
+  </action>
+  <action name="actionmarketNews">
+   <property name="text">
+    <string>沪深港美资讯</string>
+   </property>
+  </action>
+  <action name="action_zsyj">
+   <property name="text">
+    <string>招商研究</string>
+   </property>
+  </action>
+  <action name="action_opennorthanalyiesForm">
+   <property name="text">
+    <string>更多功能（打开）</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
+  </action>
+  <action name="actionjingjiawriteToTDX">
+   <property name="text">
+    <string>竞价数据写通达信</string>
+   </property>
+  </action>
+  <action name="actionjingjiadataExport">
+   <property name="text">
+    <string>竞价数据导出</string>
+   </property>
+  </action>
+  <action name="actionjingjiadataAnalyies">
+   <property name="text">
+    <string>打开分析工具</string>
+   </property>
+  </action>
+  <action name="actionnorthFindstockF10">
+   <property name="text">
+    <string>F10查询</string>
+   </property>
+  </action>
+  <action name="actionSouthmoreFunction">
+   <property name="text">
+    <string>更多功能</string>
+   </property>
+  </action>
+  <action name="actionAhistoryPEAndPB">
+   <property name="text">
+    <string>A股历史PE与PB</string>
+   </property>
+  </action>
+  <action name="actionbankyidong">
+   <property name="text">
+    <string>板块异动</string>
+   </property>
+  </action>
+  <action name="actionpankouyidong">
+   <property name="text">
+    <string>盘口异动</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="actionjiguopankoudata">
+   <property name="text">
+    <string>机构盘口**</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="actionxlwanshoudan">
+   <property name="text">
+    <string>万手单(XL)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
+   </property>
+  </action>
+  <action name="actionzp1fzsjdownload">
+   <property name="text">
+    <string>早盘1分钟数据下载</string>
+   </property>
+  </action>
+  <action name="actionzp1fzsjfx">
+   <property name="text">
+    <string>早盘1分钟数据分析</string>
+   </property>
+  </action>
+  <action name="actionzhaopanfx">
+   <property name="text">
+    <string>打开早盘竞价分析</string>
+   </property>
+  </action>
+  <action name="actionltfpsq">
+   <property name="text">
+    <string>龙头复盘</string>
+   </property>
+  </action>
+  <action name="actiondfcfxg">
+   <property name="text">
+    <string>东财选股</string>
+   </property>
+  </action>
+  <action name="actionopentradeterminetor">
+   <property name="text">
+    <string>打开交易终端</string>
+   </property>
+  </action>
+  <action name="actioniwencaixg">
+   <property name="text">
+    <string>爱问财选股</string>
+   </property>
+  </action>
+  <action name="actionstockhistoryawardselect">
+   <property name="text">
+    <string>个股历史资金查询</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Space</string>
+   </property>
+  </action>
+  <action name="actionopenquotecenter">
+   <property name="text">
+    <string>行情中心</string>
+   </property>
+  </action>
+  <action name="actionactionrelationglgsld">
+   <property name="text">
+    <string>概念公司亮点选股</string>
+   </property>
+  </action>
+  <action name="actionhgldx">
+   <property name="text">
+    <string>宏观数据-流动性</string>
+   </property>
+  </action>
+  <action name="actiondfcfqsgc">
+   <property name="text">
+    <string>东财强势股池</string>
    </property>
   </action>
  </widget>

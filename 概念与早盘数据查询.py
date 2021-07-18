@@ -3,6 +3,7 @@ import prettytable as pt  #useage:https://www.cnblogs.com/Mr-Koala/p/6582299.htm
 import pymysql
 import pyecharts       #可视化图表输出  useage:https://blog.csdn.net/update7/article/details/89086454
 import sys
+from dboprater import DB as db
 outfile='stockopendata.html' #输出到文件
 
 ####################输出分析图表#####################################
@@ -69,7 +70,7 @@ def formatresults(tablename,results,header):
 #######################根据条件查询mysql中的数据#######################
 def dataselect(tablename,*condiction,**keyscondiction):
     #dict=indb.file2dict(indb.configfile)  #读取配置信息
-    conn=indb.dbconnect()
+    conn=db.dbconnect()
     cursor= conn.cursor(cursor=pymysql.cursors.DictCursor)  #打开游标
 
     condictions= str(keyscondiction).strip('{').strip('}').replace(':','=',1).replace('\'','',2)
@@ -83,7 +84,7 @@ def dataselect(tablename,*condiction,**keyscondiction):
         sql="select date,code ,name ,kaipanhuanshuoz,kaipanjine,liangbi,xianliang,liutongsizhi,liutongguyi,xifenhangye " \
         "from "+ tablename +" where "+condictions+";"
     if tablename=='stockinfo':
-        sql = "select mcode,code,name,mark,markname,info from " + tablename + " where " + condictions + ";"
+        sql = "select code,name,mark,gsld,zycpmc,gainan from " + tablename + " where " + condictions + ";"
         #print(sql)
     #print(sql)
     try:
@@ -113,7 +114,7 @@ if __name__ == '__main__':
         var1=sys.argv[1]
         dataselect(tablename2, var1)
     elif lon<2:
-        var1=r"info like '%降解塑料%'"
+        var1=r"gainan like '%降解塑料%'"
         dataselect(tablename2,var1)   #传入要查询的条件，例如：name="中直股份‘ ，date='2020-12-01' 支持单条件如 (r"name in ('中直股份','珠江啤酒','深物业A')")
     elif lon==3:
         var1=sys.argv[1]

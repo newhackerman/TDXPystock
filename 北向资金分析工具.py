@@ -3,9 +3,6 @@ author by :newhackerman@163.com
 申明：根据此程序分析做出的买卖，本人不承担投资损失，投资有风险，买卖需谨慎！！
 '''
 
-import datetime,time
-import json
-import re,bs4
 import sys
 import webbrowser  # 打开浏览器
 import struct as st #编码解码
@@ -15,18 +12,14 @@ import mpl_finance as mpf  # python中可以用来画出蜡烛图、线图的分
 import numpy as np
 import pandas  as pd
 import prettytable as pt  # 格式化成表格输出到html文件
-import pymysql
-import requests as req
-import tushare as ts
 from util.WriteToTDX import *
 from util.checkStock import * #检查个股风险项
 from dateutil.relativedelta import relativedelta
-from lxml import etree
 from pyecharts import options as opts
 from pyecharts.charts import Page, Line
 from optparse import OptionParser
 from TradeDay import tradeday
-
+from dboprater import DB as db
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 
 
@@ -46,7 +39,7 @@ class NorthwardAnalysis():
     jsoncontent=None
     stockcode=''
     def __init__(self):
-        self.jsoncontent=self.get_config()
+        self.jsoncontent=db.get_config()
         self.pro = ts.pro_api(self.jsoncontent['tushare'])
 
     #########编码成通达信可识别的数据
@@ -57,18 +50,6 @@ class NorthwardAnalysis():
         text2 = st.pack('f', float(SCode))
         # print(text2)
         return text1 + text2
-
-    def get_config(self):
-        with open(self.configfile, encoding="utf-8") as f:
-            jsoncontent = json.load(f)
-        f.close()
-        return jsoncontent
-
-    def dbconnect(self):
-        jsoncontent = self.get_config()
-        conn = pymysql.connect(jsoncontent['host'], jsoncontent['user'], jsoncontent['password'],
-                               jsoncontent['database'], charset='utf8')
-        return conn
 
     def get_optparse(self):
         parser = OptionParser()
@@ -248,7 +229,7 @@ class NorthwardAnalysis():
     def selectdb(self, **kwords):  # **kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
         conditions = str(kwords).strip('{').strip('}').replace(':', '=', 1).replace('\'', '', 2)
         print(conditions)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 执行的sql语句
         sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF ,SHAREHOLDPRICE ,SHAREHOLDPRICEONE ,SHAREHOLDPRICEFIVE ,SHAREHOLDPRICETEN from  northdataAnaly  '''
@@ -273,7 +254,7 @@ class NorthwardAnalysis():
         # yesterday = str((outdate + datetime.timedelta(days=-1)).strftime("%Y-%m-%d"))
         sql = 'select * from northdataAnaly where Hddate=\'' + newdate + '\' order by SHAREHOLDPRICEONE desc limit 10'
         # print(sql)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         resultset = cursor.fetchall()
@@ -295,7 +276,7 @@ class NorthwardAnalysis():
         yesterday=tradeday.getyestodayTradeday(outdate)
         sql = 'select * from northdataAnaly where hddate=\'' + newdate + '\'and SHAREHOLDPRICEONE>5 and SHAREHOLDPRICEFIVE>1 and Zdf >-2 and SCode in ( select SCode from northdataAnaly where hddate=\'' + yesterday + '\' and SHAREHOLDPRICEONE<0 )  order by SHAREHOLDPRICEONE desc'
         # print(sql)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # print(sql)
         cursor.execute(sql)
@@ -504,7 +485,7 @@ class NorthwardAnalysis():
     # 获取表中最新的日期
     def getdb_maxdate(self):
         sql = 'select max(HDDATE) as "HDDATE" from northdataAnaly '
-        conn = conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -523,7 +504,7 @@ class NorthwardAnalysis():
     def getdbdate(self,hddate):
         sql = 'select  HDDATE from northdataAnaly where HDDATE=\''+hddate+'\' limit 1;'
         # print(sql)
-        conn = conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -753,7 +734,7 @@ class NorthwardAnalysis():
         if len(northdataAnalyinfos) == 0:
             return
         #print(northdataAnalyinfos)
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # 执行的sql语句
         sql = '''insert into northdataanaly (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''

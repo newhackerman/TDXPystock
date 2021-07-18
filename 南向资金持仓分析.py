@@ -1,14 +1,12 @@
 ﻿import bs4
 import requests as req
-import re,json
+import json
 import prettytable as pt   #格式化成表格输出到html文件
-import struct as st
-import time,sys
-import re
-from pyecharts.charts import Bar, Page,Line
+import time,sys,re
+from dboprater import DB as db
+from pyecharts.charts import Line
 from pyecharts import options as opts
 import tushare as ts
-import pandas as pd   #数据读取
 import webbrowser  #打开浏览器
 '''手动安装 talib 去https://www.lfd.uci.edu/~gohlke/pythonlibs/#ta-lib 下载对应的版本“TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl”  然后 pip3 install TA_Lib‑0.4.19‑cp37‑cp37m‑win_amd64.whl'''
 # import  talib   #Technical Analysis Library”, 即技术分析库 是Python金融量化的高级库，涵盖了150多种股票、期货交易软件中常用的技术分析指标，如MACD、RSI、KDJ、动量指标、布林带等等。
@@ -25,18 +23,6 @@ database='stock'
 tablename='stockopendata'
 configfile='./config/mysqlconfig.json'
 dpath = 'C:\\十档行情\\T0002\\signals\\signals_user_9603\\'
-
-#读取json格式的配置文件
-def file2dict(path):
-    with open(path, encoding="utf-8") as f:
-        jsoncontent=json.load(f)
-        return jsoncontent
-
-def dbconnect():      #建立连接
-    dict = []
-    dict = file2dict(configfile)  # 获取连接数据库需要的相关信息
-    conn = pymysql.connect(dict['host'], dict['user'], dict['password'], dict['database'], charset='utf8')
-    return conn
 
 #获取南向数据总页数
 def get_pages(headers,url,params):
@@ -129,7 +115,7 @@ def insertdb (southdatainfos):
 
     if len(southdatainfos)==0:
         return
-    conn = dbconnect()
+    conn = db.dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     #由于每次取的是全量数据，先将表清空
     sql1='delete from southdataanly'
@@ -170,7 +156,7 @@ def insertdb (southdatainfos):
 def selectdb(**kwords):      #**kwords :表示可以传入多个键值对， *kwords:表示可传入多个参数
     conditions=str(kwords).strip('{').strip('}').replace(':','=',1).replace('\'','',2)
     print(conditions)
-    conn = dbconnect()
+    conn = db.dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # 执行的sql语句
     sql = '''select HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN from  southdataanly  '''

@@ -4,6 +4,7 @@ import re,json
 import prettytable as pt   #格式化成表格输出到html文件
 import struct as st
 import datetime
+from dboprater import DB as db
 #import csvtotable      #格式化成表格输出到html文件
 import pymysql
 database='stock'
@@ -44,23 +45,6 @@ def Write_southdataanly(listdata, dpath):
     except FileNotFoundError as fnot1:
         print(fnot1)
         return
-
-#读取json格式的配置文件
-def file2dict(path):
-    with open(path, encoding="utf-8") as f:
-        jsoncontent=json.load(f)
-        #if jsoncontent.startswith(u'\ufeff'):
-        #     jsoncontent = jsoncontent.encode('utf8')[3:].decode('utf8')
-        return jsoncontent
-
-def dbconnect():      #建立连接
-    dict = []
-    dict = file2dict(configfile)  # 获取连接数据库需要的相关信息
-      # 创建数据库连接
-    conn = pymysql.connect(dict['host'], dict['user'], dict['password']
-                           , dict['database'], charset='utf8')
-    return conn
-
 def formatresults(listdata,header):
     #results   查询到的数据集
     #header   要输出的表头
@@ -70,7 +54,7 @@ def formatresults(listdata,header):
     #tb.sortby = "日期"
     #tb.set_style(pt.DEFAULT)
     #tb.horizontal_char = '*'
-    conn = dbconnect()
+    conn = db.dbconnect()
     cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # 执行的sql语句
     sql = '''insert into southdataanlyanly (HDDATE,SCODE,SNAME,SHAREHOLDSUM,SHARESRATE,CLOSEPRICE,ZDF,SHAREHOLDPRICE,SHAREHOLDPRICEONE,SHAREHOLDPRICEFIVE,SHAREHOLDPRICETEN) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''

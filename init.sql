@@ -18,33 +18,23 @@ create index stockindustry on stocks(industry);
 
 --#个股描述信息与概念表
 CREATE TABLE IF NOT EXISTS `stockinfo`(
-mcode varchar(2),
 code varchar(6),
-mark varchar(6),
-info varchar(300),
-value varchar(10),
 name varchar(10),
-markname varchar(12)
+market varchar(6),
+bank varchar(300),  /*板块*/
+gainan varchar(300), /*概念*/
+gsld varchar(300),   /*--公司亮点*/
+zyfw varchar(300),/*--经营范围*/
+kbgs varchar(300), /*--可比公司*/
+zycpmc varchar(300), /*--主营产品名称*/
+url varchar(300)  /*--公司URL*/
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-create index stockinfocode on stockinfo(code);
-create index stockinfomcode on stockinfo(mcode);
-create index stockinfomname on stockinfo(name);
-update stockinfo a set name =(select left(trim(name),4) from stocks where code =a.code);
-
-
---个股信息简介表，此表数据来源于同花顺
-CREATE TABLE IF NOT EXISTS `stockinfomation`(
-CODE varchar(8),
-NAME varchar(20),
-industry varchar(100),
-stockdesc varchar(100),
-base_business varchar(300),
-business_scope varchar(300)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-create index stockinfomationcode on stockinfomation(CODE);
-create index stockinfomationname on stockinfomation(NAME);
-create index stockinfomationstockdesc on stockinfomation(stockdesc);
+create UNIQUE index stockinfocode on stockinfo(code);
+create index stockinfoname on stockinfo(name);
+create index stockinfobank on stockinfo(bank);
+create index stockinfogsld on stockinfo(gsld);
+create index stockinfozycpmc on stockinfo(zycpmc);
+create index stockinfozyfw on stockinfo(zyfw);
 
 --早盘数据
 CREATE TABLE IF NOT EXISTS `stockopendata`(
@@ -157,14 +147,13 @@ name varchar(20),
 vol int,
 price float,
 amount float,
-drict varchar(4)
+drict varchar(4),
+market varchar(4)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE INDEX jinjiadatacode on jinjiadata(Code);
-CREATE UNIQUE INDEX jinjiadatacodenamedate on jinjiadata(HDDATE,code,name); -- 一天只能有一条竞价数据
 create index jinjiadataHDDATE on jinjiadata(HDDATE);
 create index jinjiadataname on jinjiadata(name);
-
+CREATE UNIQUE INDEX jinjiadatacodenamedate on jinjiadata(HDDATE,code,name,market);
 ---存储近三年的日期，判断是否为交易日
 CREATE TABLE IF NOT EXISTS `datelist`(
 date date,
@@ -190,9 +179,58 @@ CREATE UNIQUE INDEX timecodenamedate on stockfirstmindata(HDDATE,htime,code,name
 create index stockfirstmindataHDDATE on stockfirstmindata(HDDATE);
 create index stockfirstmindataname on stockfirstmindata(name);
 
+-- 个股历史大资金，注意与超级大单区别(只记录满足条件那天的记录)
+CREATE TABLE IF NOT EXISTS `historysuperaward`(
+hddate date,
+code varchar(8),
+name varchar(20),
+market varchar(2),
+price float,
+zdf float,
+ddlry float,
+ddb float
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---数据同步到阿里云
---mysqldump -u root -p密码 stock jinjiadata| mysql -h 47.107.130.152 -p密码 stock
+create index historysuperawardcode on historysuperaward(code);
+create index historysuperawardhddate on historysuperaward(hddate);
+create index historysuperawardname on historysuperaward(name);
+CREATE UNIQUE INDEX superawardcode_name_date_ddlry ON historysuperaward(hddate,code,name,ddlry);
+-- 策略表(表结构还没有确定)
+CREATE TABLE IF NOT EXISTS `strategys`(
+id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+name varchar(50),
+conditions varchar(400),
+datadate date,
+stockcode varchar(9),
+stockname varchar(8),
+market varchar(2),
+zdf float,
+price float,
+dde float,
+turnover_rate float /*换手率 */,
+startdate date, /*回测开始日期 */
+maxdate date,   /*回测结束日期 */
+maxAnnualYield float,   /*最大年化收益率 */
+maxhaveday int, /*最大收益率最佳持股天数 */
+maxWinRate float,   /*最大胜率 */
+maxwinhaveday int,  /*最大胜率持股天数 */
+annualYield int,    /*绝对收益率 */
+averageLossRatio int,   /*盈利能力 */
+scount int, /*交易次数 */
+testdate date,  /*测试日期 */
+maxDrawDown int,    /*扩风险能力 */
+profitVolatility int,   /*稳定性 */
+score int,  /*得份 */
+winRate int /*选股能力 */
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create index strategysname on strategys(name);
+create index strategysstockcode on strategys(stockcode);
+create index strategysstockname on strategys(stockname);
+create index strategysstockdatadate on strategys(datadate);
+CREATE UNIQUE INDEX sid_name_date_list ON strategys(name,datadate,stockcode);
+--同步到阿里云
+--mysqldump -u root -p密码 stock jinjiadata| mysql -h{host} -p密码 stock
 --mysqldump  -u root -p stock  >stock.sql
 --mysql -h 47.107.130.152 -u stock -p stock <stock.sql
 

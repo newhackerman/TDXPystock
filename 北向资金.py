@@ -2,9 +2,8 @@ import bs4
 import requests as req
 import re,json
 import prettytable as pt
-import pymysql
 import struct as st
-import datetime,time
+import datetime
 from lxml import  etree
 
 database='stock'
@@ -87,14 +86,6 @@ def file2dict(path):
         #     jsoncontent = jsoncontent.encode('utf8')[3:].decode('utf8')
         return jsoncontent
 
-def dbconnect():      #建立连接
-    dict = []
-    dict = file2dict(configfile)  # 获取连接数据库需要的相关信息
-    # 创建数据库连接
-    conn = pymysql.connect(dict['host'], dict['user'], dict['password']
-                           , dict['database'], charset='utf8')
-    return conn
-
 def formatresults(listdata,header):
     #results   查询到的数据集
     #header   要输出的表头
@@ -105,7 +96,6 @@ def formatresults(listdata,header):
     #tb.set_style(pt.DEFAULT)
     #tb.horizontal_char = '*'
 
-    # conn = dbconnect()
     # cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
     # # 执行的sql语句
     # sql = '''insert into northdata (HdDate,SCode,SName,HYName,SharesRate,NewPrice,Zdf,ShareHold,ShareSZ,LTZB,ZZB,ShareSZ_Chg_One,ShareSZ_Chg_Rate_One) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''

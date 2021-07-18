@@ -12,36 +12,15 @@ import random
 from pywinauto import application
 from pywinauto.application import *
 from pywinauto import mouse
-
+from dboprater import DB as db
 class opendatainTodb():
     database = 'stock'
     tablename = 'stockopendata'
     configfile = './config/mysqlconfig.json'  #为ｊｓｏｎ格式的配置文件
 
     def __init__(self):
-        self.jsoncontent=self.get_config()
+        self.jsoncontent=db.get_config()
         self.pro = ts.pro_api(self.jsoncontent['tushare'])
-
-    def get_config(self):
-        with open(self.configfile, encoding="utf-8") as f:
-            jsoncontent = json.load(f)
-        f.close()
-        return jsoncontent
-
-    def file2dict(self,path):
-        with open(path, encoding="utf-8") as f:
-            jsoncontent=json.load(f)
-            #if jsoncontent.startswith(u'\ufeff'):
-            #     jsoncontent = jsoncontent.encode('utf8')[3:].decode('utf8')
-            return jsoncontent
-
-    def dbconnect(self):      #建立连接
-        dict = []
-        dict = self.file2dict(self.configfile)  # 获取连接数据库需要的相关信息
-          # 创建数据库连接
-        conn = pymysql.connect(dict['host'], dict['user'], dict['password']
-                               , dict['database'], charset='utf8')
-        return conn
 
     def TDX_OpenDataOutputTXT(self):
         app=application.Application()
@@ -118,7 +97,7 @@ class opendatainTodb():
     # 获取表中指定的日期
     def getdbdate(self,date):
         sql = 'select  date from stockopendata where date=\''+date+'\' limit 1;'
-        conn = self.dbconnect()
+        conn = db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -136,7 +115,7 @@ class opendatainTodb():
     def datainsert(self,txtfile):
         date1 = re.search(r'\d+.txt$', txtfile).group()[0:8]       #截取文件名中的日期
         # 创建数据库连接
-        conn =  self.dbconnect()
+        conn =  db.dbconnect()
         cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
         # newdate=getdbdate(date1)
         # if newdate:
@@ -258,8 +237,7 @@ class Add_histoy_opendata:
 
     @staticmethod
     def insertToDB(listdata):
-        opendb = opendatainTodb()
-        conn=opendb.dbconnect()
+        conn=db.dbconnect()
         cursor=conn.cursor(cursor=pymysql.cursors.DictCursor)
         sql='''insert into stockopendata (code,name,kaipanjine,date) values(%s,%s,%s,%s)'''
         if listdata is None:
