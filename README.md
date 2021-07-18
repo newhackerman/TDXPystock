@@ -34,7 +34,7 @@
         python 北向资金分析工具.py 
 
 
-三、 A股信息简介与主营
+三、 A股信息简介与主营（已整合，不再维护此功能）
       
       先执行 stocklist= get_stockInfo()方法获取主营数据
       insertstockinfomation(stocklist)  #将数据写入到表中 
