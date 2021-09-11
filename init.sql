@@ -229,8 +229,105 @@ create index strategysstockcode on strategys(stockcode);
 create index strategysstockname on strategys(stockname);
 create index strategysstockdatadate on strategys(datadate);
 CREATE UNIQUE INDEX sid_name_date_list ON strategys(name,datadate,stockcode);
+
+--大资金净流入历史数据
+CREATE TABLE IF NOT EXISTS `superfundhistory`(
+HDDATE date,
+code varchar(8),
+name varchar(20),
+price float,
+superfund float,
+superpect float,
+zdf float,
+bigfund float,
+bigpect float,
+midfund float,
+midpect float,
+minfund float,
+minpect float,
+mainfund float,
+mainpect float,
+market int
+
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE INDEX superhistorycode on superhistory(code);
+create index superhistoryHDDATE on superhistory(HDDATE);
+create index superhistoryname on superhistory(name);
+create index superhistorysuperfund on superhistory(superfund);
+create index superhistorysuperpect on superhistory(superpect);
+CREATE UNIQUE INDEX  superhistoryUNIQUE  on superhistory(HDDATE,code,superfund);
+
+
+
+
+--rps 计算的主营产品类型分类
+CREATE TABLE IF NOT EXISTS `rpszycplx`(
+code varchar(8),
+name varchar(20),
+zycplx varchar(50)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create index rpszycplxcode on rpszycplx(code);
+CREATE UNIQUE INDEX  rpszycplxunique  on rpszycplx(code,name,zycplx);
+
+--rps 计算的三级分类
+CREATE TABLE IF NOT EXISTS `rpsxfhy`(
+code varchar(8),
+name varchar(20),
+xfhy varchar(50),  /*同花顺指数自定义 */
+SWEJFL varchar(50),  /*申万二级分类 */
+SJFL varchar(50)  /*四级分类 */
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create index rpsxfhycode on rpsxfhy(code);
+create index rpsxfhyxfhy on rpsxfhy(xfhy);
+create index rpsxfhySWEJFL on rpsxfhy(SWEJFL);
+create index rpsxfhySJFL on rpsxfhy(SJFL);
+CREATE UNIQUE INDEX  rpsxfhyunique  on rpsxfhy(code,name,SJFL);
+
+---业绩报表：
+CREATE TABLE IF NOT EXISTS `yjbb`(
+code varchar(8),
+name varchar(20),
+market varchar(2),
+publishname varchar(50),  /*行业*/
+basic_eps float,   /*每股收益*/
+deduct_basic_eps float,  /*扣除每股收益*/
+total_operate_income float,  /*营业收入*/
+ystz float,  /*营业收入同比*/
+yshz  float,  /*营业收入季度环比*/
+parent_netprofit float,  /*净利润*/
+sjltz  float,  /*净利润同比*/
+sjlhz  float, /*净利润季度环比*/
+bps float, /*每股净资产*/
+weightavg_roe float, /*净资产收益率*/
+mgjyxjje  float, /*每股经营现金流*/
+xsmll float , /*销售毛利率*/
+assigndscrpt varchar(200) , /*利润分配方案*/
+zxgxl float , /*股息率*/
+datatype  varchar(50) , /*报告类型*/
+datayear varchar(8) ,  /*报告年度*/
+datemmdd varchar(8) ,  /*半年报/季报 */
+reportdate varchar(10),  /*报告日期 */
+update_date date   /*更新日期*/
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create index yjbbcode on yjbb(code);
+create index yjbbname on yjbb(name);
+create index yjbbbasic_eps on yjbb(basic_eps);
+create index yjbbroe on yjbb(weightavg_roe);
+create index yjbbystz on yjbb(ystz);
+create index yjbbsjltz on yjbb(sjltz);
+create index yjbbreportdate on yjbb(reportdate);
+create index yjbbupdate_date on yjbb(update_date);
+
+CREATE UNIQUE INDEX yjbbunique  on yjbb(code,name,reportdate,update_date);
+
+
+
+
+
+
 --同步到阿里云
 --mysqldump -u root -p密码 stock jinjiadata| mysql -h{host} -p密码 stock
 --mysqldump  -u root -p stock  >stock.sql
---mysql -h 47.107.130.152 -u stock -p stock <stock.sql
+--mysql -h  -u stock -p stock <stock.sql
 
