@@ -24,7 +24,7 @@ PyQtWebEngine-Qt==5.15.2
 PyQtWebEngine-Qt5==5.15.2
 PySide2==5.15.2
 pytest==6.2.2
-pywin32==228
+pywin32>=301
 pywin32-ctypes==0.2.0
 qt5-applications==5.15.2.2.1
 qt5-tools==5.15.2.1.0.1
