@@ -321,6 +321,194 @@ create index yjbbupdate_date on yjbb(update_date);
 
 CREATE UNIQUE INDEX yjbbunique  on yjbb(code,name,reportdate,update_date);
 
+--- 板块RPS
+CREATE TABLE IF NOT EXISTS `bankrps`(
+hddate varchar(15),
+bankname varchar(30),
+bkvol float,
+bkamount float,
+bkzf float,
+bk3zf float,
+bk5zf float,
+bk10zf float,
+bk20zf float,
+bk60zf float,
+bk120zf float,
+bk250zf float,
+bkzfrt float,
+bk3zfrt float,
+bk5zfrt float,
+bk10zfrt float,
+bk20zfrt float,
+bk60zfrt float,
+bk120zfrt float,
+bk250zfrt float,
+bkrps float,
+bk3rps float,
+bk5rps float,
+bk10rps float,
+bk20rps float,
+bk60rps float,
+bk120rps float,
+bk250rps float
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create index bankrpsname on bankrps(bankname);
+create index bankrpshddate on bankrps(hddate);
+create index bankrpsbkzf on bankrps(bkzf);
+create index bankrpsbkrps on bankrps(bkrps);
+CREATE UNIQUE INDEX bankrpsunique  on bankrps(bankname,hddate,bk3zf); /* 有可能根据不能的板块分类进行RPS计算 */
+
+----个股rps结果表
+CREATE TABLE IF NOT EXISTS `stockrps`(
+hddate varchar(15),
+code varchar(8),
+name varchar(12),
+swejfl varchar(50),
+sjfl varchar(50),
+vol float,
+amount float,
+zf float,
+zf3 float,
+zf5 float,
+zf10 float,
+zf20 float,
+zf60 float,
+zf120 float,
+zf250 float,
+zfrt float,
+zf3rt float,
+zf5rt float,
+zf10rt float,
+zf20rt float,
+zf60rt float,
+zf120rt float,
+zf250rt float,
+rps float,
+rps3 float,
+rps5 float,
+rps10 float,
+rps20 float,
+rps60 float,
+rps120 float,
+rps250 float
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create index stockrpscode on stockrps(code);
+create index stockrpshddate on stockrps(hddate);
+create index stockrpshzf on stockrps(zf);
+create index stockrpshzf3 on stockrps(zf3);
+CREATE UNIQUE INDEX stockrpsunique  on stockrps(hddate,code,zf3);
+
+
+--个股评分数据
+CREATE TABLE IF NOT EXISTS `stockscore`(
+hddate  varchar(12),
+code varchar(8),
+name varchar(12),
+zhdf float, /* 综合得分 */
+jsdf float,/* 技术得分 */
+zjdf float,/* 资金得分 */
+xxdf float,/* 消息得分 */
+hydf float,/* 行业得分 */
+jbmdf float/* 基本面得分 */
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create index stockscorecode on stockscore(code);
+create index stockscorename on stockscore(name);
+create index stockscorezhdf on stockscore(zhdf);
+CREATE UNIQUE INDEX stockscoreunique  on stockscore(code,name,hddate,zhdf);
+
+--个股涨停信息入库
+CREATE TABLE IF NOT EXISTS `stocklimitup`(
+hddate  varchar(12),
+code varchar(8),
+name varchar(12),
+price float, /* 当前价 */
+zdf float,/* 涨跌幅 */
+limituptime float,/* 涨停时间 */
+updays float,/* 连板次数 */
+openlimits float,/* 开板次数 */
+gainan varchar(20) ,/* 所属概念 */
+reason  varchar(200)/* 原因 */
+
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create index stocklimitupcode on stocklimitup(code);
+create index stocklimitupname on stocklimitup(name);
+create index stocklimituphddate on stocklimitup(hddate);
+create index stocklimitupreason on stocklimitup(reason);
+CREATE UNIQUE INDEX stocklimitupunique  on stocklimitup(code,name,hddate);
+
+-- 个股股本，流通股本，股东占比信息【问财】
+CREATE TABLE IF NOT EXISTS `stockshareholder`(
+hddate  varchar(12),
+code varchar(8),
+name varchar(12),
+total_share int, /* 总股本 */
+total_market_value float, /* 总市值 */
+circulating_share int, /* 流通股本 */
+circulating_market_value float, /* 流通市值 */
+circulating_ratio float, /* 流通股占比 */
+top10_share_holders float, /* 前十大股东持股市值 */
+top10_share_sum int, /* 前十大股东持股数量合计 */
+top10_share_ratio float, /* 前十大股东持股比例合计 */
+free_circulation_marke_value float,/* 自由流通市值  【流通市值-10大股东市值<0|总市值-10大股东市值】当有股东增减持时，数据不准确 */
+free_circulation_share float,/* 自由流通股本  【流通股本-前十大股东持股数量合计<0->总本股-前十大股东持股数量合计】当有股东增减持时，数据不准确 */
+top10_share_name varchar(500)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create index stockshareholdercode on stockshareholder(code);
+create index stockshareholdername on stockshareholder(name);
+create index stockshareholderhddate on stockshareholder(hddate);
+create index stockshareholderfree on stockshareholder(free_circulation_marke_value);
+create index stockshareholderfree_share on stockshareholder(free_circulation_share);
+CREATE UNIQUE INDEX stockshareholderunique  on stockshareholder(code,name,hddate);
+
+
+--个股财务数据【wind】
+CREATE TABLE IF NOT EXISTS `stockfinancial`(
+hddate  varchar(12),
+code varchar(8),
+name varchar(12),
+mgjxjll float , /*  每股净现金流量(元) */
+mgjyxjl float , /* 每股经营现金流(元) */
+mgjzc float , /*  每股净资产(元/股) */
+mgsy float , /*  每股收益(元/股)	  */
+mgsytb float , /* 每股收益(摊薄)(元) */
+mgyylr float , /* 每股营业利润(元)	  */
+mgyysr float , /* 每股营业收入(元)  */
+gsymgssyzdjlr float , /* 归属于母公司净利润(元)  */
+jlr float , /* 净利润(元)  */
+lrze float , /* 利润总额(元) */
+yylr float , /* 营业利润(元) */
+yysr float , /* 营业收入(元) */
+jll float , /* 净利率(%) */
+mll float , /* 毛利率(%) */
+roe float , /* ROE(%)净资产收益率 */
+yylrl float , /* 营业利润率(%)	 */
+cwfyl float , /* 财务费用率(%)*/
+glfyl float , /* 管理费用率(%) */
+roic float , /* ROIC */
+xsfyl float , /* 销售费用率(%) */
+xsqjfyl float , /* 销售期间费用率(%) */
+xsqlr float , /* 息税前利润(元) */
+cqbl float , /* 产权比率（%）	 */
+ldbl_r float , /* 流动比率（倍） */
+lxbzbs float , /* 利息保障倍数 */
+mgjyhdxjllzzl float , /* 每股经营活动现金流量增长率（%） */
+sdbl_r float , /* 速动比率（倍） */
+xjbl float , /* 现金比率（%） */
+xjldfzb float , /* 现金流动负债比 */
+zcfzl float , /* 资产负债率（%） */
+chzzl float , /* 存货周转率（次） */
+gdzczzl float , /* 固定资产周转率（次） */
+ldzczzl float , /* 流动资产周转率（次） */
+yszkzzl float , /* 应收帐款周转率（次） */
+zzczzl float  /* 资产周转率（次） */
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create index stockfinancialcode on stockfinancial(code);
+create index stockfinancialname on stockfinancial(name);
+create index stockfinancialhddate on stockfinancial(hddate);
+CREATE UNIQUE INDEX stockfinancialunique  on stockfinancial(code,name,hddate);
 
 
 
