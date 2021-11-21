@@ -1,4 +1,5 @@
-from gtts import gTTS   #调用的是google 翻译
+#如果不需要保存，直接调本地的speaker 更简单【盘中语音提示】，有问题可以联系我
+from gtts import gTTS   #调用的是google 翻译  
 import pyttsx3
 import hashlib  # md5
 
