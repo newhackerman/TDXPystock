@@ -1,4 +1,4 @@
-#  使用百度api 语音转文字功能 [对源语音要求太高了]
+#  使用百度api 语音转文字功能 [对源语音要求太高了] 本文件代码运行有问题不要联系我，告诉你环境问题，整这个环境很花时间，一时半会根本说不清，自行google搜索解决
 import requests as req
 import json,base64,os
 import speech_recognition as sr
