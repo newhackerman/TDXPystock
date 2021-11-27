@@ -1,9 +1,11 @@
 import 语音文字转换ui
 from PyQt5.Qt import *
-import  sys,json,os,time,uuid
+import  sys,json,os,time,uuid,datetime
 import base64,hashlib,hmac,requests
 from urllib import parse
 import http.client
+import pyaudio,wave
+
 from aliyunsdkcore.acs_exception.exceptions import ClientException
 from aliyunsdkcore.acs_exception.exceptions import ServerException
 from aliyunsdkcore.client import AcsClient
@@ -75,12 +77,14 @@ class textoraudioTransalte():
         self.get_config()
     def initUI(self):
         self.mainwindow.setWindowTitle('语音文字互转小工具')
+        self.mainui.lineEdit_saverecordtimes.setText('20') #录音默认为20秒
         self.mainui.pushButton_saveconfig.clicked.connect(self.write_config)
         self.mainui.pushButton_openaudiofile.clicked.connect(self.openaudiofileload)
         self.mainui.pushButton_savetoaudiofile.clicked.connect(self.opensavetoaudiofile)
         self.mainui.pushButton_textToaudio.clicked.connect(self.starttextToaudio)
         self.mainui.pushButton_audioTotext.clicked.connect(self.startaudioTotext)
-
+        self.mainui.pushButton_saverecordaudiofile.clicked.connect(self.opensavetoaudiofile)
+        self.mainui.pushButton_startsaverecordaudiofile.clicked.connect(self.audio_recordaction)
     #读取配置
     def get_config(self):
         try:
@@ -135,7 +139,11 @@ class textoraudioTransalte():
         try:
             file_path =  QFileDialog.getExistingDirectory(QWidget(),"选取文件夹",r"H:\videoProcess\Audio_source")
             self.savedir=str(file_path)
-            self.mainui.lineEdit_savetoaudiofile.setText(self.savedir)
+            currenttab=self.mainui.tabWidget.currentIndex()
+            if currenttab ==2:
+                self.mainui.lineEdit_savetoaudiofile.setText(self.savedir)
+            elif  currenttab ==3:
+                self.mainui.lineEdit_saverecordaudiofile.setText(self.savedir)
         except BaseException as b:
             print(b)
 
@@ -153,10 +161,11 @@ class textoraudioTransalte():
         if str(path)=='' or path is None:
             self.promptinfo('请选择目录')
             path = self.mainui.lineEdit_savetoaudiofile.text()
-        if len(text)<10:
-            filename=str(path)+'/'+ str(text)+'.'+str(format)
+        tmpstr=text.replace(':','',-1).replace('/','',-1).replace('\\','',-1)
+        if len(tmpstr)<10:
+            filename=str(path)+'/'+ str(tmpstr)+'.'+str(format)
         else:
-            filename =str(path)+'/'+ str(text[0:10])+'.'+str(format)
+            filename =str(path)+'/'+ str(tmpstr[0:10])+'.'+str(format)
         token=self.get_aliyuntoken() #获取阿里云token
         if token is None:
             self.promptinfo('获取阿里云的token失败')
@@ -406,6 +415,75 @@ class textoraudioTransalte():
             print ("录音文件识别失败！")
             return None
         return getResponse
+    #录音按钮事件
+    def audio_recordaction(self):
+        times=self.mainui.lineEdit_saverecordtimes.text().strip()
+
+        if times.isalpha() or str(times)=='':
+            self.promptinfo('请输入正确的录音时间秒数，为数字')
+            return
+        path1=self.mainui.lineEdit_saverecordaudiofile.text().strip()
+        if str(path1)=='':
+            self.promptinfo('请选择要保存的目录')
+            return
+        self.promptinfo('2秒后开始')
+        time.sleep(1)
+        self.audio_record(times,path1)
+    #录音功能
+    def audio_record(self,times,path1):
+        times=int(times)
+        CHUNK = 1024  # 每个缓冲区的帧数
+        FORMAT = pyaudio.paInt16  # 采样位数
+        CHANNELS = 1  # 单声道
+        RATE = 16000  # 采样率
+        # '''RATE表示采样率，常用的采样率有：8000, 16000, 22050, 44100, 48000和 96000 Hz'''
+        timenow=str(datetime.datetime.now().strftime('%H_%M_%S'))
+        filename=str(path1)+'/'+'voice_record_start_'+timenow+'.mp3'
+        try:
+            self.start_timer(times, 1000) #开始倒计时
+            """ 录音功能 """
+            p = pyaudio.PyAudio()  # 实例化对象
+            stream = p.open(format=FORMAT,
+                            channels=CHANNELS,
+                            rate=RATE,
+                            input=True,
+                            frames_per_buffer=CHUNK)  # 打开流，传入响应参数
+            wf = wave.open(filename, 'wb')  # 打开 wav 文件。
+            wf.setnchannels(CHANNELS)  # 设置单声道
+            wf.setsampwidth(p.get_sample_size(FORMAT))  # 设置采样位宽为16bits
+            wf.setframerate(RATE)  # 设置采样率
+
+            print('Start speaking for %ds\n' % times)
+
+            for _ in range(0, int(RATE * times / CHUNK)):
+                data = stream.read(CHUNK)
+                wf.writeframes(data)  # 写入数据
+            stream.stop_stream()
+            stream.close()
+            print('End of Recording.')
+            p.terminate()
+            wf.close()
+        except BaseException as b:
+            print(b)
+            return
+    #倒计时
+    def start_timer(self, count=20, interval=1000):
+        counter = 0
+        count=int(count)
+        # print(count)
+        self.mainui.pushButton_startsaverecordaudiofile.setDisabled(True)
+        def handler():
+            nonlocal counter
+            counter += 1
+            self.mainui.label_times.setText('倒计时：'+str(int(count)-int(counter))) #改变计时器的显示
+            if counter >= count:
+                timer.stop()
+                timer.deleteLater()
+                self.mainui.pushButton_startsaverecordaudiofile.setDisabled(False)
+
+        timer = QTimer()
+        timer.timeout.connect(handler)
+        timer.start(interval)
 
 if __name__ == '__main__':
     try:
@@ -415,5 +493,6 @@ if __name__ == '__main__':
 
         app.exec()
         sys.exit()
-    except :
+    except BaseException as b :
+        print(b)
         sys.exit(1)
