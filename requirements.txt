@@ -3,7 +3,7 @@ bs4==0.0.1
 easytrader==0.22.0
 easyutils==0.1.7
 Finance-Python==0.9.7
-lxml==4.6.3
+lxml>=4.6.5
 matplotlib==3.3.2
 mootdx==0.6.6
 mpl-finance==0.10.1
