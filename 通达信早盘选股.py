@@ -5,8 +5,8 @@ import pandas as pds
 import util.logout as log
 import util.TDX_OpenDataOutput as TDX_OpenDataOutput
 
-pro = ts.pro_api('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
-ts.set_token('d0bf482fc51bedbefa41bb38877e169a43d00bd9ebfa1f21d28151c7')
+pro = ts.pro_api('XXX')
+ts.set_token('XXX')
 #早盘选股，选量比>25的，现量大于3000手，3日涨幅% <15%,流通盘小150亿
 ###################sfile早盘竞价后导出EXCEL文件
 def getstockopenamo(sfile):
