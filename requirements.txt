@@ -8,7 +8,7 @@ matplotlib==3.3.2
 mootdx==0.6.6
 mpl-finance==0.10.1
 mplfinance==0.12.7a17
-numpy==1.19.4
+numpy>=1.21
 pandas==1.2.4
 prettytable==2.0.0
 PyAutoGUI==0.9.52
