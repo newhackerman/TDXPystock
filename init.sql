@@ -251,12 +251,12 @@ market int
 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE INDEX superhistorycode on superhistory(code);
-create index superhistoryHDDATE on superhistory(HDDATE);
-create index superhistoryname on superhistory(name);
-create index superhistorysuperfund on superhistory(superfund);
-create index superhistorysuperpect on superhistory(superpect);
-CREATE UNIQUE INDEX  superhistoryUNIQUE  on superhistory(HDDATE,code,superfund);
+CREATE INDEX superhistorycode on superfundhistory(code);
+create index superhistoryHDDATE on superfundhistory(HDDATE);
+create index superhistoryname on superfundhistory(name);
+create index superhistorysuperfund on superfundhistory(superfund);
+create index superhistorysuperpect on superfundhistory(superpect);
+CREATE UNIQUE INDEX  superhistoryUNIQUE  on superfundhistory(HDDATE,code,superfund);
 
 
 
