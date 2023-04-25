@@ -86,6 +86,5 @@
 
 如果您认为还不错，也可以随意打赏
 
-![打赏码]
-(https://github.com/newhackerman/TDXPystock/blob/master/pics/%E5%BE%AE%E4%BF%A1%E4%B8%8E%E6%94%AF%E4%BB%98%E5%AE%9D.png)
+![打赏码](https://github.com/newhackerman/TDXPystock/blob/master/pics/%E5%BE%AE%E4%BF%A1%E4%B8%8E%E6%94%AF%E4%BB%98%E5%AE%9D.png)
 
