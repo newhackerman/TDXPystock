@@ -80,7 +80,7 @@
      
      util/asShare_unit.py   此代码提供A股，港股，美股，期货等行情数据下载
  
- 
+ 个人小站:https://aifamily.me ,论坛：http://20.78.8.105:8082/
         
 感谢您的关注，使用中有任何疑问，请与我联系：QQ:860760123  微信：newhackerman@163.com ,也可以新建issues                         
 
