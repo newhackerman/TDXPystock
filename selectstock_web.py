@@ -16,7 +16,7 @@ conn = db.dbconnect()
 
 htmlfile = 'selectstocks.html'
 
-redis_client = redis.Redis(host='remotehost', port=6379,password='remotepassword',encoding='utf-8',decode_responses=True,socket_connect_timeout=2)
+redis_client = redis.Redis(host=config['redishost'], port=6379,password=config['redispassword'],encoding='utf-8',decode_responses=True,socket_connect_timeout=2)
 
 # 定义首页路由
 @app.route('/')
