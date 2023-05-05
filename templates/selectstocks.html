@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Selection</title>
+    <!-- 引入Bootstrap CSS -->
+    {#    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">#}
+    <link rel='stylesheet' id='wp-block-library-css'
+          href='https://aifamily.me/wp-includes/css/dist/block-library/style.min.css?ver=6.2' type='text/css'
+          media='all'/>
+    <link rel='stylesheet' id='jetpack-layout-grid-css'
+          href='https://aifamily.me/wp-content/plugins/layout-grid/style.css?ver=1682133589' type='text/css'
+          media='all'/>
+    <style type="text/css">
+        body {
+        {#background: linear-gradient(to bottom, #fddb92 0%, #d1fdff 100%);#}{#background-image: linear-gradient(to right, #b8cbb8 0%, #b8cbb8 0%, #b465da 0%, #cf6cc9 33%, #ee609c 66%, #ee609c 100%);#} {#background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);#}{#background-image: linear-gradient(to top, #ff0844 20%, #ffb199 100%);#}{#background-image: linear-gradient(to right, #868f96 0%, #596164 100%);#}
+            /* 渐变方向：从上到下 */
+        {#background-image: linear-gradient(to right, #f83600 0%, #f9d423 100%);#}{#background-image: linear-gradient(to top, #09203f 0%, #537895 100%);#} background-image: linear-gradient(to top, #e8198b 0%, #c7eafd 100%);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Roboto, sans-serif;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        tbody tr.odd th,tbody tr.odd td { /*odd就是偶数行*/
+        background-color: #e5400d;
+        border-bottom: 2px solid #8e34d7;
+    }
+
+    td+td+td, /*第三个td以及之后的td元素*/
+    col.price{ /*类样式*/
+        text-align:right;
+    }
+
+    tbody tr:hover td, tbody tr:hover th { /*tr也有hover样式*/
+        background-color: #e3b41c;
+        color:#fff;
+    }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #c22658;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .material-icons {
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            transition: all 0.3s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+        messageBox {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+<div lang="en">
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="输入选股条件" id="conditionInput"
+                           style="width:300px">
+                    <button class="btn btn-outline-secondary" type="button" id="addConditionBtn">添加条件</button>
+
+                    <input type="hidden" name="task_id" id="task-id" value="">
+                    <button class="btn btn-primary" type="button" id="selectStockBtn"> 选&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;股</button>
+                    <button class="btn btn-success" type="button" id="exportBtn">导出 结果
+                    </button>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>选股条件列表</h5>
+                <select multiple class="form-control" id="conditionList" style="width:600px">
+                </select>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div>
+    <table style="align-content: center" align="center">
+        <tr>
+            <td>例如条件：【多个条件取交集，满足所有添加的条件】</td>
+        </tr>
+        <td> 建议多个条件一起写用“,”隔开：<p></p>
+            例：'非科创，非北交所，非ST,公司亮点，公司业务,上市日期大于1年,同花顺三级行业龙头，2022年扣非净利润正增长,股东人数小于10万，macd金叉,近期放量'
+        </td>
+        </tr>
+        <tr>
+            <td> 0、非科创，非北交所，非ST,公司亮点，公司业务,上市日期大于1年,同花顺三级行业龙头</td>
+        </tr>
+        <tr>
+            <td> 1、前十大股东持仓超过60%</td>
+        </tr>
+        <tr>
+            <td> 2、市值大于80亿小于300亿</td>
+        </tr>
+        <tr>
+            <td> 3、非周期行业</td>
+        </tr>
+        <tr>
+            <td> 4、股东人数小于10万</td>
+        </tr>
+        <tr>
+            <td> 5、评级机构数不少于4家</td>
+        </tr>
+        <tr>
+            <td> 6、2022年扣非净利润正增长</td>
+        </tr>
+        <tr>
+            <td> 7、2023年第一季扣非净利润正增长</td>
+        </tr>
+
+        <tr>
+            <td>
+                【说明，条件选票只是代表了你自己某段时间内的想法，并不代表看似很好的策略，市场会给你带来丰厚的回报，以盘面为准,不断调整自己的策略直到它经过牛熊的验证】
+            </td>
+        </tr>
+        <div class="col-md-4">
+
+        </div>
+        <div id="containerresult">
+        </div>
+    </table>
+</div>
+<!-- 引入Bootstrap JS -->
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"></script>
+<!-- 引入jQuery -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(function () {
+        // 添加选股条件
+        $('#addConditionBtn').click(function () {
+            var condition = $('#conditionInput').val().trim();
+            if (condition.length > 0) {
+                $('#conditionList').append($('<option>', {
+                    value: condition,
+                    text: condition
+                }));
+                $('#conditionInput').val('');
+            }
+        });
+        // 选股
+        $('#selectStockBtn').click(function () {
+            var conditions = [];
+
+            $('#conditionList option').each(function () {
+                conditions.push($(this).attr('value'));
+            });
+            if (conditions.length > 0) {
+                console.log('前端要传给后端的数据为：', conditions)
+                showMessage('选股中，请稍等，结果会自动更新在下方')
+                $.post('/select_stocks', {'conditions': conditions},
+                    'json')
+                    .then(response => response.toString())
+                    .then(data => {
+                        {#console.log('返回数据为：', data)#}
+                        document.getElementById('containerresult').innerHTML = data;
+                    });
+            } else {
+                alert('条件为空')
+            }
+        });
+    });
+</script>
+<script>
+    function showMessage(str) {
+        alert(str)
+        setTimeout(function () {
+
+        }, 3000);
+    }
+
+</script>
+<script>
+    $('#exportBtn').click(function () {
+        var element = document.getElementById("containerresult");
+        var content = element.innerHTML.trim();
+        if (content.length > 0) {
+            var blob = new Blob([content], {type: "text/html"});
+            var url = URL.createObjectURL(blob);
+            var downloadButton = document.createElement("a");
+            downloadButton.href = url;
+            downloadButton.download = "result.html";
+            document.body.appendChild(downloadButton);
+            downloadButton.click();
+            URL.revokeObjectURL(url);
+        } else {
+            showMessage('无数据导出')
+        }
+
+    });
+</script>
+</body>
+</html>
