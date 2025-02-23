@@ -2,8 +2,8 @@ import pandas as pd
 import pymysql
 from pymysqlpool import ConnectionPool
 import json
-from mainconfig import configfile
-# configfile = './config/mysqlconfig.json'  #全局变量，不可改名
+#from mainconfig import configfile
+configfile = './config/mysqlconfig.json'  #全局变量，不可改名
 
 class DB(object):
     def __init__(self):
