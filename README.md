@@ -1,7 +1,7 @@
 由于涉及交易，很多核心功能个人不便于公开
  个人小站:https://oneai.eu.org/ 
  
- 智能选股：https://oneai.eu.org:8001/  ETF顶底监控：https://oneai.eu.org:8003/  智能分析：https://oneai.eu.org:8899/
+ 智能选股：http://oneai.eu.org:8001/  ETF顶底监控：http://oneai.eu.org:8003/  智能分析：http://oneai.eu.org:8899/
  
 # 使用python 玩股票  (代码基于python3 数据库为mysql) 
 【由于新版本使用了私有账户与相关云资源不便于公开，部分代码未上传，此文档中说明的相关功能目前未授影响】
