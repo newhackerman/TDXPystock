@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="content-section">
+        <h2>{{ title }}</h2>
+        {% if watchlist_items %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Added On</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in watchlist_items %}
+                    <tr>
+                        <td>{{ item.stock.code }}</td>
+                        <td>{{ item.stock.name }}</td>
+                        <td>{{ item.added_on.strftime('%Y-%m-%d %H:%M') if item.added_on else 'N/A' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('user.remove_from_watchlist_route', stock_code=item.stock_code) }}" style="display:inline;">
+                                <input type="submit" value="Remove" class="btn btn-danger btn-sm">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Your watchlist is empty.</p>
+        {% endif %}
+    </div>
+
+    <!-- Example of how to add a stock (normally this button would be on a stock's detail page) -->
+    <!--
+    <h3>Add a Test Stock (e.g., '000001')</h3>
+    <form method="POST" action="{{ url_for('user.add_to_watchlist_route', stock_code='000001') }}">
+        <input type="submit" value="Add 000001 to Watchlist" class="btn btn-primary">
+    </form>
+    -->
+{% endblock content %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Total Domestic Indices: {{ total_items }}</p>
+
+    {% if not indices.empty %}
+    <div style="overflow-x:auto;"> {# For wider tables #}
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Latest Price</th>
+                    <th>Change Amount</th>
+                    <th>Change (%)</th>
+                    <th>Prev. Close</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Volume</th>
+                    <th>Turnover Value</th>
+                    <!-- Add other headers if available and desired -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, idx_row in indices.iterrows() %}
+                <tr>
+                    <td>{{ idx_row.get('代码', 'N/A') }}</td>
+                    <td>{{ idx_row.get('名称', 'N/A') }}</td>
+                    <td>{{ idx_row.get('最新价', 'N/A') }}</td>
+                    <td>{{ idx_row.get('涨跌额', 'N/A') }}</td>
+                    <td>{{ idx_row.get('涨跌幅', 'N/A') }}</td>
+                    <td>{{ idx_row.get('昨收', 'N/A') }}</td>
+                    <td>{{ idx_row.get('今开', 'N/A') }}</td>
+                    <td>{{ idx_row.get('最高', 'N/A') }}</td>
+                    <td>{{ idx_row.get('最低', 'N/A') }}</td>
+                    <td>{{ idx_row.get('成交量', 'N/A') }}</td>
+                    <td>{{ idx_row.get('成交额', 'N/A') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if total_pages > 1 %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_domestic_indices', page=page-1) }}">Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% set start_page = [1, page-2] | max %}
+            {% set end_page = [total_pages, page+2] | min %}
+
+            {% if start_page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_domestic_indices', page=1) }}">1</a></li>
+                {% if start_page > 2 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endif %}
+
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                    <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_domestic_indices', page=p) }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if end_page < total_pages %}
+                {% if end_page < total_pages - 1 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_domestic_indices', page=total_pages) }}">{{ total_pages }}</a></li>
+            {% endif %}
+
+            {% if page < total_pages %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_domestic_indices', page=page+1) }}">Next</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
+    {% endif %}
+
+    {% else %}
+    <p>No domestic indices data available at the moment.</p>
+    {% endif %}
+</div>
+{% endblock content %}

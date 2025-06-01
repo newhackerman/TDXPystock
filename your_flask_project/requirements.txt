@@ -1,0 +1,13 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+pymysql
+Flask-WTF
+Flask-Login
+email-validator
+requests
+beautifulsoup4
+pandas
+akshare
+lxml
+prettytable

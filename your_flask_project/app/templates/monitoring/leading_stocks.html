@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Data is fetched from TDX and supplemented with Sina real-time quotes.</p>
+
+    {% if is_error %}
+        <div class="alert alert-danger">
+            {{ leading_stocks }} {# This will display the error string from the service #}
+        </div>
+    {% elif leading_stocks %}
+        <div style="overflow-x:auto;">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Current Price</th>
+                        <th>Change (%)</th>
+                        <th>Open</th>
+                        <th>Previous Close</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Volume (shares)</th>
+                        <th>Turnover Value (CNY)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in leading_stocks %}
+                    <tr>
+                        <td>{{ stock.get('code_full', stock.get('code', 'N/A')) }}</td>
+                        <td>{{ stock.get('name', 'N/A') }}</td>
+                        <td>{{ stock.get('price', 'N/A') }}</td>
+                        <td>{{ stock.get('chg_pct', 'N/A') }}</td>
+                        <td>{{ stock.get('open', 'N/A') }}</td>
+                        <td>{{ stock.get('prev_close', 'N/A') }}</td>
+                        <td>{{ stock.get('high', 'N/A') }}</td>
+                        <td>{{ stock.get('low', 'N/A') }}</td>
+                        <td>{{ "{:,.0f}".format(stock.get('volume')|float) if stock.get('volume') else 'N/A' }}</td>
+                        <td>{{ "{:,.2f}".format(stock.get('amount')|float) if stock.get('amount') else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No leading stock data available or an unknown error occurred.</p>
+    {% endif %}
+</div>
+{% endblock content %}

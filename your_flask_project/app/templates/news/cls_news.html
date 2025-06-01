@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Latest news from CLS Telegraph. Total items fetched (current view): {{ news_items.shape[0] if news_items is not none and not news_items.empty else 0 }} of {{ total_items }}</p>
+
+    {% if news_items is not none and not news_items.empty %}
+    <ul class="list-group">
+        {# Expected columns from ak.cls_telegraph_news():
+           '电报内容', '快讯ID', '快讯等级', '快讯来源', '快讯时间', '标签',
+           '相关股票代码', '相关股票名称', '相关板块代码', '相关板块名称', '个股资讯链接', '板块资讯链接'
+           Using .get to safely access columns as they might vary slightly or be missing.
+        #}
+        {% for index, news_item in news_items.iterrows() %}
+            <li class="list-group-item">
+                <h5>{{ news_item.get('电报内容', 'No title available') }}</h5>
+                <small class="text-muted">
+                    Time: {{ news_item.get('快讯时间', 'N/A') }} |
+                    Source: {{ news_item.get('快讯来源', 'N/A') }} |
+                    Importance: {{ news_item.get('快讯等级', 'N/A') }}
+                </small>
+                <p>
+                    {% if news_item.get('标签') %}<strong>Tags:</strong> {{ news_item.get('标签') }}<br>{% endif %}
+                    {% if news_item.get('相关股票名称') %}
+                        <strong>Related Stocks:</strong> {{ news_item.get('相关股票名称') }} ({{ news_item.get('相关股票代码') }})<br>
+                    {% endif %}
+                    {% if news_item.get('相关板块名称') %}
+                        <strong>Related Sectors:</strong> {{ news_item.get('相关板块名称') }} ({{ news_item.get('相关板块代码') }})<br>
+                    {% endif %}
+                </p>
+                {% if news_item.get('个股资讯链接') and news_item.get('个股资讯链接')|string != 'nan' and news_item.get('个股资讯链接')|string != '' %}
+                    <a href="{{ news_item.get('个股资讯链接') }}" target="_blank" class="btn btn-sm btn-outline-primary">Stock News Link</a>
+                {% endif %}
+                {% if news_item.get('板块资讯链接') and news_item.get('板块资讯链接')|string != 'nan' and news_item.get('板块资讯链接')|string != '' %}
+                    <a href="{{ news_item.get('板块资讯链接') }}" target="_blank" class="btn btn-sm btn-outline-secondary">Sector News Link</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Pagination Controls for CLS News -->
+    {% if total_pages > 1 %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination">
+            {% if page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('news.cls_news_page', page=page-1) }}">Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% set start_page = [1, page-2] | max %}
+            {% set end_page = [total_pages, page+2] | min %}
+
+            {% if start_page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('news.cls_news_page', page=1) }}">1</a></li>
+                {% if start_page > 2 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endif %}
+
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                    <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('news.cls_news_page', page=p) }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if end_page < total_pages %}
+                {% if end_page < total_pages - 1 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('news.cls_news_page', page=total_pages) }}">{{ total_pages }}</a></li>
+            {% endif %}
+
+            {% if page < total_pages %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('news.cls_news_page', page=page+1) }}">Next</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
+    {% endif %}
+
+    {% elif not is_error %} {# Assuming is_error might be passed if service layer adds it #}
+        <p>No CLS news available at the moment.</p>
+    {% endif %}
+
+    {# Optional: Error display if service layer explicitly signals an error #}
+    {# {% if is_error %}
+    <div class="alert alert-danger">
+        Could not fetch CLS News: {{ news_items }}
+    </div>
+    {% endif %} #}
+</div>
+<style>
+    .list-group-item { margin-bottom: 10px; border: 1px solid #eee; padding: 15px; border-radius: 5px; }
+    .list-group-item h5 { margin-top: 0; margin-bottom: 5px; }
+    .list-group-item p { margin-bottom: 5px; }
+    .mt-4 { margin-top: 1.5rem !important; }
+</style>
+{% endblock content %}

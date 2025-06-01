@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Stock App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
+        .navbar { background-color: #333; overflow: hidden; padding: 10px 20px; display: flex; flex-wrap: wrap; }
+        .navbar a, .dropdown .dropbtn { float: left; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }
+        .navbar a:hover, .dropdown:hover .dropbtn { background-color: #ddd; color: black; }
+        .navbar-left { display: flex; flex-wrap: wrap; align-items: center; }
+        .navbar-right { margin-left: auto; display: flex; align-items: center; }
+
+        .dropdown { float: left; overflow: hidden; }
+        .dropdown .dropbtn {
+          font-size: 16px;
+          border: none;
+          outline: none;
+          color: white;
+          background-color: inherit;
+          font-family: inherit;
+          margin: 0;
+        }
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1000; /* Ensure dropdown is on top */
+        }
+        .dropdown-content a {
+          float: none;
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+        }
+        .dropdown-content a:hover {
+          background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+
+        .container { padding: 20px; }
+        .content-section { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; }
+        .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+        .alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+        .alert-info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
+        .form-group { margin-bottom: 1rem; }
+        .form-control-label { display: block; margin-bottom: 0.5rem; }
+        .form-control { display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; line-height: 1.5; color: #495057; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; box-sizing: border-box; }
+        .form-control.is-invalid { border-color: #dc3545; }
+        .invalid-feedback { display: none; width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545; }
+        .form-control.is-invalid ~ .invalid-feedback { display: block; }
+        .btn { display: inline-block; font-weight: 400; color: #212529; text-align: center; vertical-align: middle; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background-color: transparent; border: 1px solid transparent; padding: .375rem .75rem; font-size: 1rem; line-height: 1.5; border-radius: .25rem; }
+        .btn-outline-info { color: #17a2b8; border-color: #17a2b8; }
+        .btn-outline-info:hover { color: #fff; background-color: #17a2b8; border-color: #17a2b8; }
+        .btn-danger { color: #dc3545; border-color: #dc3545; }
+        .btn-danger:hover { color: #fff; background-color: #dc3545; border-color: #dc3545; }
+        .btn-sm { padding: .25rem .5rem; font-size: .875rem; line-height: 1.5; border-radius: .2rem; }
+        .table { width: 100%; margin-bottom: 1rem; color: #212529; }
+        .table th, .table td { padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; }
+        .table thead th { vertical-align: bottom; border-bottom: 2px solid #dee2e6; }
+        .table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0,0,0,.05); }
+        .pagination { display: flex; flex-wrap: wrap; justify-content: center; padding-left: 0; list-style: none; border-radius: .25rem; margin-top: 1rem; }
+        .page-item.disabled .page-link { color: #6c757d; pointer-events: none; background-color: #fff; border-color: #dee2e6; }
+        .page-item.active .page-link { z-index: 1; color: #fff; background-color: #007bff; border-color: #007bff; }
+        .page-link { position: relative; display: block; padding: .5rem .75rem; margin-left: -1px; line-height: 1.25; color: #007bff; background-color: #fff; border: 1px solid #dee2e6; }
+        .page-link:hover { color: #0056b3; text-decoration: none; background-color: #e9ecef; border-color: #dee2e6; }
+        .text-right { text-align: right!important; }
+        .list-group-item { margin-bottom: 10px; border: 1px solid #eee; padding: 15px; border-radius: 5px; }
+        .list-group-item h5 { margin-top: 0; margin-bottom: 5px; }
+        .list-group-item p { margin-bottom: 5px; }
+        .mt-4 { margin-top: 1.5rem !important; }
+        .border-bottom { border-bottom: 1px solid #dee2e6!important; }
+        .mb-4 { margin-bottom: 1.5rem!important; }
+        .pt-3 { padding-top: 1rem!important; }
+        .ml-2 { margin-left: .5rem!important; }
+        legend { font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="{{ url_for('main.index') }}">Stock App</a>
+            <a href="{{ url_for('news.cls_news_page') }}">News</a> <!-- Added News Link -->
+
+            <div class="dropdown">
+                <button class="dropbtn">Monitoring
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                  <a href="{{ url_for('monitoring.list_large_orders') }}">Large Orders</a>
+                  <a href="{{ url_for('monitoring.list_aggregated_large_orders') }}">Aggregated Large Orders</a> <!-- Added Link -->
+                  <a href="{{ url_for('monitoring.list_leading_stocks') }}">Leading Stocks</a>
+                  <a href="{{ url_for('monitoring.list_sector_monitor') }}">Industry Monitor</a>
+                  <a href="{{ url_for('monitoring.list_limit_up_stocks') }}">Limit-Up Stocks</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Industry & Concepts
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                  <a href="{{ url_for('monitoring.list_sector_monitor') }}">Industry Sectors</a>
+                  <a href="{{ url_for('market_data.list_concept_sectors') }}">Concept Sectors</a>
+                  <a href="{{ url_for('market_data.stock_quotes_page') }}">Stock Quotes</a>
+                  <a href="{{ url_for('market_data.stock_fundflow_ranked_page') }}">Stock Fund Flows (Ranked)</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Markets
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('market_data.list_a_shares') }}">A-Shares</a>
+                    <a href="{{ url_for('market_data.list_chinext_stocks') }}">ChiNext</a>
+                    <a href="{{ url_for('market_data.list_sme_stocks') }}">SME</a>
+                    <a href="{{ url_for('market_data.list_star_market_stocks') }}">STAR Market</a>
+                    <a href="{{ url_for('market_data.list_bse_stocks') }}">BSE</a>
+                    <hr>
+                    <a href="{{ url_for('market_data.list_domestic_indices') }}">Domestic Indices</a>
+                    <a href="{{ url_for('market_data.list_global_indices') }}">Global Indices</a>
+                    <hr>
+                    <a href="{{ url_for('market_data.list_etf') }}">ETFs</a>
+                    <a href="{{ url_for('market_data.list_convertible_bonds') }}">Convertible Bonds</a>
+                    <hr>
+                    <a href="{{ url_for('market_data.list_us_stocks') }}">US Stocks</a>
+                    <a href="{{ url_for('market_data.list_hk_stocks') }}">HK Stocks</a>
+                    <a href="{{ url_for('market_data.list_chinese_concept_stocks') }}">Chinese Concept</a>
+                    <hr>
+                    <a href="{{ url_for('market_data.list_global_bonds') }}">Global Bonds</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="navbar-right">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('user.profile') }}">Profile</a>
+                <a href="{{ url_for('user.display_watchlist') }}">Watchlist</a>
+                <a href="{{ url_for('user.logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('user.login') }}">Login</a>
+                <a href="{{ url_for('user.register') }}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        <p style="text-align: center; margin-top: 20px;">&copy; 2024 Stock App</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Data Source: AkShare stock_board_concept_spot_em (Eastmoney Concept Sectors)</p>
+    <p>Total Concept Sectors: {{ total_items }}</p>
+
+    {% if not sectors.empty %}
+    <div style="overflow-x:auto;">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Sector Name</th>
+                    <th>Avg. Price</th> {# This is an index-like value for the sector #}
+                    <th>Change Amount (Avg)</th>
+                    <th>Change (%) (Avg)</th>
+                    <th>Total Market Cap</th>
+                    <th>Turnover Rate (%)</th>
+                    <th>Rising Stocks</th>
+                    <th>Falling Stocks</th>
+                    <th>Leading Stock</th>
+                    <th>Leading Stock Change (%)</th>
+                    <!-- Columns from ak.stock_board_concept_spot_em():
+                         '板块名称', '最新价', '涨跌额', '涨跌幅', '总市值', '换手率',
+                         '上涨家数', '下跌家数', '领涨股票', '领涨股票代码', '领涨股票-涨跌幅' -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, sector_row in sectors.iterrows() %}
+                <tr>
+                    <td>{{ sector_row.get('板块名称', 'N/A') }}</td>
+                    <td>{{ sector_row.get('最新价', 'N/A') }}</td>
+                    <td>{{ sector_row.get('涨跌额', 'N/A') }}</td>
+                    <td>{{ sector_row.get('涨跌幅', 'N/A') }}</td>
+                    <td>{{ "{:,.0f}".format(sector_row.get('总市值', 0)) if sector_row.get('总市值') else 'N/A' }}</td>
+                    <td>{{ sector_row.get('换手率', 'N/A') }}</td>
+                    <td>{{ sector_row.get('上涨家数', 'N/A') }}</td>
+                    <td>{{ sector_row.get('下跌家数', 'N/A') }}</td>
+                    <td>{{ sector_row.get('领涨股票', 'N/A') }} ({{ sector_row.get('领涨股票代码', '') }})</td>
+                    <td>{{ sector_row.get('领涨股票-涨跌幅', 'N/A') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if total_pages > 1 %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_concept_sectors', page=page-1) }}">Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% set start_page = [1, page-2] | max %}
+            {% set end_page = [total_pages, page+2] | min %}
+
+            {% if start_page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_concept_sectors', page=1) }}">1</a></li>
+                {% if start_page > 2 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endif %}
+
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                    <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_concept_sectors', page=p) }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if end_page < total_pages %}
+                {% if end_page < total_pages - 1 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_concept_sectors', page=total_pages) }}">{{ total_pages }}</a></li>
+            {% endif %}
+
+            {% if page < total_pages %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('market_data.list_concept_sectors', page=page+1) }}">Next</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
+    {% endif %}
+
+    {% else %}
+    <p>No concept sector data available at the moment.</p>
+    {% endif %}
+</div>
+{% endblock content %}
