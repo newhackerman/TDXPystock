@@ -52,6 +52,7 @@
         .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
         .alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
         .alert-info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
+        .alert-warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
         .form-group { margin-bottom: 1rem; }
         .form-control-label { display: block; margin-bottom: 0.5rem; }
         .form-control { display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; line-height: 1.5; color: #495057; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; box-sizing: border-box; }
@@ -64,6 +65,9 @@
         .btn-danger { color: #dc3545; border-color: #dc3545; }
         .btn-danger:hover { color: #fff; background-color: #dc3545; border-color: #dc3545; }
         .btn-sm { padding: .25rem .5rem; font-size: .875rem; line-height: 1.5; border-radius: .2rem; }
+        .btn-primary { color: #fff; background-color: #007bff; border-color: #007bff; }
+        .btn-outline-primary { color: #007bff; border-color: #007bff; }
+        .btn-outline-primary:hover { color: #fff; background-color: #007bff; border-color: #007bff; }
         .table { width: 100%; margin-bottom: 1rem; color: #212529; }
         .table th, .table td { padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; }
         .table thead th { vertical-align: bottom; border-bottom: 2px solid #dee2e6; }
@@ -74,7 +78,10 @@
         .page-link { position: relative; display: block; padding: .5rem .75rem; margin-left: -1px; line-height: 1.25; color: #007bff; background-color: #fff; border: 1px solid #dee2e6; }
         .page-link:hover { color: #0056b3; text-decoration: none; background-color: #e9ecef; border-color: #dee2e6; }
         .text-right { text-align: right!important; }
-        .list-group-item { margin-bottom: 10px; border: 1px solid #eee; padding: 15px; border-radius: 5px; }
+        .list-group { display: flex; flex-direction: column; padding-left: 0; margin-bottom: 0; }
+        .list-group-item { position: relative; display: block; padding: .75rem 1.25rem; margin-bottom: -1px; background-color: #fff; border: 1px solid rgba(0,0,0,.125); }
+        .list-group-item:first-child { border-top-left-radius: .25rem; border-top-right-radius: .25rem; }
+        .list-group-item:last-child { margin-bottom: 0; border-bottom-right-radius: .25rem; border-bottom-left-radius: .25rem; }
         .list-group-item h5 { margin-top: 0; margin-bottom: 5px; }
         .list-group-item p { margin-bottom: 5px; }
         .mt-4 { margin-top: 1.5rem !important; }
@@ -83,31 +90,37 @@
         .pt-3 { padding-top: 1rem!important; }
         .ml-2 { margin-left: .5rem!important; }
         legend { font-size: 1.5rem; }
+        /* For form layout */
+        .row::after { content: ""; clear: both; display: table; }
+        .col-md-4 { float: left; width: 33.33%; padding: 5px; box-sizing: border-box; }
+        @media screen and (max-width: 768px) {
+          .col-md-4 { width: 100%; margin-bottom: 10px; }
+          .col-md-4.align-self-end { margin-top: 10px; }
+        }
+        .align-self-end { align-self: flex-end; }
+        .invalid-feedback.d-block { display: block !important; }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-left">
             <a href="{{ url_for('main.index') }}">Stock App</a>
-            <a href="{{ url_for('news.cls_news_page') }}">News</a> <!-- Added News Link -->
+            <a href="{{ url_for('news.cls_news_page') }}">News</a>
 
             <div class="dropdown">
-                <button class="dropbtn">Monitoring
-                  <i class="fa fa-caret-down"></i>
-                </button>
+                <button class="dropbtn">Monitoring</button>
                 <div class="dropdown-content">
                   <a href="{{ url_for('monitoring.list_large_orders') }}">Large Orders</a>
-                  <a href="{{ url_for('monitoring.list_aggregated_large_orders') }}">Aggregated Large Orders</a> <!-- Added Link -->
+                  <a href="{{ url_for('monitoring.list_aggregated_large_orders') }}">Aggregated Large Orders</a>
                   <a href="{{ url_for('monitoring.list_leading_stocks') }}">Leading Stocks</a>
                   <a href="{{ url_for('monitoring.list_sector_monitor') }}">Industry Monitor</a>
                   <a href="{{ url_for('monitoring.list_limit_up_stocks') }}">Limit-Up Stocks</a>
+                  <a href="{{ url_for('monitoring.market_fundflow_overview_page') }}">Market Fundflow Overview</a>
                 </div>
             </div>
 
             <div class="dropdown">
-                <button class="dropbtn">Industry & Concepts
-                  <i class="fa fa-caret-down"></i>
-                </button>
+                <button class="dropbtn">Industry & Concepts</button>
                 <div class="dropdown-content">
                   <a href="{{ url_for('monitoring.list_sector_monitor') }}">Industry Sectors</a>
                   <a href="{{ url_for('market_data.list_concept_sectors') }}">Concept Sectors</a>
@@ -117,9 +130,7 @@
             </div>
 
             <div class="dropdown">
-                <button class="dropbtn">Markets
-                  <i class="fa fa-caret-down"></i>
-                </button>
+                <button class="dropbtn">Markets</button>
                 <div class="dropdown-content">
                     <a href="{{ url_for('market_data.list_a_shares') }}">A-Shares</a>
                     <a href="{{ url_for('market_data.list_chinext_stocks') }}">ChiNext</a>
@@ -138,6 +149,26 @@
                     <a href="{{ url_for('market_data.list_chinese_concept_stocks') }}">Chinese Concept</a>
                     <hr>
                     <a href="{{ url_for('market_data.list_global_bonds') }}">Global Bonds</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Fund Flows</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('fund_flow.northbound_daily_flow') }}">Northbound Daily Flow</a>
+                    <a href="{{ url_for('fund_flow.southbound_daily_flow') }}">Southbound Daily Flow</a>
+                    <a href="{{ url_for('fund_flow.northbound_top_holdings') }}">Northbound Top Holdings</a>
+                    <a href="{{ url_for('fund_flow.hgt_top_holdings') }}">HGT Top Holdings</a>
+                    <a href="{{ url_for('fund_flow.sgt_top_holdings') }}">SGT Top Holdings</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Analysis Tools</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('analysis.risk_scan_page') }}">Risk Scan</a>
+                    <a href="{{ url_for('analysis.list_newly_highlighted_stocks') }}">Newly Highlighted Stocks</a>
+                    <a href="{{ url_for('analysis.fund_data_select_page') }}">Fund Data Selection</a> <!-- Added Link -->
                 </div>
             </div>
 

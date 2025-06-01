@@ -2,7 +2,10 @@
 
 {% block content %}
 <div class="content-section">
-    <h2>{{ title }}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>{{ title }}</h2>
+        <a href="{{ url_for('monitoring.export_large_orders_csv') }}" class="btn btn-success btn-sm">Export to CSV</a>
+    </div>
     <p>Data Source: AkShare stock_individual_fund_flow_rank (今日)</p>
     <p>Total Records (All Stocks): {{ total_items }}</p>
 
@@ -19,11 +22,6 @@
                     <th>Main Inflow (%)</th>
                     <th>Super Large Inflow (Net)</th>
                     <th>Super Large Inflow (%)</th>
-                    <!-- Columns from ak.stock_individual_fund_flow_rank: '代码', '名称', '最新价', '涨跌幅',
-                         '主力净流入-净额', '主力净流入-净占比', '超大单净流入-净额', '超大单净流入-净占比',
-                         '大单净流入-净额', '大单净流入-净占比', '中单净流入-净额', '中单净流入-净占比',
-                         '小单净流入-净额', '小单净流入-净占比', '行业', '最新价 - 收盘价'
-                         (We selected a subset in the service layer for this example) -->
                 </tr>
             </thead>
             <tbody>
@@ -88,14 +86,24 @@
     <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
     {% endif %}
 
-    {% elif not is_error %}
+    {% elif not is_error %} {# Assuming is_error might be passed from route if service fails #}
     <p>No large order data available at the moment.</p>
     {% endif %}
 
-    {% if is_error %}
+    {% if is_error %} {# Explicit error handling if needed #}
     <div class="alert alert-danger">
-        Could not fetch large order data: {{ orders }}
+        Could not fetch large order data. {{ orders }}
     </div>
     {% endif %}
 </div>
+<style>
+    /* For d-flex, justify-content-between, align-items-center, mb-3 - basic bootstrap-like helpers if not using full Bootstrap */
+    .d-flex { display: flex !important; }
+    .justify-content-between { justify-content: space-between !important; }
+    .align-items-center { align-items: center !important; }
+    .mb-3 { margin-bottom: 1rem !important; }
+    .btn-success { color: #fff; background-color: #28a745; border-color: #28a745; }
+    .btn-success:hover { color: #fff; background-color: #218838; border-color: #1e7e34; }
+
+</style>
 {% endblock content %}

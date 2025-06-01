@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Enter a stock code (e.g., sh600519 or 000001) to scan for potential risks based on TDX data.</p>
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group">
+                {{ form.stock_code.label(class="form-control-label") }}
+                {% if form.stock_code.errors %}
+                    {{ form.stock_code(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.stock_code.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.stock_code(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+
+    {% if stock_code_checked %}
+        <hr>
+        <h4>Scan Results for: {{ stock_name_checked }} ({{ stock_code_checked }})</h4>
+        {% if risk_score is not none %}
+            <p><strong>Overall Risk Score: {{ risk_score }} / 100</strong>
+               (100 indicates lower specific risk based on checked items, 0 indicates high risk or error)</p>
+        {% endif %}
+
+        {% if scan_results %}
+            <h5>Identified Risk Items:</h5>
+            <ul class="list-group">
+                {% for item in scan_results %}
+                    <li class="list-group-item">{{ item }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No specific risk items to display, or an error occurred during the scan if score is low.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock content %}

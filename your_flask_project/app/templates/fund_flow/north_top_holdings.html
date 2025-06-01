@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Data Source: AkShare stock_em_hsgt_hold_stock(market="北向", indicator=...)</p>
+
+    <div>
+        Period:
+        {% for ind_choice in valid_indicators %}
+            <a href="{{ url_for('fund_flow.northbound_top_holdings', indicator=ind_choice) }}"
+               class="btn btn-sm {% if ind_choice == current_indicator %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                {{ ind_choice.replace("排行","") }} {# Simplifies button text e.g. "今日" #}
+            </a>
+        {% endfor %}
+    </div>
+    <hr>
+    <p>Total Holdings Found: {{ total_items }}</p>
+
+    {% if not holdings.empty %}
+    <div style="overflow-x:auto;">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Latest Price</th>
+                    <th>Change (%)</th>
+                    <th>Holding Quantity</th>
+                    <th>Holding Market Value (CNY)</th>
+                    <th>Holding % of A-Shares</th>
+                    <th>Change 1D (Value)</th>
+                    <th>Change 5D (Value)</th>
+                    <th>Change 10D (Value)</th>
+                    <!-- Columns: '代码', '名称', '最新价', '涨跌幅', '持股数量', '持股市值', '持股数量占A股百分比', '持股市值变化-1日', '持股市值变化-5日', '持股市值变化-10日' -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in holdings.iterrows() %}
+                <tr>
+                    <td>{{ row.get('代码', 'N/A') }}</td>
+                    <td>{{ row.get('名称', 'N/A') }}</td>
+                    <td>{{ row.get('最新价', 'N/A') }}</td>
+                    <td>{{ row.get('涨跌幅', 'N/A') }}</td>
+                    <td>{{ "{:,.0f}".format(row.get('持股数量', 0)) if row.get('持股数量') else 'N/A' }}</td>
+                    <td>{{ "{:,.0f}".format(row.get('持股市值', 0)) if row.get('持股市值') else 'N/A' }}</td>
+                    <td>{{ row.get('持股数量占A股百分比', 'N/A') }}</td>
+                    <td>{{ "{:,.0f}".format(row.get('持股市值变化-1日', 0)) if row.get('持股市值变化-1日') else 'N/A' }}</td>
+                    <td>{{ "{:,.0f}".format(row.get('持股市值变化-5日', 0)) if row.get('持股市值变化-5日') else 'N/A' }}</td>
+                    <td>{{ "{:,.0f}".format(row.get('持股市值变化-10日', 0)) if row.get('持股市值变化-10日') else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if total_pages > 1 %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('fund_flow.northbound_top_holdings', indicator=current_indicator, page=page-1) }}">Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) if p >= page - 2 and p <= page + 2 or p == 1 or p == total_pages %}
+                {% if p == page - 3 and p > 1 %} <li class="page-item disabled"><span class="page-link">...</span></li> {% endif %}
+                {% if p == page %}
+                    <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('fund_flow.northbound_top_holdings', indicator=current_indicator, page=p) }}">{{ p }}</a></li>
+                {% endif %}
+                {% if p == page + 3 and p < total_pages %} <li class="page-item disabled"><span class="page-link">...</span></li> {% endif %}
+            {% endfor %}
+            {% if page < total_pages %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('fund_flow.northbound_top_holdings', indicator=current_indicator, page=page+1) }}">Next</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
+    {% endif %}
+
+    {% else %}
+    <p>No Northbound top holdings data available for this indicator.</p>
+    {% endif %}
+</div>
+{% endblock content %}

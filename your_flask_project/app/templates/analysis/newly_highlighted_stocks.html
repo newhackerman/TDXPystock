@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Stocks frequently appearing on the Dragon Tiger List (龙虎榜个股上榜统计). Data from Sina Finance via AkShare.</p>
+    <p>Showing data for the last
+        <a href="{{ url_for('analysis.list_newly_highlighted_stocks', days='1') }}" class="btn btn-sm {% if current_days_filter == '1' %}btn-primary{% else %}btn-outline-primary{% endif %}">1 Day</a>
+        <a href="{{ url_for('analysis.list_newly_highlighted_stocks', days='3') }}" class="btn btn-sm {% if current_days_filter == '3' %}btn-primary{% else %}btn-outline-primary{% endif %}">3 Days</a>
+        <a href="{{ url_for('analysis.list_newly_highlighted_stocks', days='5') }}" class="btn btn-sm {% if current_days_filter == '5' %}btn-primary{% else %}btn-outline-primary{% endif %}">5 Days</a>
+        <a href="{{ url_for('analysis.list_newly_highlighted_stocks', days='10') }}" class="btn btn-sm {% if current_days_filter == '10' %}btn-primary{% else %}btn-outline-primary{% endif %}">10 Days</a>
+        <a href="{{ url_for('analysis.list_newly_highlighted_stocks', days='30') }}" class="btn btn-sm {% if current_days_filter == '30' %}btn-primary{% else %}btn-outline-primary{% endif %}">30 Days</a>
+    </p>
+    <p>Total Highlighted Stocks: {{ total_items }}</p>
+
+    {% if not stocks.empty %}
+    <div style="overflow-x:auto;">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Appearances</th>
+                    <th>Cumulative Buy (CNY)</th>
+                    <th>Cumulative Sell (CNY)</th>
+                    <th>Net Amount (CNY)</th>
+                    <th>Buy Seats</th>
+                    <th>Sell Seats</th>
+                    <!-- Columns: '股票代码', '股票名称', '上榜次数', '累积购买额', '累积卖出额', '净额', '买入席位数', '卖出席位数' -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, stock_row in stocks.iterrows() %}
+                <tr>
+                    <td>{{ stock_row.get('股票代码', 'N/A') }}</td>
+                    <td>{{ stock_row.get('股票名称', 'N/A') }}</td>
+                    <td>{{ stock_row.get('上榜次数', 'N/A') }}</td>
+                    <td>{{ "{:,.0f}".format(stock_row.get('累积购买额', 0)) if stock_row.get('累积购买额') else 'N/A' }}</td>
+                    <td>{{ "{:,.0f}".format(stock_row.get('累积卖出额', 0)) if stock_row.get('累积卖出额') else 'N/A' }}</td>
+                    <td>{{ "{:,.0f}".format(stock_row.get('净额', 0)) if stock_row.get('净额') else 'N/A' }}</td>
+                    <td>{{ stock_row.get('买入席位数', 'N/A') }}</td>
+                    <td>{{ stock_row.get('卖出席位数', 'N/A') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if total_pages > 1 %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('analysis.list_newly_highlighted_stocks', days=current_days_filter, page=page-1) }}">Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% set start_page = [1, page-2] | max %}
+            {% set end_page = [total_pages, page+2] | min %}
+
+            {% if start_page > 1 %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('analysis.list_newly_highlighted_stocks', days=current_days_filter, page=1) }}">1</a></li>
+                {% if start_page > 2 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endif %}
+
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                    <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('analysis.list_newly_highlighted_stocks', days=current_days_filter, page=p) }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if end_page < total_pages %}
+                {% if end_page < total_pages - 1 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('analysis.list_newly_highlighted_stocks', days=current_days_filter, page=total_pages) }}">{{ total_pages }}</a></li>
+            {% endif %}
+
+            {% if page < total_pages %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('analysis.list_newly_highlighted_stocks', days=current_days_filter, page=page+1) }}">Next</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
+    {% endif %}
+
+    {% else %}
+    <p>No newly highlighted stock data available for the selected period.</p>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <h2>{{ title }}</h2>
+    <p>Select stocks based on fund flow data rankings and optional minimum main force net inflow percentage.</p>
+
+    <form method="POST" action="{{ url_for('analysis.fund_data_select_page', page=1) }}"> {# Submit to page 1 on new criteria #}
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form.indicator.label(class="form-control-label") }}
+                        {{ form.indicator(class="form-control") }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form.min_main_force_percent.label(class="form-control-label") }}
+                        {{ form.min_main_force_percent(class="form-control", placeholder="e.g., 5 for 5%") }}
+                        {% if form.min_main_force_percent.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.min_main_force_percent.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">{{ form.min_main_force_percent.description }}</small>
+                    </div>
+                </div>
+                <div class="col-md-4 align-self-end">
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    {% if stocks is not none and not stocks.empty %}
+        <hr>
+        <h4>Results:</h4>
+        <p>Total Matching Stocks: {{ total_items }}</p>
+        <div style="overflow-x:auto;">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Latest Price</th>
+                        <th>Change (%)</th>
+                        <th>Main Inflow (Net)</th>
+                        <th>Main Inflow (%)</th>
+                        <th>Super Large Inflow (Net)</th>
+                        <th>Super Large Inflow (%)</th>
+                        <!-- Add more columns as needed from stock_individual_fund_flow_rank -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, stock_row in stocks.iterrows() %}
+                    <tr>
+                        <td>{{ stock_row.get('序号', loop.index + (page-1)*per_page ) }}</td>
+                        <td>{{ stock_row.get('代码', 'N/A') }}</td>
+                        <td>{{ stock_row.get('名称', 'N/A') }}</td>
+                        <td>{{ stock_row.get('最新价', 'N/A') }}</td>
+                        <td>{{ stock_row.get('涨跌幅', 'N/A') }}</td>
+                        <td>{{ "{:,.0f}".format(stock_row.get('主力净流入-净额', 0)) if stock_row.get('主力净流入-净额') else 'N/A' }}</td>
+                        <td>{{ stock_row.get('主力净流入-净占比', 'N/A') }}</td>
+                        <td>{{ "{:,.0f}".format(stock_row.get('超大单净流入-净额', 0)) if stock_row.get('超大单净流入-净额') else 'N/A' }}</td>
+                        <td>{{ stock_row.get('超大单净流入-净占比', 'N/A') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if total_pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if page > 1 %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('analysis.fund_data_select_page', indicator=selected_indicator, min_main_force_percent=selected_min_main_force_percent if selected_min_main_force_percent is not none else '', page=page-1) }}">Previous</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                {% endif %}
+
+                {% set start_page = [1, page-2] | max %}
+                {% set end_page = [total_pages, page+2] | min %}
+
+                {% if start_page > 1 %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('analysis.fund_data_select_page', indicator=selected_indicator, min_main_force_percent=selected_min_main_force_percent if selected_min_main_force_percent is not none else '', page=1) }}">1</a></li>
+                    {% if start_page > 2 %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endif %}
+
+                {% for p in range(start_page, end_page + 1) %}
+                    {% if p == page %}
+                        <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('analysis.fund_data_select_page', indicator=selected_indicator, min_main_force_percent=selected_min_main_force_percent if selected_min_main_force_percent is not none else '', page=p) }}">{{ p }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if end_page < total_pages %}
+                    {% if end_page < total_pages - 1 %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('analysis.fund_data_select_page', indicator=selected_indicator, min_main_force_percent=selected_min_main_force_percent if selected_min_main_force_percent is not none else '', page=total_pages) }}">{{ total_pages }}</a></li>
+                {% endif %}
+
+                {% if page < total_pages %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('analysis.fund_data_select_page', indicator=selected_indicator, min_main_force_percent=selected_min_main_force_percent if selected_min_main_force_percent is not none else '', page=page+1) }}">Next</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <p class="text-right">Page {{ page }} of {{ total_pages }}</p>
+        {% endif %}
+    {% elif request.method == 'POST' %}
+        {# Only show "no results" if a search was actually performed #}
+        <hr>
+        <p>No stocks found matching your criteria.</p>
+    {% endif %}
+</div>
+<style>
+/* Basic styling for rows and columns if not using Bootstrap grid fully */
+.row::after { content: ""; clear: both; display: table; }
+.col-md-4 { float: left; width: 33.33%; padding: 5px; box-sizing: border-box; }
+/* Responsive behavior for smaller screens */
+@media screen and (max-width: 768px) {
+  .col-md-4 { width: 100%; margin-bottom: 10px; }
+  .col-md-4.align-self-end { margin-top: 10px; } /* Add some space for submit button on new line */
+}
+.align-self-end { align-self: flex-end; } /* For button alignment if in flex container */
+.invalid-feedback.d-block { display: block !important; } /* Ensure WTForms errors are shown */
+
+</style>
+{% endblock content %}
