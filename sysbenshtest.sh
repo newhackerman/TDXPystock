@@ -36,7 +36,7 @@ log_error() {
 check_dependencies() {
     log_info "检查依赖工具..."
     
-    local deps=("sysbench" "iperf3" "curl" "wget" "lscpu" "free" "df")
+    local deps=("sysbench" "iperf3" "curl" "wget" "lscpu" "free" "df" "dig" "python3")
     local missing_deps=()
     
     for dep in "${deps[@]}"; do
@@ -48,10 +48,37 @@ check_dependencies() {
     if [ ${#missing_deps[@]} -ne 0 ]; then
         log_error "缺少依赖工具: ${missing_deps[*]}"
         log_info "请安装缺少的工具:"
-        log_info "  Ubuntu/Debian: sudo apt-get install sysbench iperf3 curl wget"
-        log_info "  CentOS/RHEL: sudo yum install sysbench iperf3 curl wget"
+        log_info "  Ubuntu/Debian: sudo apt-get install sysbench iperf3 curl wget dnsutils python3"
+        log_info "  CentOS/RHEL: sudo yum install sysbench iperf3 curl wget bind-utils python3"
         exit 1
     fi
+    
+    # 检查iperf3版本
+    local iperf_version=$(iperf3 --version 2>&1 | head -1)
+    log_info "iperf3版本: $iperf_version"
+    
+    # 测试iperf3基本功能
+    log_info "测试iperf3基本功能..."
+    if ! iperf3 -s -D -p 5202 --pidfile /tmp/iperf3_test.pid; then
+        log_error "iperf3服务器启动失败"
+        exit 1
+    fi
+    
+    sleep 1
+    
+    if ! timeout 5 iperf3 -c localhost -p 5202 -t 1 > /dev/null 2>&1; then
+        log_warn "iperf3本地测试失败，网络测试可能不会正常工作"
+    else
+        log_info "iperf3功能测试通过"
+    fi
+    
+    # 清理测试进程
+    local test_pid=$(cat /tmp/iperf3_test.pid 2>/dev/null)
+    if [ -n "$test_pid" ] && kill -0 "$test_pid" 2>/dev/null; then
+        kill "$test_pid" 2>/dev/null
+    fi
+    pkill -f "iperf3.*-s.*5202" 2>/dev/null || true
+    rm -f /tmp/iperf3_test.pid
 }
 
 # 获取系统信息
@@ -161,33 +188,120 @@ test_network() {
     
     # 本地回环测试
     log_info "执行本地网络回环测试..."
+    local server_pid=""
     {
-        iperf3 -s -D -p 5201 > /dev/null 2>&1
-        sleep 2
-        iperf3 -c localhost -p 5201 -t 30 -J > "$REPORT_DIR/network_localhost.json" 2>&1
-        pkill -f "iperf3 -s"
-    } || log_warn "本地网络测试失败"
+        # 启动iperf3服务器
+        iperf3 -s -p 5201 -D --pidfile /tmp/iperf3_server.pid
+        server_pid=$(cat /tmp/iperf3_server.pid 2>/dev/null)
+        sleep 3
+        
+        # 执行客户端测试
+        log_info "测试本地网络带宽..."
+        iperf3 -c localhost -p 5201 -t 20 -J > "$REPORT_DIR/network_localhost.json" 2>&1
+        
+        # 停止服务器
+        if [ -n "$server_pid" ] && kill -0 "$server_pid" 2>/dev/null; then
+            kill "$server_pid" 2>/dev/null
+        fi
+        pkill -f "iperf3.*-s.*5201" 2>/dev/null || true
+        rm -f /tmp/iperf3_server.pid
+        
+        log_info "本地网络测试完成"
+    } || {
+        log_warn "本地网络测试失败"
+        # 清理进程
+        pkill -f "iperf3.*-s.*5201" 2>/dev/null || true
+        rm -f /tmp/iperf3_server.pid
+    }
     
-    # 远程网络测试（如果指定了远程主机）
-    if [ "$REMOTE_HOST" != "8.8.8.8" ]; then
-        log_info "执行远程网络测试到 $REMOTE_HOST..."
+    # 公共iperf3服务器测试
+    log_info "测试公共网络服务器连接..."
+    local public_servers=("iperf.scottlinux.com" "iperf.par2.as49434.net" "ping.online.net")
+    
+    for server in "${public_servers[@]}"; do
+        log_info "尝试连接到 $server..."
         {
-            # 尝试连接远程iperf3服务器
-            timeout 10 iperf3 -c "$REMOTE_HOST" -t 10 -J > "$REPORT_DIR/network_remote.json" 2>&1
-        } || log_warn "远程网络测试失败，请确保远程主机运行iperf3服务器"
-    fi
+            timeout 30 iperf3 -c "$server" -p 5201 -t 10 -J > "$REPORT_DIR/network_${server//\./_}.json" 2>&1
+            if [ $? -eq 0 ]; then
+                log_info "成功连接到 $server"
+                break
+            else
+                log_warn "连接 $server 失败，尝试下一个服务器"
+            fi
+        } || {
+            log_warn "连接 $server 超时"
+        }
+    done
     
-    # HTTP下载测试
+    # HTTP下载速度测试 - 使用多个测试源
     log_info "执行HTTP下载速度测试..."
     {
-        time curl -o /dev/null -s "http://speedtest.tele2.net/100MB.zip" 2>&1 | grep real > "$REPORT_DIR/network_download.txt"
+        log_info "测试下载速度 - 100MB文件..."
+        echo "=== 100MB Download Test ===" > "$REPORT_DIR/network_download.txt"
+        
+        # 测试1: speedtest.tele2.net
+        {
+            echo "Testing speedtest.tele2.net..." >> "$REPORT_DIR/network_download.txt"
+            time_output=$(timeout 60 time curl -o /dev/null -s -w "Speed: %{speed_download} bytes/sec, Time: %{time_total}s\n" "http://speedtest.tele2.net/100MB.zip" 2>&1)
+            echo "$time_output" >> "$REPORT_DIR/network_download.txt"
+        } || {
+            echo "speedtest.tele2.net test failed" >> "$REPORT_DIR/network_download.txt"
+        }
+        
+        # 测试2: proof.ovh.net 10MB文件
+        {
+            echo -e "\nTesting proof.ovh.net..." >> "$REPORT_DIR/network_download.txt"
+            time_output=$(timeout 30 time curl -o /dev/null -s -w "Speed: %{speed_download} bytes/sec, Time: %{time_total}s\n" "http://proof.ovh.net/files/10Mb.dat" 2>&1)
+            echo "$time_output" >> "$REPORT_DIR/network_download.txt"
+        } || {
+            echo "proof.ovh.net test failed" >> "$REPORT_DIR/network_download.txt"
+        }
+        
+        log_info "HTTP下载测试完成"
     } || log_warn "HTTP下载测试失败"
     
-    # 网络延迟测试
+    # 网络延迟测试 - 测试多个目标
     log_info "执行网络延迟测试..."
     {
-        ping -c 10 "$REMOTE_HOST" > "$REPORT_DIR/network_ping.txt" 2>&1
+        echo "=== Network Latency Tests ===" > "$REPORT_DIR/network_ping.txt"
+        
+        # 测试多个目标的延迟
+        local ping_targets=("8.8.8.8" "1.1.1.1" "114.114.114.114" "baidu.com")
+        
+        for target in "${ping_targets[@]}"; do
+            echo -e "\n--- Ping to $target ---" >> "$REPORT_DIR/network_ping.txt"
+            ping -c 5 -W 3 "$target" >> "$REPORT_DIR/network_ping.txt" 2>&1 || {
+                echo "Ping to $target failed" >> "$REPORT_DIR/network_ping.txt"
+            }
+        done
+        
+        log_info "网络延迟测试完成"
     } || log_warn "网络延迟测试失败"
+    
+    # 网络连接质量测试
+    log_info "执行网络连接质量测试..."
+    {
+        echo "=== Network Connection Quality ===" > "$REPORT_DIR/network_quality.txt"
+        
+        # DNS解析测试
+        echo "--- DNS Resolution Test ---" >> "$REPORT_DIR/network_quality.txt"
+        for domain in "google.com" "baidu.com" "github.com"; do
+            echo -n "Resolving $domain: " >> "$REPORT_DIR/network_quality.txt"
+            dig +short "$domain" | head -1 >> "$REPORT_DIR/network_quality.txt" 2>&1 || {
+                echo "Failed" >> "$REPORT_DIR/network_quality.txt"
+            }
+        done
+        
+        # HTTP连接测试
+        echo -e "\n--- HTTP Connection Test ---" >> "$REPORT_DIR/network_quality.txt"
+        for url in "http://www.google.com" "http://www.baidu.com"; do
+            echo -n "Testing $url: " >> "$REPORT_DIR/network_quality.txt"
+            curl_output=$(timeout 10 curl -o /dev/null -s -w "HTTP %{http_code}, Time: %{time_total}s\n" "$url" 2>&1)
+            echo "$curl_output" >> "$REPORT_DIR/network_quality.txt"
+        done
+        
+        log_info "网络连接质量测试完成"
+    } || log_warn "网络连接质量测试失败"
 }
 
 # 解析测试结果
@@ -234,6 +348,46 @@ parse_results() {
         fi
     }
     
+    # 解析网络结果
+    parse_network_results() {
+        local results="{"
+        
+        # 解析iperf3本地测试结果
+        if [ -f "$REPORT_DIR/network_localhost.json" ]; then
+            local bandwidth=$(python3 -c "
+import json, sys
+try:
+    with open('$REPORT_DIR/network_localhost.json', 'r') as f:
+        data = json.load(f)
+        print(f\"{data['end']['sum_received']['bits_per_second']:.0f}\")
+except:
+    print('N/A')
+" 2>/dev/null)
+            results="$results\"localhost_bandwidth_bps\": \"$bandwidth\","
+        else
+            results="$results\"localhost_bandwidth_bps\": \"N/A\","
+        fi
+        
+        # 解析下载速度测试
+        if [ -f "$REPORT_DIR/network_download.txt" ]; then
+            local download_speed=$(grep "Speed:" "$REPORT_DIR/network_download.txt" | head -1 | awk '{print $2}')
+            results="$results\"download_speed_bps\": \"$download_speed\","
+        else
+            results="$results\"download_speed_bps\": \"N/A\","
+        fi
+        
+        # 解析ping延迟
+        if [ -f "$REPORT_DIR/network_ping.txt" ]; then
+            local avg_ping=$(grep "avg" "$REPORT_DIR/network_ping.txt" | head -1 | awk -F'/' '{print $5}' | awk '{print $1}')
+            results="$results\"avg_ping_ms\": \"$avg_ping\""
+        else
+            results="$results\"avg_ping_ms\": \"N/A\""
+        fi
+        
+        results="$results}"
+        echo "\"network\": $results"
+    }
+    
     # 创建结果JSON
     cat > "$REPORT_DIR/results.json" << EOF
 {
@@ -252,7 +406,8 @@ parse_results() {
         $(parse_disk_results "$REPORT_DIR/disk_seq_write.txt" "seq_write"),
         $(parse_disk_results "$REPORT_DIR/disk_rnd_read.txt" "rnd_read"),
         $(parse_disk_results "$REPORT_DIR/disk_rnd_write.txt" "rnd_write")
-    }
+    },
+    $(parse_network_results)
 }
 EOF
 }
