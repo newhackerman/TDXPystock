@@ -7,8 +7,8 @@ set -e
 
 # 配置参数
 REPORT_DIR="$(pwd)/benchmark_report_$(date +%Y%m%d_%H%M%S)"
-TEMP_DIR="/tmp/sysbench_test"
-TEST_FILE_SIZE="10G"
+TEMP_DIR="/databak/sysbenchtest"
+TEST_FILE_SIZE="5G"
 NETWORK_TEST_SIZE="100M"
 REMOTE_HOST="${1:-8.8.8.8}"  # 默认远程主机，可通过参数传入
 
